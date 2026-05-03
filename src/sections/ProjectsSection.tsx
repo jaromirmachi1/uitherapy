@@ -6,7 +6,6 @@ import {
   type ProjectTechKey,
 } from "@/components/ProjectTechStack";
 import { SpotlightCard } from "@/components/reactbits/SpotlightCard";
-import { motion, useReducedMotion } from "motion/react";
 
 type ProjectEntry = {
   name: string;
@@ -63,8 +62,6 @@ const projects: ProjectEntry[] = [
 ];
 
 export function ProjectsSection() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <section
       id="projects"
@@ -137,23 +134,12 @@ export function ProjectsSection() {
                       reversed ? "lg:flex-row-reverse" : ""
                     }`}
                   >
-                    <motion.div
-                      data-gsap="parallax"
-                      data-gsap-y="-8"
+                    <div
                       className={`relative flex-1 overflow-hidden bg-neutral-950 lg:w-[56%] ${
                         reversed
                           ? "rounded-sm rounded-br-[3rem] rounded-tl-[2.75rem] lg:rounded-sm lg:rounded-bl-[3.5rem] lg:rounded-tr-[2.75rem]"
                           : "rounded-sm rounded-bl-[3rem] rounded-tr-[2.75rem] lg:rounded-sm lg:rounded-br-[3.5rem] lg:rounded-tl-[2.75rem]"
                       }`}
-                      initial={
-                        reduceMotion ? false : { opacity: 0, scale: 1.04 }
-                      }
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, margin: "-10% 0px" }}
-                      transition={{
-                        duration: reduceMotion ? 0 : 1.05,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
                     >
                       <div
                         className="pointer-events-none absolute inset-0 z-[2] opacity-[0.18] mix-blend-overlay"
@@ -167,7 +153,7 @@ export function ProjectsSection() {
                         src={project.image.src}
                         alt={project.image.alt}
                         fill
-                        className="object-cover transition-transform duration-[1.1s] ease-out group-hover:scale-[1.03]"
+                        className="object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.012]"
                         sizes="(max-width: 1024px) 100vw, 56vw"
                         priority={index === 0}
                       />
@@ -180,7 +166,7 @@ export function ProjectsSection() {
                           {project.tag}
                         </span>
                       </div>
-                    </motion.div>
+                    </div>
 
                     <div className="flex flex-1 flex-col justify-between gap-10 lg:w-[44%] lg:py-4">
                       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/[0.07] pb-6">

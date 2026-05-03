@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CapabilitiesSection } from "@/sections/CapabilitiesSection";
 import { ContactSection } from "@/sections/ContactSection";
+import { EcommerceSection } from "@/sections/EcommerceSection";
 import { HeroSection } from "@/sections/HeroSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
@@ -21,6 +22,7 @@ export default function Home() {
           <HeroSection />
           <ProjectsSection />
           <CapabilitiesSection />
+          <EcommerceSection />
           <ProcessSection />
           <ContactSection />
         </main>
