@@ -10,7 +10,6 @@ import { EcommerceSection } from "@/sections/EcommerceSection";
 import { HeroSection } from "@/sections/HeroSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
-import { SeoGrowthSection } from "@/sections/SeoGrowthSection";
 
 export default function Home() {
   return (
@@ -27,7 +26,6 @@ export default function Home() {
           <CapabilitiesSection />
           <EcommerceSection />
           <ProcessSection />
-          <SeoGrowthSection />
           <ContactSection />
         </main>
         <SiteFooter />

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import GradualBlur from "@/components/reactbits/GradualBlur";
 import { HeroMotion } from "@/components/reactbits/HeroMotion";
+import { ScrambledText } from "@/components/reactbits/ScrambledText";
 import { motion, useReducedMotion } from "motion/react";
 
 const Dither = dynamic(() => import("@/components/reactbits/Dither"), {
@@ -92,15 +93,12 @@ export function HeroSection() {
             </motion.span>
           </h1>
           <HeroMotion className="mt-8 max-w-xl" delay={0.35}>
-            <p
-              data-gsap="reveal"
-              data-gsap-delay="0.08"
-              className="text-base leading-relaxed text-neutral-400 sm:text-lg"
-            >
-              We ship bold, production-grade front ends—typography, motion, and
-              performance tuned like an instrument. Built to feel expensive in
-              the hand and clear to crawlers.
-            </p>
+            <div data-gsap="reveal" data-gsap-delay="0.08">
+              <ScrambledText
+                text="We ship bold, production-grade front ends—typography, motion, and performance tuned like an instrument. Built to feel expensive in the hand and clear to crawlers."
+                className="text-base leading-relaxed text-neutral-400 sm:text-lg"
+              />
+            </div>
           </HeroMotion>
           <HeroMotion
             className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center"
