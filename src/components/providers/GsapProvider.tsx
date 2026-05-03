@@ -12,7 +12,9 @@ export function GsapProvider() {
 
     const media = gsap.matchMedia();
     const ctx = gsap.context(() => {
-      const revealItems = gsap.utils.toArray<HTMLElement>('[data-gsap="reveal"]');
+      const revealItems = gsap.utils.toArray<HTMLElement>(
+        '[data-gsap="reveal"]',
+      );
       revealItems.forEach((item) => {
         const delay = Number(item.dataset.gsapDelay ?? 0);
         gsap.fromTo(
@@ -33,7 +35,9 @@ export function GsapProvider() {
         );
       });
 
-      const parallaxItems = gsap.utils.toArray<HTMLElement>('[data-gsap="parallax"]');
+      const parallaxItems = gsap.utils.toArray<HTMLElement>(
+        '[data-gsap="parallax"]',
+      );
       parallaxItems.forEach((item) => {
         const yPercent = Number(item.dataset.gsapY ?? -10);
         gsap.to(item, {

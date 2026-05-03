@@ -1,13 +1,27 @@
 "use client";
 
 import Image from "next/image";
+import {
+  ProjectTechStack,
+  type ProjectTechKey,
+} from "@/components/ProjectTechStack";
 import { SpotlightCard } from "@/components/reactbits/SpotlightCard";
 import { motion, useReducedMotion } from "motion/react";
+
+type ProjectEntry = {
+  name: string;
+  tag: string;
+  role: string;
+  year: string;
+  summary: string;
+  image: { src: string; alt: string };
+  stack: readonly ProjectTechKey[];
+};
 
 const NOISE =
   "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
-const projects = [
+const projects: ProjectEntry[] = [
   {
     name: "Panorama Žabiny",
     tag: "Web design and development",
@@ -19,6 +33,7 @@ const projects = [
       src: "/panoramaph.webp",
       alt: "Panoramic photograph for the Commerce storefront project showcase",
     },
+    stack: ["nextjs", "react", "typescript", "tailwind"],
   },
   {
     name: "Golden Touch",
@@ -30,6 +45,7 @@ const projects = [
       src: "/barbermartini.webp",
       alt: "Mobile phone displaying a streaming app interface against a red backdrop",
     },
+    stack: ["nextjs", "tailwind", "framer"],
   },
   {
     name: "DVD Culture",
@@ -42,8 +58,9 @@ const projects = [
       src: "/dvdculture.webp",
       alt: "Team collaborating at a desk with laptops open to product interfaces",
     },
+    stack: ["nextjs", "react", "threedotjs", "gsap", "tailwind"],
   },
-] as const;
+];
 
 export function ProjectsSection() {
   const reduceMotion = useReducedMotion();
@@ -187,9 +204,12 @@ export function ProjectsSection() {
                         <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.85rem,4.8vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.035em] text-white transition-transform duration-700 ease-out group-hover:translate-x-1 lg:max-w-[20ch]">
                           {project.name}
                         </h3>
-                        <p className="mt-8 max-w-lg border-l border-accent/35 pl-7 text-sm leading-[1.75] text-neutral-400 sm:text-base">
-                          {project.summary}
-                        </p>
+                        <div className="mt-8 max-w-lg border-l border-accent/35 pl-7">
+                          <p className="text-sm leading-[1.75] text-neutral-400 sm:text-base">
+                            {project.summary}
+                          </p>
+                          <ProjectTechStack stack={project.stack} />
+                        </div>
                       </div>
 
                       <div

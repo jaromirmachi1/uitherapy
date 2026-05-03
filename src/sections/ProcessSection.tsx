@@ -58,8 +58,8 @@ export function ProcessSection() {
                 From brief to launch, no black box.
               </h2>
               <p className="mt-8 max-w-md border-l border-accent/40 pl-6 text-sm leading-relaxed text-neutral-400 sm:text-base">
-                A focused build sequence designed for polished interfaces, fast pages,
-                and content that search engines can understand.
+                A focused build sequence designed for polished interfaces, fast
+                pages, and content that search engines can understand.
               </p>
             </div>
             <div className="mt-14 flex items-center gap-4 text-[0.62rem] uppercase tracking-[0.3em] text-neutral-600">

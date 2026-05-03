@@ -55,7 +55,11 @@ export function HeroSection() {
             aria-hidden
             initial={{ scaleX: 0, opacity: 0 }}
             animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.9,
+              delay: 0.15,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           />
           <h1
             id="hero-heading"
@@ -88,12 +92,20 @@ export function HeroSection() {
             </motion.span>
           </h1>
           <HeroMotion className="mt-8 max-w-xl" delay={0.35}>
-            <p data-gsap="reveal" data-gsap-delay="0.08" className="text-base leading-relaxed text-neutral-400 sm:text-lg">
-              We ship bold, production-grade front ends—typography, motion, and performance tuned
-              like an instrument. Built to feel expensive in the hand and clear to crawlers.
+            <p
+              data-gsap="reveal"
+              data-gsap-delay="0.08"
+              className="text-base leading-relaxed text-neutral-400 sm:text-lg"
+            >
+              We ship bold, production-grade front ends—typography, motion, and
+              performance tuned like an instrument. Built to feel expensive in
+              the hand and clear to crawlers.
             </p>
           </HeroMotion>
-          <HeroMotion className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center" delay={0.45}>
+          <HeroMotion
+            className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center"
+            delay={0.45}
+          >
             <motion.a
               href="#projects"
               className="pointer-events-auto inline-flex h-14 min-w-[200px] items-center justify-center bg-accent px-8 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_40px_-8px_rgba(82,38,255,0.35)] transition-colors hover:bg-accent-hover"
