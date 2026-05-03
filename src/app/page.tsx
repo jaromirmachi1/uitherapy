@@ -10,6 +10,7 @@ import { EcommerceSection } from "@/sections/EcommerceSection";
 import { HeroSection } from "@/sections/HeroSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
+import { RingStatementSection } from "@/sections/RingStatementSection";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <SiteHeader />
         <main id="main">
           <HeroSection />
+          <RingStatementSection />
           <ProjectsSection />
           <CapabilitiesSection />
           <EcommerceSection />
