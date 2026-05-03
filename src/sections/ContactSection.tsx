@@ -1,6 +1,7 @@
 "use client";
 
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
+import { siteEmail } from "@/seo/site";
 import { motion } from "motion/react";
 
 export function ContactSection() {
@@ -32,13 +33,13 @@ export function ContactSection() {
         </ScrollReveal>
         <ScrollReveal className="mt-12 flex flex-col gap-6 sm:flex-row sm:items-center" delay={0.12}>
           <motion.a
-            href="mailto:hello@uitherapy.io?subject=Project%20inquiry%20%E2%80%94%20UI%20Therapy"
+            href={`mailto:${siteEmail}?subject=Project%20inquiry%20%E2%80%94%20UI%20Therapy`}
             className="inline-flex h-14 min-w-[240px] items-center justify-center bg-accent px-10 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_36px_-8px_rgba(82,38,255,0.4)] transition-colors hover:bg-accent-hover"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             transition={{ type: "spring", stiffness: 400, damping: 28 }}
           >
-            hello@uitherapy.io
+            {siteEmail}
           </motion.a>
           <motion.a
             href="#projects"

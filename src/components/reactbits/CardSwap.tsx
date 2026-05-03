@@ -22,8 +22,8 @@ type Props = {
 
 const positions = [
   { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1, zIndex: 30 },
-  { x: 34, y: 34, rotate: 2.5, scale: 0.965, opacity: 0.72, zIndex: 20 },
-  { x: 68, y: 68, rotate: 5, scale: 0.93, opacity: 0.42, zIndex: 10 },
+  { x: 42, y: 38, rotate: 2.5, scale: 0.965, opacity: 0.72, zIndex: 20 },
+  { x: 84, y: 76, rotate: 5, scale: 0.93, opacity: 0.42, zIndex: 10 },
 ] as const;
 
 export function CardSwap({ cards, intervalMs = 2800 }: Props) {
@@ -63,7 +63,7 @@ export function CardSwap({ cards, intervalMs = 2800 }: Props) {
 
   return (
     <div
-      className="relative min-h-[34rem] w-full max-w-[38rem] sm:min-h-[38rem]"
+      className="relative min-h-[34rem] w-full max-w-[44rem] sm:min-h-[38rem]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -74,7 +74,7 @@ export function CardSwap({ cards, intervalMs = 2800 }: Props) {
           return (
             <motion.article
               key={card.title}
-              className={`absolute left-0 top-0 flex min-h-[30rem] w-[min(82vw,24rem)] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-neutral-950/90 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.48)] transition-[border-color,background-color] duration-300 sm:min-h-[34rem] sm:w-[27rem] sm:p-6 ${
+              className={`absolute left-0 top-0 flex min-h-[30rem] w-[min(92vw,28rem)] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-white/10 bg-neutral-950/90 p-5 shadow-[0_28px_90px_rgba(0,0,0,0.48)] transition-[border-color,background-color] duration-300 sm:min-h-[34rem] sm:w-[31rem] sm:p-6 lg:w-[34rem] ${
                 isActive ? "border-accent/45 bg-neutral-950" : ""
               }`}
               animate={positions[offset] ?? positions[2]}
@@ -100,7 +100,7 @@ export function CardSwap({ cards, intervalMs = 2800 }: Props) {
                     src={card.image.src}
                     alt={card.image.alt}
                     fill
-                    sizes="(max-width: 640px) 82vw, 27rem"
+                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 31rem, 34rem"
                     className="object-cover opacity-80 saturate-[0.85]"
                   />
                   <div
@@ -116,7 +116,7 @@ export function CardSwap({ cards, intervalMs = 2800 }: Props) {
                 <h3 className="mt-7 font-[family-name:var(--font-display)] text-[clamp(2.25rem,6.5vw,4rem)] font-bold leading-[0.92] tracking-[-0.055em] text-white">
                   {card.title}
                 </h3>
-                <p className="mt-5 max-w-sm text-sm leading-[1.7] text-neutral-400 sm:text-base">
+                <p className="mt-5 max-w-md text-sm leading-[1.7] text-neutral-400 sm:text-base">
                   {card.description}
                 </p>
               </div>
@@ -135,21 +135,6 @@ export function CardSwap({ cards, intervalMs = 2800 }: Props) {
             </motion.article>
           );
         })}
-      </div>
-
-      <div className="absolute bottom-0 left-0 z-40 flex gap-2">
-        {cards.map((card, index) => (
-          <button
-            key={card.title}
-            type="button"
-            onClick={() => setActive(index)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              active === index ? "w-10 bg-accent" : "w-4 bg-white/20 hover:bg-white/40"
-            }`}
-            aria-label={`Show ${card.title}`}
-            aria-current={active === index ? "true" : undefined}
-          />
-        ))}
       </div>
     </div>
   );

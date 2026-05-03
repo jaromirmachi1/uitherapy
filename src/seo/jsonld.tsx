@@ -1,4 +1,4 @@
-import { getSiteUrl, siteDescription, siteName } from "./site";
+import { getSiteUrl, siteDescription, siteEmail, siteName } from "./site";
 
 export function JsonLdWebsite() {
   const url = getSiteUrl();
@@ -26,6 +26,7 @@ export function JsonLdProfessionalService() {
     name: siteName,
     description: siteDescription,
     url,
+    email: siteEmail,
     areaServed: "Worldwide",
     serviceType: ["Web design", "Frontend development", "UI engineering"],
   };

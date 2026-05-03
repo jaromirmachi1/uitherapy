@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getSiteUrl } from "@/seo/site";
+import { getSiteUrl, siteEmail } from "@/seo/site";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -26,10 +26,10 @@ export function SiteFooter() {
         <div className="flex flex-col gap-6 text-sm text-neutral-500 sm:items-end">
           <div className="flex flex-wrap gap-x-8 gap-y-2">
             <a
-              href="mailto:hello@uitherapy.io"
+              href={`mailto:${siteEmail}`}
               className="transition-colors hover:text-accent"
             >
-              hello@uitherapy.io
+              {siteEmail}
             </a>
             <Link href={url} className="transition-colors hover:text-accent">
               {url.replace(/^https?:\/\//, "")}

@@ -1,4 +1,5 @@
 import { AmbientBackground } from "@/components/AmbientBackground";
+import { InteractiveCursor } from "@/components/InteractiveCursor";
 import { IntroLoader } from "@/components/IntroLoader";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -9,11 +10,13 @@ import { EcommerceSection } from "@/sections/EcommerceSection";
 import { HeroSection } from "@/sections/HeroSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
+import { SeoGrowthSection } from "@/sections/SeoGrowthSection";
 
 export default function Home() {
   return (
     <>
       <IntroLoader />
+      <InteractiveCursor />
       <AmbientBackground />
       <div className="relative z-10">
         <SkipLink />
@@ -24,6 +27,7 @@ export default function Home() {
           <CapabilitiesSection />
           <EcommerceSection />
           <ProcessSection />
+          <SeoGrowthSection />
           <ContactSection />
         </main>
         <SiteFooter />

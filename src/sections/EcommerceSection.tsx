@@ -9,8 +9,8 @@ const ecommerceCards = [
       "Fast storefronts for brands that want polished product pages, conversion-focused landing flows, and a reliable checkout foundation.",
     points: ["Theme build", "Custom sections", "SEO setup"],
     image: {
-      src: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=80",
-      alt: "Mock ecommerce storefront displayed on a laptop",
+      src: "/shopifyShowoff.jpg",
+      alt: "Shopify admin overview dashboard with sales and visitor analytics",
     },
   },
   {
@@ -20,19 +20,19 @@ const ecommerceCards = [
       "Premium Shoptet fronts for local businesses that need better hierarchy, stronger visuals, and cleaner product storytelling.",
     points: ["Template polish", "UX cleanup", "Performance pass"],
     image: {
-      src: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1200&q=80",
-      alt: "Mock retail product shelves for an ecommerce catalog",
+      src: "/shoptetshowof.jpeg",
+      alt: "Shoptet administration dashboard with orders and sales charts",
     },
   },
   {
     title: "Custom CMS",
-    eyebrow: "Tailored stack",
+    eyebrow: "Sanity + headless",
     description:
-      "Custom ecommerce systems when the product model, editorial workflow, or brand experience needs more control than a preset platform.",
+      "Headless content and commerce when you need a tailored editorial model, structured product data, and a storefront that stays fast at scale.",
     points: ["Next.js build", "CMS modeling", "Structured data"],
     image: {
-      src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-      alt: "Mock custom CMS dashboard interface on a laptop",
+      src: "/sanityshowof.png",
+      alt: "Sanity Studio editing a product with Shopify sync and rich content fields",
     },
   },
 ] as const;

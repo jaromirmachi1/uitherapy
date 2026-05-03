@@ -14,6 +14,7 @@ const NAV = [
   { href: "#capabilities", label: "Lab" },
   { href: "#ecommerce", label: "E-shop" },
   { href: "#process", label: "Process" },
+  { href: "#seo-growth", label: "SEO" },
   { href: "#contact", label: "Contact" },
 ] as const;
 
