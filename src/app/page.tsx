@@ -7,7 +7,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { CapabilitiesSection } from "@/sections/CapabilitiesSection";
 import { ContactSection } from "@/sections/ContactSection";
 import { EcommerceSection } from "@/sections/EcommerceSection";
-import { HeroSection } from "@/sections/HeroSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
 import { RingStatementSection } from "@/sections/RingStatementSection";
@@ -22,7 +21,6 @@ export default function Home() {
         <SkipLink />
         <SiteHeader />
         <main id="main">
-          <HeroSection />
           <RingStatementSection />
           <ProjectsSection />
           <CapabilitiesSection />

@@ -1,6 +1,8 @@
 "use client";
 
+import GradualBlur from "@/components/reactbits/GradualBlur";
 import Script from "next/script";
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
 
 const SPLINE_VIEWER_SCRIPT =
@@ -20,6 +22,7 @@ function hideSplineViewerLogo(viewer: HTMLElement) {
 
 export function RingStatementSection() {
   const viewerRef = useRef<HTMLElement | null>(null);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const el = viewerRef.current;
@@ -62,8 +65,8 @@ export function RingStatementSection() {
 
   return (
     <section
-      aria-labelledby="ring-statement-heading"
-      className="relative isolate min-h-dvh overflow-hidden border-b border-accent/12 bg-black"
+      aria-labelledby="hero-heading"
+      className="relative isolate min-h-dvh overflow-hidden border-b border-accent/15 bg-black"
     >
       <Script
         type="module"
@@ -76,10 +79,7 @@ export function RingStatementSection() {
         aria-hidden
       />
 
-      <div
-        className="absolute inset-0 z-0 min-h-0 opacity-90"
-        aria-hidden
-      >
+      <div className="absolute inset-0 z-0 min-h-0 opacity-90" aria-hidden>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.22),transparent_40%)]" />
         <spline-viewer
           ref={viewerRef}
@@ -89,23 +89,61 @@ export function RingStatementSection() {
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.2)_42%,rgba(0,0,0,0.86)_78%)]" />
+      <GradualBlur
+        preset="smooth"
+        target="parent"
+        zIndex={3}
+        className="pointer-events-none"
+      />
 
-      <div className="relative z-20 mx-auto flex min-h-dvh max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 lg:px-10">
-        <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent/80">
-          Interface therapy
-        </p>
-        <h2
-          id="ring-statement-heading"
-          className="mt-5 font-(family-name:--font-display) text-[clamp(2.5rem,8vw,6.25rem)] font-bold leading-[0.9] tracking-[-0.055em] text-white"
-        >
-          Calm structure.
-          <span className="block text-outline">Liquid motion.</span>
-        </h2>
-        <p className="mt-8 max-w-xl text-sm leading-relaxed text-neutral-400 sm:text-base">
-          A blank-stage moment for the brand: premium visuals, readable content,
-          and motion that supports the message instead of stealing it.
-        </p>
+      <div className="pointer-events-none absolute inset-0 z-4 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.2)_42%,rgba(0,0,0,0.86)_78%)]" />
+
+      <div className="pointer-events-none relative z-10 mx-auto flex min-h-dvh w-full max-w-[90rem] flex-col items-center justify-center px-4 pt-24 pb-12 sm:px-6 sm:pt-28 lg:px-10">
+        <div className="relative w-full max-w-4xl text-center">
+          <motion.div
+            className="mx-auto mb-6 h-px w-full max-w-md origin-center bg-gradient-to-r from-transparent via-accent/55 to-transparent"
+            aria-hidden
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: 1, opacity: 1 }}
+            transition={{
+              duration: 0.9,
+              delay: 0.15,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+          <h1
+            id="hero-heading"
+            data-gsap="reveal"
+            className="font-(family-name:--font-display) text-[clamp(2.75rem,11vw,7.5rem)] font-bold leading-[0.92] tracking-[-0.04em] text-white"
+          >
+            <motion.span
+              className="block"
+              initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.85,
+                delay: reduceMotion ? 0 : 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              uitherapy
+            </motion.span>
+            <motion.span
+              className="mt-1 block text-[clamp(1.2rem,3.85vw,2.85rem)] leading-[1.06] tracking-[-0.03em] text-outline sm:mt-2"
+              initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.85,
+                delay: reduceMotion ? 0 : 0.18,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              we fix interfaces,
+              <br />
+              sadly not people
+            </motion.span>
+          </h1>
+        </div>
       </div>
     </section>
   );
