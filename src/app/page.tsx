@@ -4,7 +4,6 @@ import { IntroLoader } from "@/components/IntroLoader";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { CapabilitiesSection } from "@/sections/CapabilitiesSection";
 import { ContactSection } from "@/sections/ContactSection";
 import { EcommerceSection } from "@/sections/EcommerceSection";
 import { ProcessSection } from "@/sections/ProcessSection";
@@ -23,7 +22,6 @@ export default function Home() {
         <main id="main">
           <RingStatementSection />
           <ProjectsSection />
-          <CapabilitiesSection />
           <EcommerceSection />
           <ProcessSection />
           <ContactSection />

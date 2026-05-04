@@ -66,10 +66,14 @@ export function ProjectsSection() {
     <section
       id="projects"
       aria-labelledby="projects-heading"
-      className="relative overflow-hidden border-b border-accent/12"
+      className="relative overflow-hidden border-b border-accent/10 bg-[#111018]"
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.25]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_0%,rgba(130,80,255,0.16)_0%,rgba(17,16,24,0.08)_52%,rgba(17,16,24,0.5)_100%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.1]"
         aria-hidden
         style={{
           backgroundImage: NOISE,
@@ -97,19 +101,19 @@ export function ProjectsSection() {
             >
               <span className="block">Projects</span>
               <span
-                className="mt-3 block max-w-xl font-mono text-[clamp(0.7rem,1.8vw,0.85rem)] font-medium normal-case tracking-[0.35em] text-neutral-600"
+                className="mt-3 block max-w-xl font-mono text-[clamp(0.7rem,1.8vw,0.85rem)] font-medium normal-case tracking-[0.35em] text-neutral-500"
                 aria-hidden
               >
                 01 — {String(projects.length).padStart(2, "0")}
               </span>
             </h2>
-            <p className="mt-8 max-w-md border-l border-accent/40 pl-6 text-sm leading-relaxed text-neutral-400 sm:text-base">
+            <p className="mt-8 max-w-md border-l border-accent/30 pl-6 text-sm leading-relaxed text-neutral-400 sm:text-base">
               Interfaces in the wild—swap for your own captures when we ship
               together.
             </p>
           </div>
           <div className="hidden lg:col-span-4 lg:flex lg:justify-end lg:pb-2">
-            <p className="max-h-[11rem] text-[0.6rem] font-medium uppercase leading-loose tracking-[0.42em] text-neutral-600 [writing-mode:vertical-rl]">
+            <p className="max-h-[11rem] text-[0.6rem] font-medium uppercase leading-loose tracking-[0.42em] text-neutral-500 [writing-mode:vertical-rl]">
               Strategy · UI · build · ship
             </p>
           </div>
@@ -124,7 +128,7 @@ export function ProjectsSection() {
               <div key={project.name} className="relative">
                 {index > 0 ? (
                   <div
-                    className="mx-auto mb-2 h-px max-w-3xl bg-gradient-to-r from-transparent via-accent/30 to-transparent sm:mb-0"
+                    className="mx-auto mb-2 h-px max-w-3xl bg-gradient-to-r from-transparent via-accent/18 to-transparent sm:mb-0"
                     aria-hidden
                   />
                 ) : null}
@@ -135,14 +139,14 @@ export function ProjectsSection() {
                     }`}
                   >
                     <div
-                      className={`relative flex-1 overflow-hidden bg-neutral-950 lg:w-[56%] ${
+                      className={`relative flex-1 overflow-hidden bg-black lg:w-[56%] ${
                         reversed
                           ? "rounded-sm rounded-br-[3rem] rounded-tl-[2.75rem] lg:rounded-sm lg:rounded-bl-[3.5rem] lg:rounded-tr-[2.75rem]"
                           : "rounded-sm rounded-bl-[3rem] rounded-tr-[2.75rem] lg:rounded-sm lg:rounded-br-[3.5rem] lg:rounded-tl-[2.75rem]"
                       }`}
                     >
                       <div
-                        className="pointer-events-none absolute inset-0 z-[2] opacity-[0.18] mix-blend-overlay"
+                        className="pointer-events-none absolute inset-0 z-[2] opacity-[0.12] mix-blend-overlay"
                         style={{
                           backgroundImage: NOISE,
                           backgroundSize: "88px 88px",
@@ -158,28 +162,28 @@ export function ProjectsSection() {
                         priority={index === 0}
                       />
                       <div
-                        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/75 via-black/10 to-transparent"
+                        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/32 via-black/5 to-transparent"
                         aria-hidden
                       />
                       <div className="pointer-events-none absolute left-5 top-5 z-[3] sm:left-7 sm:top-7">
-                        <span className="inline-block border border-white/20 bg-black/40 px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.28em] text-white/90 backdrop-blur-md">
+                        <span className="inline-block border border-white/20 bg-black/35 px-3 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.28em] text-white/90 backdrop-blur-md">
                           {project.tag}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex flex-1 flex-col justify-between gap-10 lg:w-[44%] lg:py-4">
-                      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/[0.07] pb-6">
+                      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/[0.05] pb-6">
                         <span className="font-mono text-[0.7rem] tabular-nums tracking-[0.2em] text-accent/90">
                           {n}
                         </span>
                         <div className="text-right">
-                          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-neutral-500">
+                          <p className="text-[0.62rem] uppercase tracking-[0.28em] text-neutral-400">
                             {project.role}
                           </p>
                           <time
                             dateTime={project.year}
-                            className="mt-1 block font-mono text-xs text-neutral-600"
+                            className="mt-1 block font-mono text-xs text-neutral-500"
                           >
                             {project.year}
                           </time>
