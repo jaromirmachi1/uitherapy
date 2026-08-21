@@ -85,6 +85,17 @@
     overflow: hidden;
   }
 
+  html.ut-modal-open,
+  html.ut-modal-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
+  }
+
+  html.ut-modal-open [data-lenis-prevent] {
+    touch-action: pan-y;
+  }
+
   main section[id] {
     scroll-margin-top: 6rem;
   }

@@ -19,7 +19,8 @@ export function middleware(request: NextRequest) {
 
   if (pathnameLocale === defaultLocale) {
     const url = request.nextUrl.clone();
-    url.pathname = pathname.replace(/^\/en/, "") || "/";
+    url.pathname =
+      pathname.replace(new RegExp(`^/${defaultLocale}(?=/|$)`), "") || "/";
     return NextResponse.redirect(url);
   }
 

@@ -158,8 +158,7 @@ const cs: typeof en = {
   hero: {
     proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
     proofLabel: "Zaměření uitherapy",
-    heading:
-      "Kreativní webová terapie pro značky, které si nemohou dovolit chybu",
+    heading: "Webová terapie pro značky, které nesmí minout",
     body: "Senior frontend studio pro prémiové marketingové weby, e-commerce a rozhraní připravená pro vyhledávače.",
   },
   process: {

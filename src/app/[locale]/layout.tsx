@@ -46,7 +46,8 @@ export async function generateMetadata({
   if (!isLocale(raw)) return {};
   const locale = raw;
   const t = getDictionary(locale);
-  const canonical = locale === "en" ? siteUrl : `${siteUrl}/cs`;
+  const canonical =
+    locale === "cs" ? siteUrl : `${siteUrl}/${locale}`;
 
   return {
     metadataBase: new URL(siteUrl),
@@ -67,8 +68,8 @@ export async function generateMetadata({
     alternates: {
       canonical,
       languages: {
-        en: siteUrl,
-        cs: `${siteUrl}/cs`,
+        cs: siteUrl,
+        en: `${siteUrl}/en`,
         "x-default": siteUrl,
       },
     },

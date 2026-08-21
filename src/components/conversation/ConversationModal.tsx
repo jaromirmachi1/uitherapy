@@ -58,6 +58,7 @@ export function ConversationModal() {
     const prev = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
     lenis?.stop();
+    document.documentElement.classList.add("ut-modal-open");
     document.body.classList.add("ut-loading");
 
     const onKey = (event: KeyboardEvent) => {
@@ -81,6 +82,7 @@ export function ConversationModal() {
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
+      document.documentElement.classList.remove("ut-modal-open");
       document.body.classList.remove("ut-loading");
       lenis?.start();
       prev?.focus();
@@ -158,7 +160,8 @@ export function ConversationModal() {
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className="fixed inset-0 z-[125] flex flex-col overflow-y-auto"
+          data-lenis-prevent
+          className="fixed inset-0 z-[125] overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch]"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -192,7 +195,7 @@ export function ConversationModal() {
             </p>
           </div>
 
-          <div className="relative flex justify-end px-5 pt-5 sm:px-8 sm:pt-7">
+          <div className="relative z-10 flex justify-end px-5 pt-5 sm:px-8 sm:pt-7">
             <button
               ref={closeRef}
               type="button"
@@ -204,7 +207,7 @@ export function ConversationModal() {
             </button>
           </div>
 
-          <div className="relative mx-auto grid w-full max-w-[92rem] flex-1 grid-cols-1 items-start gap-5 px-5 pb-16 sm:px-8 lg:grid-cols-[minmax(20rem,0.85fr)_minmax(0,1.2fr)] lg:gap-8 lg:px-12 xl:gap-10 xl:px-16">
+          <div className="relative z-10 mx-auto grid w-full max-w-[92rem] grid-cols-1 items-start gap-5 px-5 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-8 lg:grid-cols-[minmax(20rem,0.85fr)_minmax(0,1.2fr)] lg:gap-8 lg:px-12 xl:gap-10 xl:px-16">
             <motion.section
               className="rounded-[1.75rem] bg-white px-7 py-8 shadow-[0_24px_80px_rgba(43,43,43,0.08)] sm:px-10 lg:sticky lg:top-8"
               initial={reduce ? false : { opacity: 0, y: 18 }}

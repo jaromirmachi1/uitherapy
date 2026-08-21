@@ -20,7 +20,7 @@ export function SiteHeader() {
   return (
     <>
       <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50">
-        <div className="pointer-events-auto mx-auto flex max-w-[100rem] items-start justify-between gap-3 px-3 pt-5 sm:px-12 sm:pt-12">
+        <div className="pointer-events-auto mx-auto flex max-w-[100rem] items-start justify-between gap-3 px-5 pt-5 sm:px-12 sm:pt-12">
           <Link
             href={localePath(locale)}
             className="inline-flex shrink-0 overflow-hidden rounded-md"
