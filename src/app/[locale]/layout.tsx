@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { DM_Sans, Syne } from "next/font/google";
 import { notFound } from "next/navigation";
+import { ConversationModal } from "@/components/conversation/ConversationModal";
+import { ConversationProvider } from "@/components/conversation/ConversationProvider";
 import { GsapProvider } from "@/components/providers/GsapProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { isLocale, locales, type Locale } from "@/i18n/config";
@@ -100,10 +102,13 @@ export default async function LocaleLayout({
         <JsonLdWebsite description={dictionary.seo.description} />
         <JsonLdProfessionalService description={dictionary.seo.description} />
         <I18nProvider locale={locale} dictionary={dictionary}>
-          <SmoothScrollProvider>
-            <GsapProvider />
-            {children}
-          </SmoothScrollProvider>
+          <ConversationProvider>
+            <SmoothScrollProvider>
+              <GsapProvider />
+              {children}
+              <ConversationModal />
+            </SmoothScrollProvider>
+          </ConversationProvider>
         </I18nProvider>
       </body>
     </html>

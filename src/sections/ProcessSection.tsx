@@ -1,6 +1,5 @@
 "use client";
 
-import { GradientWaves } from "@/components/GradientWaves";
 import { ScrollStack } from "@/components/reactbits/ScrollStack";
 import type { Dictionary } from "@/i18n/dictionary";
 import { useI18n } from "@/i18n/provider";
@@ -12,7 +11,7 @@ export function ProcessSection() {
   const steps = t.process.steps;
   const trackRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
-  const trackHeight = `${Math.max(steps.length, 1) * 100}dvh`;
+  const trackHeight = `${100 + Math.max(steps.length - 1, 0) * 40}dvh`;
 
   return (
     <section
@@ -26,19 +25,6 @@ export function ProcessSection() {
         style={{ height: reduceMotion ? undefined : trackHeight }}
       >
         <div className="sticky top-0 flex h-dvh w-full flex-col motion-reduce:relative motion-reduce:h-auto motion-reduce:min-h-dvh">
-          <GradientWaves
-            className="z-0"
-            horizonColor="#e8e8e8"
-            waveColor="#1f5eff"
-            crestColor="#ffffff"
-            speed={0.38}
-            opacity={0.92}
-            brightness={1.22}
-            fogDepth={24}
-            amplitude={3.1}
-            detail="medium"
-          />
-
           <div className="relative z-1 flex min-h-0 flex-1 flex-col px-6 py-16 sm:px-10 md:px-16 md:py-14 lg:px-20">
             <header className="mx-auto w-full max-w-4xl shrink-0 text-center">
               <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
@@ -61,7 +47,7 @@ export function ProcessSection() {
               scaleStep={0.07}
               blur={4}
               dim={0.28}
-              smooth={0.18}
+              smooth={0.32}
               depth={3}
               cardWidth={880}
               borderRadius={22}

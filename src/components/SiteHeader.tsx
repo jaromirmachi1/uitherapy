@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useConversation } from "@/components/conversation/ConversationProvider";
 import { localePath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 
 export function SiteHeader() {
   const { locale, t } = useI18n();
+  const { openConversation } = useConversation();
 
   return (
     <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -35,12 +37,13 @@ export function SiteHeader() {
             >
               {t.nav.projects}
             </a>
-            <a
-              href="#contact"
+            <button
+              type="button"
+              onClick={openConversation}
               className="inline-flex h-9 items-center rounded-md bg-foreground px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent sm:px-4"
             >
               {t.nav.contact}
-            </a>
+            </button>
           </nav>
           <LanguageSwitcher locale={locale} label={t.nav.language} />
         </div>
