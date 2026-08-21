@@ -43,41 +43,51 @@ const en = {
   },
   projects: {
     kicker: "Selected",
-    heading: "Projects",
+    heading: "See for yourself",
     intro:
       "Interfaces in the wild—swap for your own captures when we ship together.",
     spine: "Strategy · UI · build · ship",
+    latestHeading: "Selected work",
+    latestBody: "New projects typically start within two weeks.",
+    viewProject: "View project",
+    requestQuote: "Start a conversation",
     techLabel: "Technologies used",
     newTab: "(opens in a new tab)",
     items: {
       panorama: {
         category: "Web design and development",
         subcategory: "Design systems · Next.js",
+        summary: "Residential launch site for a Brno developer.",
+        location: "Brno",
         story:
           "A residential developer in Brno needed a site that could sell apartments before they existed as a physical experience. Built a fully animated Next.js site with unit browsing, availability states, and a visual language that matched the architectural identity of the project.",
         quote:
           "We started getting more clients coming to view the apartments. The site made everything feel prestigious — and we could run it as a Google Ad straight away.",
-        attribution: "— Panorama Žabiny, residential developer, Brno",
+        attribution: "Panorama Žabiny, residential developer, Brno",
         alt: "Panorama Žabiny website showcase on a screen",
       },
       golden: {
         category: "Culture",
         subcategory: "Creative direction · Motion",
+        summary: "Motion-forward site for a barber shop in Ostrava.",
+        location: "Ostrava",
         story:
           "A barber shop in Ostrava with a sharp identity and zero digital presence to match it. Built a motion-forward experience using Next.js and Framer Motion — atmosphere over information, with a dark editorial visual language that put personality first.",
         quote:
           "People find us online now. It's like a business card — but with style. It's totally us.",
-        attribution: "— Golden Touch, barber shop, Ostrava",
+        attribution: "Golden Touch, barber shop, Ostrava",
         alt: "Golden Touch barber shop site on a phone",
       },
       dvd: {
         category: "Product",
         subcategory: "Product UI · Creative direction",
+        summary: "Studio portfolio with Three.js motion and GSAP craft.",
+        location: "Czechia",
         story:
           "A video production and creative direction studio whose work was sharper than their digital presence. Built a high-performance interface using Three.js and GSAP — motion language tuned so the work speaks, not the wrapper around it.",
         quote:
           "The site reflects our signature style — all our work in one place, under one roof. Clients can see the full picture.",
-        attribution: "— DVD Culture™, video production & creative direction",
+        attribution: "DVD Culture™, video production & creative direction",
         alt: "DVD Culture studio portfolio site preview",
       },
     },
@@ -181,41 +191,51 @@ const cs: typeof en = {
   },
   projects: {
     kicker: "Vybrané",
-    heading: "Projekty",
+    heading: "Podívejte se sami",
     intro:
       "Rozhraní venku ve světě — až budeme tvořit spolu, nahradíme je vašimi záběry.",
     spine: "Strategie · UI · stavba · spuštění",
+    latestHeading: "Vybraná práce",
+    latestBody: "Nové projekty obvykle začínají do dvou týdnů.",
+    viewProject: "Zobrazit projekt",
+    requestQuote: "Začít konverzaci",
     techLabel: "Použité technologie",
     newTab: "(otevře se v novém okně)",
     items: {
       panorama: {
         category: "Webdesign a vývoj",
         subcategory: "Design systémy · Next.js",
+        summary: "Web pro rezidenční development v Brně.",
+        location: "Brno",
         story:
           "Rezidenční developer v Brně potřeboval web, který prodá byty dřív, než existují jako fyzický zážitek. Postavili jsme plně animovaný Next.js web s výběrem jednotek, stavy dostupnosti a vizuálním jazykem, který sedí architektuře projektu.",
         quote:
           "Začali k nám chodit další klienti na prohlídky. Web působil prestižně — a hned jsme z něj mohli spustit Google reklamu.",
-        attribution: "— Panorama Žabiny, rezidenční developer, Brno",
+        attribution: "Panorama Žabiny, rezidenční developer, Brno",
         alt: "Web Panorama Žabiny na obrazovce",
       },
       golden: {
         category: "Kultura",
         subcategory: "Creative direction · Motion",
+        summary: "Motion-first web pro barbershop v Ostravě.",
+        location: "Ostrava",
         story:
           "Barbershop v Ostravě se ostrou identitou a nulovou digitální stopou, která by jí odpovídala. Postavili jsme motion-first zážitek na Next.js a Framer Motion — atmosféra před informacemi, tmavý editorial, který dává osobnost na první místo.",
         quote:
           "Lidi nás teď najdou online. Je to vizitka — ale se stylem. Jsme to přesně my.",
-        attribution: "— Golden Touch, barbershop, Ostrava",
+        attribution: "Golden Touch, barbershop, Ostrava",
         alt: "Web Golden Touch na telefonu",
       },
       dvd: {
         category: "Produkt",
         subcategory: "Product UI · Creative direction",
+        summary: "Studiové portfolio s Three.js a GSAP.",
+        location: "Česko",
         story:
           "Video produkce a creative direction studio, jehož práce byla ostřejší než digitální přítomnost. Postavili jsme výkonné rozhraní na Three.js a GSAP — pohyb naladěný tak, aby mluvila práce, ne obal kolem ní.",
         quote:
           "Web odráží náš rukopis — všechna práce na jednom místě, pod jednou střechou. Klienti vidí celý obraz.",
-        attribution: "— DVD Culture™, video produkce a creative direction",
+        attribution: "DVD Culture™, video produkce a creative direction",
         alt: "Náhled portfolia studia DVD Culture",
       },
     },

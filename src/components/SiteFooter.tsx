@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { useI18n } from "@/i18n/provider";
 import { getSiteUrl, siteEmail } from "@/seo/site";
 
@@ -12,7 +13,7 @@ export function SiteFooter() {
 
   return (
     <footer className="site-block">
-      <div className="mx-auto flex max-w-[90rem] flex-col gap-12 px-4 py-16 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-10">
+      <ScrollReveal className="mx-auto flex max-w-[90rem] flex-col gap-12 px-4 py-16 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-10">
         <div>
           <div className="inline-flex rounded-xl border border-black/10 bg-black p-3 shadow-[0_16px_42px_rgba(23,21,16,0.12)] backdrop-blur-md sm:p-3.5">
             <Image
@@ -43,7 +44,7 @@ export function SiteFooter() {
             © {year} UI Therapy
           </p>
         </div>
-      </div>
+      </ScrollReveal>
     </footer>
   );
 }

@@ -34,9 +34,15 @@ export function RingStatementSection() {
         <motion.ul
           className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.7rem] font-medium uppercase tracking-[0.16em] text-foreground"
           aria-label={t.hero.proofLabel}
-          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial={
+            reduceMotion ? false : { opacity: 0, y: 20, filter: "blur(12px)" }
+          }
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: reduceMotion ? 0 : 0.85,
+            delay: reduceMotion ? 0 : 1.55,
+            ease: [0.22, 1, 0.36, 1],
+          }}
         >
           {proof.map((item, index) => (
             <li key={item} className="flex items-center gap-3">
@@ -50,16 +56,17 @@ export function RingStatementSection() {
 
         <h1
           id="hero-heading"
-          data-gsap="reveal"
           className="mt-10 max-w-[18ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
         >
           <motion.span
             className="block"
-            initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={
+              reduceMotion ? false : { opacity: 0, y: 28, filter: "blur(14px)" }
+            }
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{
-              duration: reduceMotion ? 0 : 0.85,
-              delay: reduceMotion ? 0 : 0.08,
+              duration: reduceMotion ? 0 : 0.95,
+              delay: reduceMotion ? 0 : 1.65,
               ease: [0.22, 1, 0.36, 1],
             }}
           >
@@ -69,11 +76,13 @@ export function RingStatementSection() {
 
         <motion.p
           className="mt-10 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg"
-          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={
+            reduceMotion ? false : { opacity: 0, y: 24, filter: "blur(12px)" }
+          }
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
-            duration: reduceMotion ? 0 : 0.75,
-            delay: reduceMotion ? 0 : 0.22,
+            duration: reduceMotion ? 0 : 0.9,
+            delay: reduceMotion ? 0 : 1.78,
             ease: [0.22, 1, 0.36, 1],
           }}
         >

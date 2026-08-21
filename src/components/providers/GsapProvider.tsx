@@ -18,10 +18,11 @@ export function GsapProvider() {
         const delay = Number(item.dataset.gsapDelay ?? 0);
         gsap.fromTo(
           item,
-          { autoAlpha: 0, y: 28 },
+          { autoAlpha: 0, y: 28, filter: "blur(12px)" },
           {
             autoAlpha: 1,
             y: 0,
+            filter: "blur(0px)",
             duration: 0.95,
             delay,
             ease: "power3.out",

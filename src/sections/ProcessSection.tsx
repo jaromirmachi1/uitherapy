@@ -1,5 +1,6 @@
 "use client";
 
+import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ScrollStack } from "@/components/reactbits/ScrollStack";
 import type { Dictionary } from "@/i18n/dictionary";
 import { useI18n } from "@/i18n/provider";
@@ -26,20 +27,22 @@ export function ProcessSection() {
       >
         <div className="sticky top-0 flex h-dvh w-full flex-col motion-reduce:relative motion-reduce:h-auto motion-reduce:min-h-dvh">
           <div className="relative z-1 flex min-h-0 flex-1 flex-col px-6 py-16 sm:px-10 md:px-16 md:py-14 lg:px-20">
-            <header className="mx-auto w-full max-w-4xl shrink-0 text-center">
-              <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
-                {t.process.kicker}
-              </p>
-              <h2
-                id="process-heading"
-                className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[0.88] tracking-[-0.055em] text-foreground"
-              >
-                {t.process.heading}
-              </h2>
-              <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-neutral-600 sm:text-base">
-                {t.process.body}
-              </p>
-            </header>
+            <ScrollReveal className="mx-auto w-full max-w-4xl shrink-0 text-center">
+              <header>
+                <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
+                  {t.process.kicker}
+                </p>
+                <h2
+                  id="process-heading"
+                  className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[0.88] tracking-[-0.055em] text-foreground"
+                >
+                  {t.process.heading}
+                </h2>
+                <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-neutral-600 sm:text-base">
+                  {t.process.body}
+                </p>
+              </header>
+            </ScrollReveal>
 
             <ScrollStack
               trackRef={trackRef}

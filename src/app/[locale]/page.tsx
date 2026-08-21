@@ -38,12 +38,13 @@ export default function Home() {
                 detail="medium"
               />
             </div>
-            <div className="relative z-1 -mt-[100dvh] flex flex-col gap-6">
+            <div className="relative z-1 -mt-[100dvh]">
               <ProcessSection />
-              <div className="px-6">
-                <ProjectsSection />
-              </div>
             </div>
+          </div>
+
+          <div className="px-6">
+            <ProjectsSection />
           </div>
 
           <div className="px-6">

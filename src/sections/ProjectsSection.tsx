@@ -1,235 +1,229 @@
 "use client";
 
 import Image from "next/image";
-import { SpotlightCard } from "@/components/reactbits/SpotlightCard";
+import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
+import { useConversation } from "@/components/conversation/ConversationProvider";
 import { useI18n } from "@/i18n/provider";
 
 type ProjectEntry = {
   id: "panorama" | "golden" | "dvd";
   title: string;
   year: string;
-  tags: readonly string[];
   url: string;
-  linkLabel: string;
   image: string;
+  rotate: string;
+  position: string;
 };
-
-const NOISE =
-  "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 const projects: ProjectEntry[] = [
   {
     id: "panorama",
     title: "Panorama Žabiny",
     year: "2026",
-    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
     url: "https://www.panoramazabiny.cz",
-    linkLabel: "panoramazabiny.cz",
     image: "/panoramaph.webp",
+    rotate: "-rotate-[16deg]",
+    position:
+      "right-[36%] top-[28%] w-[42%] max-w-[20rem] sm:right-[34%] sm:top-[22%]",
   },
   {
     id: "golden",
     title: "Golden Touch",
     year: "2025",
-    tags: ["Next.js", "Tailwind CSS", "Motion"],
     url: "https://www.goldentouchova.cz",
-    linkLabel: "goldentouchova.cz",
     image: "/barbermartini.webp",
+    rotate: "-rotate-[3deg]",
+    position:
+      "right-[16%] top-[18%] w-[44%] max-w-[21rem] sm:right-[14%] sm:top-[14%]",
   },
   {
     id: "dvd",
     title: "DVD Culture",
     year: "2025",
-    tags: ["Next.js", "React", "Three.js", "GSAP", "Tailwind CSS"],
     url: "https://www.dvdculture.com",
-    linkLabel: "dvdculture.com",
     image: "/dvdculture.webp",
+    rotate: "rotate-[11deg]",
+    position:
+      "right-[-2%] top-[34%] w-[46%] max-w-[22rem] sm:right-[-1%] sm:top-[30%]",
   },
 ];
 
+function ExternalIcon() {
+  return (
+    <svg
+      viewBox="0 0 13 13"
+      className="h-3.5 w-3.5"
+      fill="currentColor"
+      aria-hidden
+    >
+      <path d="M6.4 11.7q-1.1 1.1-2.65 1.1A3.62 3.62 0 0 1 1.1 11.7 3.6 3.6 0 0 1 0 9.06q0-1.55 1.1-2.65l1.59-1.59a.73.73 0 0 1 1.06 0q.23.23.23.53 0 .31-.23.53L2.16 7.47a2.17 2.17 0 0 0-.66 1.59q0 .93.66 1.59a2.17 2.17 0 0 0 1.59.66q.93 0 1.59-.66l1.59-1.59a.73.73 0 0 1 1.06 0q.23.23.23.53 0 .31-.23.53zm-1.06-3.18a.73.73 0 0 1-1.06 0 .73.73 0 0 1 0-1.06l3.18-3.18a.73.73 0 0 1 1.06 0 .73.73 0 0 1 0 1.06zM10.11 8a.73.73 0 0 1-1.06 0 .73.73 0 0 1 0-1.06l1.59-1.59a2.17 2.17 0 0 0 .66-1.59 2.17 2.17 0 0 0-.66-1.59 2.17 2.17 0 0 0-1.59-.66 2.17 2.17 0 0 0-1.59.66L5.87 3.75a.73.73 0 0 1-1.06 0 .73.73 0 0 1 0-1.06L6.4 1.1A3.62 3.62 0 0 1 9.06 0q1.55 0 2.65 1.1A3.62 3.62 0 0 1 12.81 3.75a3.6 3.6 0 0 1-1.1 2.65z" />
+    </svg>
+  );
+}
+
 export function ProjectsSection() {
   const { t } = useI18n();
-  return (
-    <section
-      id="projects"
-      aria-labelledby="projects-heading"
-      className="site-block relative overflow-hidden"
-    >
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_0%,rgba(255,255,255,0.9)_0%,rgba(244,240,232,0.72)_58%,rgba(238,231,220,0.9)_100%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-multiply"
-        aria-hidden
-        style={{
-          backgroundImage: NOISE,
-          backgroundSize: "96px 96px",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute -left-[12%] top-[18%] font-[family-name:var(--font-display)] text-[clamp(7rem,24vw,20rem)] font-bold leading-none tracking-[-0.06em] text-black/[0.035]"
-        aria-hidden
-      >
-        0
-      </div>
+  const { openConversation } = useConversation();
+  const featured = t.projects.items.golden;
 
-      <div className="relative mx-auto max-w-[100rem] px-4 py-24 sm:px-6 lg:px-12 lg:py-36">
-        <header className="grid gap-14 lg:mb-28 lg:grid-cols-12 lg:gap-8 lg:items-end">
-          <div className="lg:col-span-8">
-            <p className="text-[0.65rem] font-medium uppercase tracking-[0.38em] text-accent">
-              {t.projects.kicker}
-            </p>
+  return (
+    <section id="projects" aria-labelledby="projects-heading" className="relative">
+      <div
+        className="pointer-events-none absolute inset-x-[-1.5rem] -top-[22svh] bottom-0 -z-1 bg-[#e8e8e8] [mask-image:linear-gradient(to_bottom,transparent,black_22svh)]"
+        aria-hidden
+      />
+
+      <div className="flex flex-wrap gap-4">
+        <ScrollReveal className="w-full lg:w-[calc(58.333%-0.5rem)]">
+          <div className="relative h-full min-h-[66svh] overflow-hidden rounded-[1.5rem] bg-[#fafafa] lg:min-h-[min(72svh,38rem)]">
             <h2
               id="projects-heading"
-              data-gsap="reveal"
-              className="mt-5 font-[family-name:var(--font-display)] text-[clamp(3.25rem,11vw,8rem)] font-bold leading-[0.92] tracking-[-0.045em] text-foreground"
+              className="pointer-events-none absolute left-6 top-6 z-10 max-w-[4.4em] font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.6vw,4.75rem)] font-medium leading-[0.86] tracking-[-0.05em] text-foreground sm:left-8 sm:top-8"
             >
-              <span className="block">{t.projects.heading}</span>
-              <span
-                className="mt-3 block max-w-xl font-mono text-[clamp(0.7rem,1.8vw,0.85rem)] font-medium normal-case tracking-[0.35em] text-neutral-500"
-                aria-hidden
-              >
-                01 — {String(projects.length).padStart(2, "0")}
-              </span>
+              {t.projects.heading}
             </h2>
-            <p className="mt-8 max-w-md border-l border-accent/35 pl-6 text-sm leading-relaxed text-neutral-600 sm:text-base">
-              {t.projects.intro}
-            </p>
-          </div>
-          <div className="hidden lg:col-span-4 lg:flex lg:justify-end lg:pb-2">
-            <p className="max-h-[11rem] text-[0.6rem] font-medium uppercase leading-loose tracking-[0.42em] text-neutral-500 [writing-mode:vertical-rl]">
-              {t.projects.spine}
-            </p>
-          </div>
-        </header>
 
-        <div className="flex flex-col">
-          {projects.map((project, index) => {
-            const n = String(index + 1).padStart(2, "0");
-            const reversed = index % 2 === 1;
-            const copy = t.projects.items[project.id];
-
-            return (
-              <div key={project.title} className="relative">
-                {index > 0 ? (
-                  <div
-                    className="mx-auto mb-2 h-px max-w-3xl bg-gradient-to-r from-transparent via-black/12 to-transparent sm:mb-0"
-                    aria-hidden
-                  />
-                ) : null}
-                <SpotlightCard spotlightHex="1F5EFF" className="group">
-                  <article
-                    className={`relative flex flex-col overflow-hidden rounded-[1.75rem] border border-black/10 bg-white/62 shadow-[0_26px_88px_rgba(23,21,16,0.08)] backdrop-blur-xl transition-[border-color,box-shadow] duration-300 ease-out hover:border-accent/35 hover:shadow-[0_32px_110px_rgba(31,94,255,0.12)] lg:min-h-[min(82vh,840px)] lg:flex-row lg:items-stretch ${
-                      reversed ? "lg:flex-row-reverse" : ""
-                    }`}
+            <div className="absolute inset-0">
+              {projects.map((project, index) => {
+                const copy = t.projects.items[project.id];
+                return (
+                  <a
+                    key={project.id}
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`absolute overflow-hidden rounded-2xl bg-white p-1.5 shadow-[0_22px_70px_rgba(23,21,16,0.14)] transition-transform duration-500 ease-out hover:-translate-y-1.5 ${project.position} ${project.rotate}`}
+                    style={{ zIndex: index + 1 }}
                   >
-                    <div
-                      className={`relative min-h-[24rem] flex-1 overflow-hidden bg-[#ded6c9] lg:w-[56%] ${
-                        reversed
-                          ? "rounded-[1.75rem] rounded-br-[3rem] rounded-tl-[2.75rem] lg:rounded-none lg:rounded-br-[2.5rem] lg:rounded-tl-[2rem]"
-                          : "rounded-[1.75rem] rounded-bl-[3rem] rounded-tr-[2.75rem] lg:rounded-none lg:rounded-bl-[2.5rem] lg:rounded-tr-[2rem]"
-                      }`}
-                    >
-                      <div
-                        className="pointer-events-none absolute inset-0 z-[2] opacity-[0.08] mix-blend-multiply"
-                        style={{
-                          backgroundImage: NOISE,
-                          backgroundSize: "88px 88px",
-                        }}
-                        aria-hidden
-                      />
+                    <span className="relative block aspect-[4/5] overflow-hidden rounded-[0.9rem] bg-[#ececec]">
                       <Image
                         src={project.image}
                         alt={copy.alt}
                         fill
-                        className="object-cover will-change-auto"
-                        sizes="(max-width: 1024px) 100vw, 56vw"
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 46vw, 22rem"
                         priority={index === 0}
                       />
-                      <div
-                        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/28 via-black/0 to-white/10"
-                        aria-hidden
-                      />
-                      <div className="pointer-events-none absolute left-5 top-5 z-[3] max-w-[min(100%,20rem)] sm:left-7 sm:top-7">
-                        <span className="inline-block rounded-full border border-white/50 bg-white/64 px-3 py-1.5 font-mono text-[0.6rem] leading-snug tracking-[0.12em] text-foreground backdrop-blur-md">
-                          {copy.category}
-                        </span>
-                      </div>
-                    </div>
+                    </span>
+                    <span className="sr-only">
+                      {project.title} {t.projects.newTab}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </ScrollReveal>
 
-                    <div
-                      className={`flex flex-1 flex-col gap-8 border-t border-black/10 px-5 py-12 sm:gap-9 sm:px-7 sm:py-16 lg:w-[44%] lg:border-t-0 lg:border-black/10 lg:py-10 ${
-                        reversed
-                          ? "lg:border-r lg:pl-8 lg:pr-10"
-                          : "lg:border-l lg:pl-10 lg:pr-8"
-                      }`}
-                    >
-                      <div className="flex items-baseline justify-between gap-4">
-                        <span className="font-mono text-[0.7rem] tabular-nums tracking-[0.2em] text-accent/90">
-                          {n}
-                        </span>
-                        <time
-                          dateTime={project.year}
-                          className="font-mono text-xs tabular-nums text-neutral-500"
-                        >
-                          {project.year}
-                        </time>
-                      </div>
+        <ScrollReveal className="w-full lg:w-[calc(41.667%-0.5rem)]" delay={0.08}>
+          <blockquote className="relative flex h-full min-h-[22rem] flex-col justify-center overflow-hidden rounded-[1.5rem] bg-foreground px-8 py-16 text-[#fafafa] sm:px-12 lg:min-h-[min(72svh,38rem)] lg:px-[11%]">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.22]"
+              aria-hidden
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(250,250,250,0.55) 0.7px, transparent 0.8px)",
+                backgroundSize: "14px 14px",
+              }}
+            />
+            <div
+              className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-accent/35 blur-3xl"
+              aria-hidden
+            />
+            <p className="relative font-[family-name:var(--font-display)] text-[clamp(1.85rem,4.2vw,3.4rem)] font-medium leading-[0.92] tracking-[-0.04em]">
+              <span
+                className="absolute -left-3 -top-3 text-[1.15em] leading-none text-white/70 sm:-left-5"
+                aria-hidden
+              >
+                “
+              </span>
+              {featured.quote}
+            </p>
+            <footer className="relative mt-8 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/55">
+              — {featured.attribution}
+            </footer>
+          </blockquote>
+        </ScrollReveal>
 
-                      <div className="flex flex-1 flex-col gap-6">
-                        <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.85rem,4.8vw,3.75rem)] font-medium leading-[1.05] tracking-[-0.035em] text-foreground lg:max-w-[20ch]">
-                          {project.title}
-                        </h3>
-                        <p className="text-sm leading-relaxed text-neutral-500 sm:text-[0.9375rem]">
-                          {copy.subcategory}
-                        </p>
-                        <p className="max-w-lg text-sm leading-[1.75] text-neutral-600 sm:text-base">
-                          {copy.story}
-                        </p>
-                        <figure className="max-w-lg border-l border-accent/45 pl-6">
-                          <blockquote className="text-sm italic leading-relaxed text-foreground sm:text-base">
-                            <p>&ldquo;{copy.quote}&rdquo;</p>
-                          </blockquote>
-                          <figcaption className="mt-4 font-mono text-[0.65rem] leading-relaxed tracking-[0.06em] text-neutral-500">
-                            {copy.attribution}
-                          </figcaption>
-                        </figure>
-                      </div>
-
-                      <div className="flex flex-col gap-6 border-t border-black/10 pt-8 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-x-6 sm:gap-y-4">
-                        <ul
-                          className="flex flex-wrap gap-2"
-                          aria-label={t.projects.techLabel}
-                        >
-                          {project.tags.map((tag) => (
-                            <li key={tag}>
-                              <span className="inline-block rounded-full border border-black/10 bg-white/60 px-2.5 py-1 font-mono text-[0.65rem] tracking-wide text-neutral-600">
-                                {tag}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                        <a
-                          href={project.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex shrink-0 items-center gap-2 rounded-full border border-accent/45 bg-accent/10 px-4 py-2 font-mono text-[0.75rem] font-medium tracking-[0.14em] text-accent transition-colors hover:border-accent hover:bg-accent hover:text-white"
-                        >
-                          {project.linkLabel}
-                          <span aria-hidden className="text-base leading-none">
-                            →
-                          </span>
-                          <span className="sr-only">{t.projects.newTab}</span>
-                        </a>
-                      </div>
-                    </div>
-                  </article>
-                </SpotlightCard>
+        <ScrollReveal className="w-full xl:w-[calc(80%-0.5rem)]" delay={0.04}>
+          <div className="flex flex-col gap-6 rounded-[1.5rem] bg-[#fafafa] p-5 sm:p-6 lg:flex-row lg:items-stretch lg:gap-8 lg:p-8">
+            <div className="flex shrink-0 flex-col justify-between gap-5 lg:max-w-[13.5rem]">
+              <div>
+                <h3 className="font-[family-name:var(--font-display)] text-[1.45rem] font-medium leading-none tracking-[-0.04em] text-foreground">
+                  {t.projects.latestHeading}
+                </h3>
+                <p className="mt-3 max-w-[16rem] text-sm leading-relaxed text-neutral-500">
+                  {t.projects.latestBody}
+                </p>
               </div>
-            );
-          })}
-        </div>
+              <button
+                type="button"
+                onClick={openConversation}
+                className="hidden h-9 w-fit items-center rounded-md bg-foreground px-3.5 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent sm:inline-flex"
+              >
+                {t.projects.requestQuote}
+              </button>
+            </div>
+
+            <ul className="grid flex-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {projects.map((project) => {
+                const copy = t.projects.items[project.id];
+                return (
+                  <li
+                    key={project.id}
+                    className="flex min-h-[8.5rem] flex-col justify-between rounded-2xl bg-white p-3.5 sm:p-4"
+                  >
+                    <p className="px-1 text-[0.9375rem] leading-snug text-foreground">
+                      {copy.summary}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="inline-flex h-6 items-center rounded-full bg-[#f1f1f1] px-2.5 text-[0.72rem] tracking-[0.03em] text-foreground">
+                          {copy.location}
+                        </span>
+                        <span className="inline-flex h-6 items-center rounded-full bg-[#f1f1f1] px-2.5 text-[0.72rem] tracking-[0.03em] text-foreground">
+                          {project.year}
+                        </span>
+                      </div>
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-neutral-400 transition-colors hover:text-foreground"
+                      >
+                        <ExternalIcon />
+                        <span className="sr-only">
+                          {t.projects.viewProject}: {project.title}{" "}
+                          {t.projects.newTab}
+                        </span>
+                      </a>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal className="hidden min-h-[10rem] xl:block xl:w-[calc(20%-0.5rem)]" delay={0.1}>
+          <a
+            href={projects[0].url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative block h-full min-h-[10rem] overflow-hidden rounded-[1.5rem]"
+          >
+            <Image
+              src={projects[0].image}
+              alt={t.projects.items.panorama.alt}
+              fill
+              className="object-cover"
+              sizes="20vw"
+            />
+            <span className="sr-only">
+              {t.projects.viewProject}: {projects[0].title} {t.projects.newTab}
+            </span>
+          </a>
+        </ScrollReveal>
       </div>
     </section>
   );
