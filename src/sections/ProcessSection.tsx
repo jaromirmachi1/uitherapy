@@ -2,33 +2,14 @@
 
 import { GradientWaves } from "@/components/GradientWaves";
 import { ScrollStack } from "@/components/reactbits/ScrollStack";
+import type { Dictionary } from "@/i18n/dictionary";
+import { useI18n } from "@/i18n/provider";
 import { useReducedMotion } from "motion/react";
 import { useRef } from "react";
 
-const steps = [
-  {
-    title: "Align",
-    label: "Strategy",
-    text: "Goals, audience, and what “premium” means in motion and type.",
-  },
-  {
-    title: "Architect",
-    label: "Structure",
-    text: "Routes, content model, component API—SEO and a11y in the blueprint.",
-  },
-  {
-    title: "Craft",
-    label: "Interface",
-    text: "UI systems, responsive behavior, animation language in real code.",
-  },
-  {
-    title: "Harden",
-    label: "Launch",
-    text: "Perf budgets, a11y passes, analytics—ship with confidence.",
-  },
-] as const;
-
 export function ProcessSection() {
+  const { t } = useI18n();
+  const steps = t.process.steps;
   const trackRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
   const trackHeight = `${Math.max(steps.length, 1) * 100}dvh`;
@@ -51,25 +32,26 @@ export function ProcessSection() {
             waveColor="#1f5eff"
             crestColor="#ffffff"
             speed={0.38}
-            opacity={0.55}
-            brightness={1.05}
+            opacity={0.92}
+            brightness={1.22}
+            fogDepth={24}
+            amplitude={3.1}
             detail="medium"
           />
 
           <div className="relative z-1 flex min-h-0 flex-1 flex-col px-6 py-16 sm:px-10 md:px-16 md:py-14 lg:px-20">
             <header className="mx-auto w-full max-w-4xl shrink-0 text-center">
               <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
-                Process
+                {t.process.kicker}
               </p>
               <h2
                 id="process-heading"
                 className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[0.88] tracking-[-0.055em] text-foreground"
               >
-                From brief to launch, no black box.
+                {t.process.heading}
               </h2>
               <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-neutral-600 sm:text-base">
-                A focused build sequence designed for polished interfaces, fast
-                pages, and content that search engines can understand.
+                {t.process.body}
               </p>
             </header>
 
@@ -102,7 +84,7 @@ function ProcessCard({
   step,
   index,
 }: {
-  step: (typeof steps)[number];
+  step: Dictionary["process"]["steps"][number];
   index: number;
 }) {
   const n = String(index + 1).padStart(2, "0");

@@ -1,12 +1,13 @@
 "use client";
 
 import { FluidCursor } from "@/components/FluidCursor";
+import { useI18n } from "@/i18n/provider";
 import { motion, useReducedMotion } from "motion/react";
 
-const proof = ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const;
-
 export function RingStatementSection() {
+  const { t } = useI18n();
   const reduceMotion = useReducedMotion();
+  const proof = t.hero.proof;
 
   return (
     <section
@@ -32,7 +33,7 @@ export function RingStatementSection() {
       <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3rem)] w-full max-w-[72rem] flex-col items-center justify-center px-6 py-28 text-center sm:px-8">
         <motion.ul
           className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.7rem] font-medium uppercase tracking-[0.16em] text-foreground"
-          aria-label="UI Therapy focus"
+          aria-label={t.hero.proofLabel}
           initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -50,7 +51,7 @@ export function RingStatementSection() {
         <h1
           id="hero-heading"
           data-gsap="reveal"
-          className="mt-10 max-w-[14ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
+          className="mt-10 max-w-[18ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
         >
           <motion.span
             className="block"
@@ -62,7 +63,7 @@ export function RingStatementSection() {
               ease: [0.22, 1, 0.36, 1],
             }}
           >
-            Creative web therapy for brands that can&apos;t afford to miss
+            {t.hero.heading}
           </motion.span>
         </h1>
 
@@ -76,8 +77,7 @@ export function RingStatementSection() {
             ease: [0.22, 1, 0.36, 1],
           }}
         >
-          A senior frontend studio building premium marketing sites, ecommerce
-          fronts, and search-ready interfaces.
+          {t.hero.body}
         </motion.p>
       </div>
     </section>

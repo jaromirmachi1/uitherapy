@@ -1,13 +1,14 @@
 import { getSiteUrl, siteDescription, siteEmail, siteName } from "./site";
 
-export function JsonLdWebsite() {
+export function JsonLdWebsite({ description }: { description?: string }) {
   const url = getSiteUrl();
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteName,
-    description: siteDescription,
+    description: description ?? siteDescription,
     url,
+    inLanguage: ["en", "cs"],
   };
 
   return (
@@ -18,13 +19,17 @@ export function JsonLdWebsite() {
   );
 }
 
-export function JsonLdProfessionalService() {
+export function JsonLdProfessionalService({
+  description,
+}: {
+  description?: string;
+}) {
   const url = getSiteUrl();
   const schema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: siteName,
-    description: siteDescription,
+    description: description ?? siteDescription,
     url,
     email: siteEmail,
     areaServed: "Worldwide",

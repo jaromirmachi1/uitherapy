@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useI18n } from "@/i18n/provider";
 import { getSiteUrl, siteEmail } from "@/seo/site";
 
 export function SiteFooter() {
+  const { t } = useI18n();
   const year = new Date().getFullYear();
   const url = getSiteUrl();
 
@@ -20,7 +24,7 @@ export function SiteFooter() {
             />
           </div>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
-            Frontend craft—layout, motion, performance, accessibility.
+            {t.footer.blurb}
           </p>
         </div>
         <div className="flex flex-col gap-6 text-sm text-neutral-600 sm:items-end">

@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useI18n } from "@/i18n/provider";
 
 const DURATION_MS = 2000;
 const EXIT_MS = 650;
 
 export function IntroLoader() {
+  const { t } = useI18n();
   const [progress, setProgress] = useState(0);
   const [closing, setClosing] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -54,7 +56,7 @@ export function IntroLoader() {
           priority
           className="intro-loader__logo h-[clamp(1.75rem,5.5vw,3.25rem)] w-auto"
         />
-        <p className="intro-loader__tag">Premium interfaces and technical SEO</p>
+        <p className="intro-loader__tag">{t.loader}</p>
       </div>
       <div className="intro-loader__meter">
         <span>{progress.toString().padStart(2, "0")}</span>
