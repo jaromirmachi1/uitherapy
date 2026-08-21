@@ -6,6 +6,7 @@ import {
   Children,
   type ReactNode,
   type RefObject,
+  useCallback,
   useEffect,
   useRef,
 } from "react";
@@ -56,13 +57,13 @@ export function ScrollStack({
   const count = items.length;
   const reduceMotion = useReducedMotion();
 
-  const readProgress = () => {
+  const readProgress = useCallback(() => {
     const track = trackRef.current;
     if (!track) return 0;
     const rect = track.getBoundingClientRect();
     const total = Math.max(track.offsetHeight - window.innerHeight, 1);
     return clamp(-rect.top / total, 0, 1) * Math.max(count - 1, 0);
-  };
+  }, [count, trackRef]);
 
   useLenis(() => {
     targetProgress.current = readProgress();
@@ -185,6 +186,7 @@ export function ScrollStack({
     depth,
     dim,
     peek,
+    readProgress,
     reduceMotion,
     scaleStep,
     smooth,

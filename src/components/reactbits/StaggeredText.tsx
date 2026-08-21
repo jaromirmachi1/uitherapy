@@ -1,19 +1,21 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  type Easing,
-  type MotionStyle,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   useEffect,
   useMemo,
   useRef,
   useState,
-  type ElementType,
   type CSSProperties,
+  type ElementType,
 } from "react";
+
+type SegmentState = {
+  opacity: number;
+  x: number;
+  y: number;
+  filter?: string;
+};
 
 export type StaggeredTextProps = {
   text?: string;
@@ -24,7 +26,6 @@ export type StaggeredTextProps = {
   separator?: string;
   delay?: number;
   duration?: number;
-  easing?: Easing | Easing[];
   threshold?: number;
   rootMargin?: string;
   direction?: "top" | "bottom" | "left" | "right";
@@ -32,8 +33,8 @@ export type StaggeredTextProps = {
   staggerDirection?: "forward" | "reverse" | "center";
   respectReducedMotion?: boolean;
   exitOnScrollOut?: boolean;
-  from?: MotionStyle;
-  to?: MotionStyle | MotionStyle[];
+  from?: SegmentState;
+  to?: SegmentState;
   onAnimationComplete?: () => void;
   onExitComplete?: () => void;
   style?: CSSProperties;
@@ -98,7 +99,6 @@ export default function StaggeredText({
   separator,
   delay = 80,
   duration = 0.6,
-  easing = [0.22, 1, 0.36, 1],
   threshold = 0.1,
   rootMargin = "0px",
   direction = "top",
@@ -115,9 +115,10 @@ export default function StaggeredText({
   const Tag = as as ElementType;
   const rootRef = useRef<HTMLElement | null>(null);
   const prefersReduced = useReducedMotion();
-  const reduceMotion = respectReducedMotion && prefersReduced;
+  const reduceMotion = Boolean(respectReducedMotion && prefersReduced);
   const [visible, setVisible] = useState(false);
   const completedRef = useRef(false);
+  const visibleRef = useRef(false);
 
   const segments = useMemo(
     () => splitSegments(text, segmentBy, separator),
@@ -125,25 +126,22 @@ export default function StaggeredText({
   );
 
   const offset = offsetForDirection(direction);
-  const initialStyle: MotionStyle = from ?? {
+  const initialStyle: SegmentState = from ?? {
     opacity: 0,
     x: offset.x,
     y: offset.y,
-    ...(blur ? { filter: "blur(12px)" } : null),
+    ...(blur ? { filter: "blur(12px)" } : {}),
   };
-  const targetStyle: MotionStyle = Array.isArray(to)
-    ? (to[to.length - 1] ?? {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        ...(blur ? { filter: "blur(0px)" } : null),
-      })
-    : (to ?? {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        ...(blur ? { filter: "blur(0px)" } : null),
-      });
+  const targetStyle: SegmentState = to ?? {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    ...(blur ? { filter: "blur(0px)" } : {}),
+  };
+
+  useEffect(() => {
+    visibleRef.current = visible;
+  }, [visible]);
 
   useEffect(() => {
     const node = rootRef.current;
@@ -159,7 +157,7 @@ export default function StaggeredText({
           if (!exitOnScrollOut) observer.disconnect();
           return;
         }
-        if (exitOnScrollOut && visible) {
+        if (exitOnScrollOut && visibleRef.current) {
           setVisible(false);
           completedRef.current = false;
         }
@@ -169,7 +167,7 @@ export default function StaggeredText({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [exitOnScrollOut, rootMargin, threshold, visible]);
+  }, [exitOnScrollOut, rootMargin, threshold]);
 
   useEffect(() => {
     completedRef.current = false;
@@ -192,7 +190,7 @@ export default function StaggeredText({
           : segments.length - 1;
     if (index === lastIndex) {
       completedRef.current = true;
-      if (visible) onAnimationComplete?.();
+      if (visibleRef.current) onAnimationComplete?.();
       else onExitComplete?.();
     }
   };
@@ -218,23 +216,19 @@ export default function StaggeredText({
           );
         }
 
+        const animateState = reduceMotion || visible ? targetStyle : initialStyle;
+
         return (
           <motion.span
             key={`${segment}-${index}`}
             className="inline-block will-change-transform"
             aria-hidden="true"
             initial={reduceMotion ? false : initialStyle}
-            animate={
-              reduceMotion
-                ? targetStyle
-                : visible
-                  ? targetStyle
-                  : initialStyle
-            }
+            animate={animateState}
             transition={{
               duration: reduceMotion ? 0 : duration,
               delay: delaySec,
-              ease: easing,
+              ease: [0.22, 1, 0.36, 1],
             }}
             onAnimationComplete={() => handleSegmentComplete(index)}
           >
