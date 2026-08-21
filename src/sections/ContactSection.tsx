@@ -5,6 +5,9 @@ import { useConversation } from "@/components/conversation/ConversationProvider"
 import { useI18n } from "@/i18n/provider";
 import { motion } from "motion/react";
 
+const NOISE =
+  "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
 export function ContactSection() {
   const { t } = useI18n();
   const { openConversation } = useConversation();
@@ -15,9 +18,33 @@ export function ContactSection() {
       aria-labelledby="contact-heading"
       className="site-block relative overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 opacity-[0.22]" aria-hidden>
-        <div className="absolute -right-1/4 bottom-0 h-[min(80vw,480px)] w-[min(80vw,480px)] rounded-full border border-accent/30" />
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden bg-[#d7dbe6]"
+        aria-hidden
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              "radial-gradient(ellipse 70% 55% at 88% 8%, rgba(31,94,255,0.42), transparent 58%)",
+              "radial-gradient(ellipse 55% 45% at 8% 92%, rgba(31,94,255,0.22), transparent 52%)",
+              "radial-gradient(ellipse 40% 30% at 42% 48%, rgba(255,255,255,0.55), transparent 70%)",
+            ].join(","),
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.38]"
+          style={{
+            backgroundImage: "radial-gradient(#2b2b2b 0.7px, transparent 0.8px)",
+            backgroundSize: "13px 13px",
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.14] mix-blend-multiply"
+          style={{ backgroundImage: NOISE, backgroundSize: "180px 180px" }}
+        />
       </div>
+
       <div className="relative mx-auto max-w-[90rem] px-4 py-24 sm:px-6 lg:px-10 lg:py-36">
         <ScrollReveal>
           <div>

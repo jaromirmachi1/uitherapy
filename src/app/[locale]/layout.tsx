@@ -27,7 +27,7 @@ const sans = DM_Sans({
 const siteUrl = getSiteUrl();
 
 export const viewport: Viewport = {
-  themeColor: "#f1f1f1",
+  themeColor: "#ffffff",
   colorScheme: "light",
 };
 
@@ -56,6 +56,14 @@ export async function generateMetadata({
     },
     description: t.seo.description,
     applicationName: siteName,
+    icons: {
+      icon: [
+        { url: "/uifavicon.ico", sizes: "32x32", type: "image/x-icon" },
+        { url: "/uifavicon.png", sizes: "32x32", type: "image/png" },
+      ],
+      shortcut: "/uifavicon.ico",
+      apple: [{ url: "/uifavicon.png", sizes: "32x32", type: "image/png" }],
+    },
     alternates: {
       canonical,
       languages: {

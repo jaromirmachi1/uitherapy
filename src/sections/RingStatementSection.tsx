@@ -1,6 +1,7 @@
 "use client";
 
 import { FluidCursor } from "@/components/FluidCursor";
+import StaggeredText from "@/components/reactbits/StaggeredText";
 import { useI18n } from "@/i18n/provider";
 import { motion, useReducedMotion } from "motion/react";
 
@@ -40,7 +41,7 @@ export function RingStatementSection() {
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
             duration: reduceMotion ? 0 : 0.85,
-            delay: reduceMotion ? 0 : 1.55,
+            delay: reduceMotion ? 0 : 0.05,
             ease: [0.22, 1, 0.36, 1],
           }}
         >
@@ -54,25 +55,19 @@ export function RingStatementSection() {
           ))}
         </motion.ul>
 
-        <h1
+        <StaggeredText
+          key={t.hero.heading}
+          as="h1"
           id="hero-heading"
+          text={t.hero.heading}
+          segmentBy="words"
+          direction="top"
+          blur
+          delay={70}
+          duration={0.7}
+          staggerDirection="forward"
           className="mt-10 max-w-[18ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
-        >
-          <motion.span
-            className="block"
-            initial={
-              reduceMotion ? false : { opacity: 0, y: 28, filter: "blur(14px)" }
-            }
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-              duration: reduceMotion ? 0 : 0.95,
-              delay: reduceMotion ? 0 : 1.65,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            {t.hero.heading}
-          </motion.span>
-        </h1>
+        />
 
         <motion.p
           className="mt-10 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg"
@@ -82,7 +77,7 @@ export function RingStatementSection() {
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
             duration: reduceMotion ? 0 : 0.9,
-            delay: reduceMotion ? 0 : 1.78,
+            delay: reduceMotion ? 0 : 0.22,
             ease: [0.22, 1, 0.36, 1],
           }}
         >

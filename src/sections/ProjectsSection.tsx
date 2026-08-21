@@ -68,14 +68,9 @@ export function ProjectsSection() {
 
   return (
     <section id="projects" aria-labelledby="projects-heading" className="relative">
-      <div
-        className="pointer-events-none absolute inset-x-[-1.5rem] -top-[22svh] bottom-0 -z-1 bg-[#e8e8e8] [mask-image:linear-gradient(to_bottom,transparent,black_22svh)]"
-        aria-hidden
-      />
-
       <div className="flex flex-wrap gap-4">
         <ScrollReveal className="w-full lg:w-[calc(58.333%-0.5rem)]">
-          <div className="relative h-full min-h-[66svh] overflow-hidden rounded-[1.5rem] bg-[#fafafa] lg:min-h-[min(72svh,38rem)]">
+          <div className="relative h-full min-h-[66svh] overflow-hidden rounded-[1.5rem] bg-[#ffffff] lg:min-h-[min(72svh,38rem)]">
             <h2
               id="projects-heading"
               className="pointer-events-none absolute left-6 top-6 z-10 max-w-[4.4em] font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.6vw,4.75rem)] font-medium leading-[0.86] tracking-[-0.05em] text-foreground sm:left-8 sm:top-8"
@@ -146,7 +141,7 @@ export function ProjectsSection() {
         </ScrollReveal>
 
         <ScrollReveal className="w-full xl:w-[calc(80%-0.5rem)]" delay={0.04}>
-          <div className="flex flex-col gap-6 rounded-[1.5rem] bg-[#fafafa] p-5 sm:p-6 lg:flex-row lg:items-stretch lg:gap-8 lg:p-8">
+          <div className="flex flex-col gap-6 rounded-[1.5rem] bg-[#ffffff] p-5 sm:p-6 lg:flex-row lg:items-stretch lg:gap-8 lg:p-8">
             <div className="flex shrink-0 flex-col justify-between gap-5 lg:max-w-[13.5rem]">
               <div>
                 <h3 className="font-[family-name:var(--font-display)] text-[1.45rem] font-medium leading-none tracking-[-0.04em] text-foreground">

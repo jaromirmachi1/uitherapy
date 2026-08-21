@@ -17,7 +17,7 @@ export function SiteHeader() {
         <Link
           href={localePath(locale)}
           className="inline-flex overflow-hidden rounded-md"
-          aria-label="UI Therapy home"
+          aria-label="uitherapy home"
         >
           <Image
             src="/uitherapyblack.png"

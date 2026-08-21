@@ -2,7 +2,6 @@ import { defaultLocale, type Locale } from "./config";
 
 const en = {
   skip: "Skip to main content",
-  loader: "Premium interfaces and technical SEO",
   nav: {
     projects: "Projects",
     contact: "Start a conversation",
@@ -10,7 +9,7 @@ const en = {
   },
   hero: {
     proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
-    proofLabel: "UI Therapy focus",
+    proofLabel: "uitherapy focus",
     heading: "Creative web therapy for brands that can't afford to miss",
     body: "A senior frontend studio building premium marketing sites, ecommerce fronts, and search-ready interfaces.",
   },
@@ -97,7 +96,7 @@ const en = {
     heading: "Let's ship something unforgettable.",
     body: "Product, timeline, references—we reply within two business days.",
     back: "Back to projects",
-    mailSubject: "Project inquiry — UI Therapy",
+    mailSubject: "Project inquiry — uitherapy",
     openForm: "Start a conversation",
   },
   enquiry: {
@@ -139,9 +138,9 @@ const en = {
     blurb: "Frontend craft—layout, motion, performance, accessibility.",
   },
   seo: {
-    title: "UI Therapy — Premium interfaces & technical SEO",
+    title: "uitherapy — Premium interfaces & technical SEO",
     description:
-      "UI Therapy is a frontend studio crafting luxury-grade web experiences—motion, typography, accessibility, and technical SEO baked in from day one.",
+      "uitherapy is a frontend studio crafting luxury-grade web experiences—motion, typography, accessibility, and technical SEO baked in from day one.",
     tagline:
       "Premium interfaces, performance-first builds, and search-ready experiences.",
   },
@@ -149,23 +148,22 @@ const en = {
 
 const cs: typeof en = {
   skip: "Přeskočit na hlavní obsah",
-  loader: "Prémiová rozhraní a technické SEO",
   nav: {
     projects: "Projekty",
-    contact: "Začít konverzaci",
+    contact: "Domluvme se",
     language: "Jazyk",
   },
   hero: {
     proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
-    proofLabel: "Zaměření UI Therapy",
+    proofLabel: "Zaměření uitherapy",
     heading:
-      "Kreativní webová terapie pro značky, které si nemohou dovolit minout",
+      "Kreativní webová terapie pro značky, které si nemohou dovolit chybu",
     body: "Senior frontend studio pro prémiové marketingové weby, e-commerce a rozhraní připravená pro vyhledávače.",
   },
   process: {
     kicker: "Proces",
-    heading: "Od briefu po spuštění, bez černé skříňky.",
-    body: "Soustředěný postup stavby pro uhlazená rozhraní, rychlé stránky a obsah, kterému vyhledávače rozumí.",
+    heading: "Od briefu po spuštění — transparentně, žádná tajemství.",
+    body: "Přehledný proces od briefu po launch — bez zbytečných kroků. Uhlazená rozhraní, rychlé stránky a obsah, kterému vyhledávače rozumí.",
     steps: [
       {
         title: "Sladit",
@@ -180,12 +178,12 @@ const cs: typeof en = {
       {
         title: "Vytvořit",
         label: "Rozhraní",
-        text: "UI systémy, responzivní chování, řeč animace v reálném kódu.",
+        text: "UI systémy, responzivní chování, styl animací v reálném kódu.",
       },
       {
         title: "Zpevnit",
         label: "Spuštění",
-        text: "Rozpočty výkonu, a11y kontroly, analytika — spouštíme s jistotou.",
+        text: "Výkonnostní rozpočty, a11y kontroly, analytika — spouštíme s jistotou.",
       },
     ],
   },
@@ -198,14 +196,14 @@ const cs: typeof en = {
     latestHeading: "Vybraná práce",
     latestBody: "Nové projekty obvykle začínají do dvou týdnů.",
     viewProject: "Zobrazit projekt",
-    requestQuote: "Začít konverzaci",
+    requestQuote: "Domluvme se",
     techLabel: "Použité technologie",
     newTab: "(otevře se v novém okně)",
     items: {
       panorama: {
         category: "Webdesign a vývoj",
         subcategory: "Design systémy · Next.js",
-        summary: "Web pro rezidenční development v Brně.",
+        summary: "Web pro rezidenčního developera v Brně.",
         location: "Brno",
         story:
           "Rezidenční developer v Brně potřeboval web, který prodá byty dřív, než existují jako fyzický zážitek. Postavili jsme plně animovaný Next.js web s výběrem jednotek, stavy dostupnosti a vizuálním jazykem, který sedí architektuře projektu.",
@@ -222,7 +220,7 @@ const cs: typeof en = {
         story:
           "Barbershop v Ostravě se ostrou identitou a nulovou digitální stopou, která by jí odpovídala. Postavili jsme motion-first zážitek na Next.js a Framer Motion — atmosféra před informacemi, tmavý editorial, který dává osobnost na první místo.",
         quote:
-          "Lidi nás teď najdou online. Je to vizitka — ale se stylem. Jsme to přesně my.",
+          "Lidi nás teď najdou online. Je to jako vizitka — ale se stylem. Jsme to přesně my.",
         attribution: "Golden Touch, barbershop, Ostrava",
         alt: "Web Golden Touch na telefonu",
       },
@@ -242,16 +240,15 @@ const cs: typeof en = {
   },
   contact: {
     kicker: "Kontakt",
-    heading: "Pojďme poslat něco, na co se nezapomíná.",
+    heading: "Pojďme spustit něco, na co se nezapomíná.",
     body: "Produkt, termín, reference — odpovíme do dvou pracovních dnů.",
     back: "Zpět k projektům",
-    mailSubject: "Poptávka projektu — UI Therapy",
-    openForm: "Začít konverzaci",
+    mailSubject: "Poptávka projektu — uitherapy",
+    openForm: "Domluvme se",
   },
   enquiry: {
     title: "Poptávka projektu",
-    intro:
-      "Napište detaily a termín projektu — ozveme se vám v krátkém čase.",
+    intro: "Napište detaily a termín projektu — ozveme se vám v krátkém čase.",
     emailLead: "Můžete také",
     emailCta: "poslat e-mail",
     emailTrail: "— obvykle odpovídáme do 48 hodin.",
@@ -274,8 +271,7 @@ const cs: typeof en = {
     privacy:
       "Odesláním souhlasíte, že tyto údaje použijeme k odpovědi na poptávku.",
     successTitle: "Máme to.",
-    successBody:
-      "Přečteme to a ozveme se do dvou pracovních dnů.",
+    successBody: "Přečteme to a ozveme se do dvou pracovních dnů.",
     budgets: [
       { value: "5-10k", label: "€5k – €10k" },
       { value: "10-15k", label: "€10k – €15k" },
@@ -287,9 +283,9 @@ const cs: typeof en = {
     blurb: "Frontend řemeslo — layout, pohyb, výkon, přístupnost.",
   },
   seo: {
-    title: "UI Therapy — Prémiová rozhraní a technické SEO",
+    title: "uitherapy — Prémiová rozhraní a technické SEO",
     description:
-      "UI Therapy je frontend studio pro luxusní webové zážitky — pohyb, typografie, přístupnost a technické SEO od prvního dne.",
+      "uitherapy je frontend studio pro luxusní webové zážitky — pohyb, typografie, přístupnost a technické SEO od prvního dne.",
     tagline:
       "Prémiová rozhraní, výkon na prvním místě a zážitky připravené pro vyhledávače.",
   },

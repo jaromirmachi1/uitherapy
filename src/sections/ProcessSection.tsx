@@ -4,7 +4,7 @@ import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ScrollStack } from "@/components/reactbits/ScrollStack";
 import type { Dictionary } from "@/i18n/dictionary";
 import { useI18n } from "@/i18n/provider";
-import { useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 
 export function ProcessSection() {
@@ -76,11 +76,9 @@ function ProcessCard({
   step: Dictionary["process"]["steps"][number];
   index: number;
 }) {
-  const n = String(index + 1).padStart(2, "0");
-
   return (
     <div className="flex h-full min-h-0 flex-col md:grid md:grid-cols-[1.05fr_0.95fr]">
-      <div className="relative min-h-40 flex-1 overflow-hidden bg-[#f1f1f1] md:min-h-0">
+      <div className="relative min-h-40 flex-1 overflow-hidden bg-[#f7f7f7] md:min-h-0">
         <div
           className="pointer-events-none absolute inset-0 opacity-30"
           aria-hidden
@@ -90,13 +88,7 @@ function ProcessCard({
             backgroundSize: "14px 14px",
           }}
         />
-        <span
-          className="pointer-events-none absolute right-4 top-2 font-[family-name:var(--font-display)] text-[clamp(4rem,8vw,6.5rem)] font-medium leading-none tracking-[-0.08em] text-foreground/6"
-          aria-hidden
-        >
-          {n}
-        </span>
-        <StepIllustration index={index} />
+        <StepMotion index={index} />
       </div>
 
       <div className="flex flex-1 flex-col justify-end px-6 py-6 sm:px-8 sm:py-8">
@@ -114,14 +106,35 @@ function ProcessCard({
   );
 }
 
-function StepIllustration({ index }: { index: number }) {
+function StepMotion({ index }: { index: number }) {
+  const reduce = useReducedMotion();
+
   if (index === 0) {
     return (
       <div className="absolute inset-0 flex items-center px-8 md:px-12" aria-hidden>
-        <div className="flex w-full flex-col gap-2.5">
-          <span className="h-2.5 w-[72%] rounded-full bg-foreground/80" />
-          <span className="ml-6 h-2.5 w-[62%] rounded-full bg-accent" />
-          <span className="ml-3 h-2.5 w-[78%] rounded-full bg-foreground/55" />
+        <div className="flex w-full flex-col gap-3">
+          {[0.72, 0.58, 0.8].map((width, i) => (
+            <motion.span
+              key={i}
+              className="h-2.5 rounded-full bg-accent origin-left"
+              style={{ width: `${width * 100}%`, marginLeft: i === 1 ? "1.5rem" : i === 2 ? "0.75rem" : 0 }}
+              initial={reduce ? false : { scaleX: 0.35, opacity: 0.45 }}
+              animate={
+                reduce
+                  ? undefined
+                  : {
+                      scaleX: [0.35, 1, 0.72, 1],
+                      opacity: [0.45, 1, 0.7, 1],
+                    }
+              }
+              transition={{
+                duration: 3.2,
+                delay: i * 0.22,
+                repeat: Infinity,
+                ease: [0.45, 0, 0.2, 1],
+              }}
+            />
+          ))}
         </div>
       </div>
     );
@@ -129,15 +142,35 @@ function StepIllustration({ index }: { index: number }) {
 
   if (index === 1) {
     return (
-      <div className="absolute inset-0 grid grid-cols-3 gap-2 p-7 md:p-10" aria-hidden>
-        {Array.from({ length: 9 }, (_, i) => (
-          <span
-            key={i}
-            className={`rounded-md ${
-              i === 4 ? "bg-accent" : "border border-foreground/15 bg-white/70"
-            }`}
-          />
-        ))}
+      <div className="absolute inset-0 grid grid-cols-3 gap-2.5 p-7 md:p-10" aria-hidden>
+        {Array.from({ length: 9 }, (_, i) => {
+          const accent = i === 4 || i === 1 || i === 7;
+          return (
+            <motion.span
+              key={i}
+              className={`rounded-lg ${
+                accent
+                  ? "bg-accent"
+                  : "border border-accent/25 bg-accent/10"
+              }`}
+              initial={reduce ? false : { scale: 0.7, opacity: 0.35 }}
+              animate={
+                reduce
+                  ? undefined
+                  : {
+                      scale: accent ? [0.85, 1.06, 0.92, 1] : [0.92, 1, 0.96, 1],
+                      opacity: accent ? [0.55, 1, 0.75, 1] : [0.35, 0.7, 0.45, 0.65],
+                    }
+              }
+              transition={{
+                duration: 2.8,
+                delay: (i % 3) * 0.12 + Math.floor(i / 3) * 0.08,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
       </div>
     );
   }
@@ -145,21 +178,62 @@ function StepIllustration({ index }: { index: number }) {
   if (index === 2) {
     return (
       <div className="absolute inset-0" aria-hidden>
-        <span className="absolute left-8 top-8 h-20 w-20 rounded-2xl bg-foreground/90 md:h-28 md:w-28" />
-        <span className="absolute bottom-8 right-10 h-24 w-24 rounded-2xl bg-accent/90 md:h-32 md:w-32" />
-        <span className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-foreground/20 bg-white/80 md:h-20 md:w-20" />
+        <motion.span
+          className="absolute left-[12%] top-[14%] h-20 w-20 rounded-2xl bg-accent md:h-28 md:w-28"
+          animate={
+            reduce
+              ? undefined
+              : { y: [0, -10, 0], rotate: [0, -4, 0], borderRadius: ["1rem", "1.5rem", "1rem"] }
+          }
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.span
+          className="absolute bottom-[12%] right-[12%] h-24 w-24 rounded-2xl bg-accent/75 md:h-32 md:w-32"
+          animate={
+            reduce
+              ? undefined
+              : { y: [0, 12, 0], rotate: [0, 5, 0], borderRadius: ["1.25rem", "2rem", "1.25rem"] }
+          }
+          transition={{ duration: 4.6, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+        />
+        <motion.span
+          className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-accent/50 bg-white/80 md:h-20 md:w-20"
+          animate={reduce ? undefined : { scale: [1, 1.08, 1], rotate: [0, 8, 0] }}
+          transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: 0.35 }}
+        />
       </div>
     );
   }
 
   return (
-    <div
-      className="absolute inset-0 flex items-center justify-center"
-      aria-hidden
-    >
-      <span className="absolute h-28 w-28 rounded-full border border-foreground/15 md:h-40 md:w-40" />
-      <span className="absolute h-20 w-20 rounded-full border border-accent/40 md:h-28 md:w-28" />
-      <span className="h-8 w-8 rounded-full bg-accent md:h-10 md:w-10" />
+    <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
+      <motion.span
+        className="absolute h-32 w-32 rounded-full border border-accent/25 md:h-44 md:w-44"
+        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.35, 0.7, 0.35] }}
+        transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.span
+        className="absolute h-24 w-24 rounded-full border-2 border-accent/55 md:h-28 md:w-28"
+        animate={reduce ? undefined : { scale: [1.05, 0.92, 1.05], rotate: [0, 180, 360] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+      />
+      <motion.span
+        className="h-9 w-9 rounded-full bg-accent md:h-11 md:w-11"
+        animate={reduce ? undefined : { scale: [1, 1.18, 1] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.span
+        className="absolute h-3 w-3 rounded-full bg-accent"
+        animate={
+          reduce
+            ? undefined
+            : {
+                x: [0, 52, 0, -52, 0],
+                y: [-48, 0, 48, 0, -48],
+              }
+        }
+        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+      />
     </div>
   );
 }
