@@ -31,7 +31,7 @@ export function RingStatementSection() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3rem)] w-full max-w-[72rem] flex-col items-center justify-center px-6 py-28 text-center sm:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-3rem)] w-full max-w-[72rem] flex-col items-center justify-center px-4 py-24 text-center sm:px-8 sm:py-28">
         <motion.ul
           className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.7rem] font-medium uppercase tracking-[0.16em] text-foreground"
           aria-label={t.hero.proofLabel}

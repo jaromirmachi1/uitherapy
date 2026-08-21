@@ -30,19 +30,19 @@ export default function Home() {
         </div>
         <SkipLink />
         <SiteHeader />
-        <main id="main" className="flex flex-col gap-6 py-6">
-          <div className="px-6">
+        <main id="main" className="flex flex-col gap-3 py-3 sm:gap-6 sm:py-6">
+          <div className="px-2.5 sm:px-6">
             <RingStatementSection />
           </div>
           <ProcessSection />
-          <div className="px-6">
+          <div className="px-2.5 sm:px-6">
             <ProjectsSection />
           </div>
-          <div className="px-6">
+          <div className="px-2.5 sm:px-6">
             <ContactSection />
           </div>
         </main>
-        <div className="px-6 pb-6">
+        <div className="px-2.5 pb-20 sm:px-6 sm:pb-6">
           <SiteFooter />
         </div>
       </div>

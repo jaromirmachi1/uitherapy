@@ -45,7 +45,7 @@ export function ContactSection() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-[90rem] px-4 py-24 sm:px-6 lg:px-10 lg:py-36">
+      <div className="relative mx-auto max-w-[90rem] px-4 py-20 sm:px-6 lg:px-10 lg:py-36">
         <ScrollReveal>
           <div>
             <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
