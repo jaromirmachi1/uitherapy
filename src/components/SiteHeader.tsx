@@ -63,7 +63,7 @@ export function SiteHeader() {
       </header>
 
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 sm:hidden">
-        <div className="pointer-events-auto p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="pointer-events-auto px-5 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.75rem))] pt-3">
           <Link
             href={localePath(alternate)}
             hrefLang={alternate}
