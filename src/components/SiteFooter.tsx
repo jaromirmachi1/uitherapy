@@ -7,23 +7,23 @@ export function SiteFooter() {
   const url = getSiteUrl();
 
   return (
-    <footer className="border-t border-accent/15 bg-black">
+    <footer className="site-block">
       <div className="mx-auto flex max-w-[90rem] flex-col gap-12 px-4 py-16 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-10">
         <div>
-          <div className="inline-flex rounded-xl border border-white/15 bg-white/[0.06] p-3 backdrop-blur-md sm:p-3.5">
+          <div className="inline-flex rounded-xl border border-black/10 bg-black p-3 shadow-[0_16px_42px_rgba(23,21,16,0.12)] backdrop-blur-md sm:p-3.5">
             <Image
-              src="/uilogo.png"
+              src="/uitherapyblack.png"
               alt="UI Therapy"
               width={781}
               height={188}
               className="h-8 w-auto sm:h-9"
             />
           </div>
-          <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-500">
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
             Frontend craft—layout, motion, performance, accessibility.
           </p>
         </div>
-        <div className="flex flex-col gap-6 text-sm text-neutral-500 sm:items-end">
+        <div className="flex flex-col gap-6 text-sm text-neutral-600 sm:items-end">
           <div className="flex flex-wrap gap-x-8 gap-y-2">
             <a
               href={`mailto:${siteEmail}`}
@@ -35,7 +35,7 @@ export function SiteFooter() {
               {url.replace(/^https?:\/\//, "")}
             </Link>
           </div>
-          <p className="text-xs uppercase tracking-[0.2em] text-neutral-600">
+          <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">
             © {year} UI Therapy
           </p>
         </div>

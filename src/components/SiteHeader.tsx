@@ -1,34 +1,39 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PillNav } from "@/components/PillNav";
 
 export function SiteHeader() {
   return (
     <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50">
-      <div className="pointer-events-auto mx-auto flex max-w-[90rem] items-center gap-3 px-4 pt-4 sm:gap-5 sm:px-6 sm:pt-5 lg:px-10">
+      <div className="pointer-events-auto mx-auto flex max-w-[100rem] items-start justify-between px-12 pt-12">
         <Link
           href="/"
-          className="flex shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/45 px-3 py-2 shadow-[0_16px_42px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-colors duration-300 hover:border-white/35 sm:px-3.5 sm:py-2.5"
+          className="inline-flex overflow-hidden rounded-md"
           aria-label="UI Therapy home"
         >
           <Image
-            src="/uilogo.png"
+            src="/uitherapyblack.png"
             alt=""
             width={781}
             height={188}
             priority
-            className="h-6 w-auto sm:h-7"
+            className="h-8 w-auto"
           />
         </Link>
-        <div className="flex min-w-0 flex-1 justify-center">
-          <PillNav />
-        </div>
-        <a
-          href="#contact"
-          className="shrink-0 rounded-full border border-white/25 bg-black/40 px-4 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white shadow-[0_16px_42px_rgba(0,0,0,0.42)] backdrop-blur-xl transition-[background-color,color,transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-white/45 hover:bg-white hover:text-black sm:px-5 sm:text-[0.65rem] sm:tracking-[0.26em]"
-        >
-          Let&apos;s talk
-        </a>
+
+        <nav aria-label="Primary" className="flex items-center gap-2">
+          <a
+            href="#projects"
+            className="inline-flex h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white"
+          >
+            Projects
+          </a>
+          <a
+            href="#contact"
+            className="inline-flex h-9 items-center rounded-md bg-foreground px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent"
+          >
+            Start a conversation
+          </a>
+        </nav>
       </div>
     </header>
   );

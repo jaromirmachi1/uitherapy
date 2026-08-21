@@ -47,7 +47,7 @@ export function IntroLoader() {
     >
       <div className="intro-loader__inner">
         <Image
-          src="/uilogo.png"
+          src="/uitherapyblack.png"
           alt=""
           width={781}
           height={188}

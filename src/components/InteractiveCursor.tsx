@@ -99,16 +99,16 @@ export function InteractiveCursor() {
   return (
     <div
       ref={rootRef}
-      className="interactive-cursor pointer-events-none fixed inset-0 z-[130] hidden opacity-0 mix-blend-difference transition-opacity duration-300 lg:block"
+      className="interactive-cursor pointer-events-none fixed inset-0 z-[130] hidden opacity-0 transition-opacity duration-300 lg:block"
       aria-hidden
     >
       <span
         ref={dotRef}
-        className="absolute left-0 top-0 h-2 w-2 rounded-full bg-white shadow-[0_0_18px_rgba(82,38,255,0.95)]"
+        className="absolute left-0 top-0 h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_rgba(31,94,255,0.95)]"
       />
       <span
         ref={ringRef}
-        className="absolute left-0 top-0 h-11 w-11 rounded-full border border-white/70 transition-[border-color,background-color] duration-200"
+        className="absolute left-0 top-0 h-11 w-11 rounded-full border border-foreground/40 transition-[border-color,background-color] duration-200"
       />
       {[0, 1, 2].map((item) => (
         <span
