@@ -127,6 +127,8 @@ const en = {
     successTitle: "Received.",
     successBody:
       "We’ll read this through and write back within two business days.",
+    error:
+      "Something went wrong sending this. Try again, or email us directly.",
     budgets: [
       { value: "5-10k", label: "€5k – €10k" },
       { value: "10-15k", label: "€10k – €15k" },
@@ -272,11 +274,13 @@ const cs: typeof en = {
       "Odesláním souhlasíte, že tyto údaje použijeme k odpovědi na poptávku.",
     successTitle: "Máme to.",
     successBody: "Přečteme to a ozveme se do dvou pracovních dnů.",
+    error:
+      "Odeslání se nepovedlo. Zkuste to znovu, nebo nám napište e-mailem.",
     budgets: [
-      { value: "5-10k", label: "€5k – €10k" },
-      { value: "10-15k", label: "€10k – €15k" },
-      { value: "15-25k", label: "€15k – €25k" },
-      { value: "25k+", label: "€25k+" },
+      { value: "50-100k", label: "50–100 tis. Kč" },
+      { value: "100-200k", label: "100–200 tis. Kč" },
+      { value: "200-400k", label: "200–400 tis. Kč" },
+      { value: "400k+", label: "400 tis. Kč+" },
     ],
   },
   footer: {

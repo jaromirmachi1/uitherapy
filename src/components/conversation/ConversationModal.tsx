@@ -38,7 +38,7 @@ const empty: FormState = {
 
 export function ConversationModal() {
   const { isOpen, closeConversation } = useConversation();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const reduce = useReducedMotion();
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -46,6 +46,8 @@ export function ConversationModal() {
   const lenis = useLenis();
   const [mounted, setMounted] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(empty);
 
   useEffect(() => setMounted(true), []);
@@ -88,15 +90,21 @@ export function ConversationModal() {
   useEffect(() => {
     if (!isOpen) {
       setSent(false);
+      setSending(false);
+      setError(null);
       setForm(empty);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    setForm((current) => ({ ...current, budget: "" }));
+  }, [locale]);
 
   const ready =
     form.name.trim().length > 1 &&
     /\S+@\S+\.\S+/.test(form.email) &&
     form.budget.length > 0 &&
-    form.brief.trim().length > 8;
+    form.brief.trim().length >= 3;
 
   const set =
     (key: keyof FormState) =>
@@ -108,23 +116,36 @@ export function ConversationModal() {
       setForm((current) => ({ ...current, [key]: event.target.value }));
     };
 
-  const submit = (event: React.FormEvent) => {
+  const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!ready) return;
-    const lines = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Company: ${form.company || "—"}`,
-      `Website: ${form.website || "—"}`,
-      `Budget: ${form.budget}`,
-      `Start: ${form.start || "—"}`,
-      `Launch: ${form.launch || "—"}`,
-      "",
-      form.brief,
-    ];
-    const href = `mailto:${siteEmail}?subject=${encodeURIComponent(t.contact.mailSubject)}&body=${encodeURIComponent(lines.join("\n"))}`;
-    window.location.href = href;
-    setSent(true);
+    if (!ready || sending) return;
+
+    setSending(true);
+    setError(null);
+
+    try {
+      const budgetLabel =
+        t.enquiry.budgets.find((item) => item.value === form.budget)?.label ??
+        form.budget;
+
+      const response = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, budget: budgetLabel, locale }),
+      });
+
+      if (!response.ok) {
+        setError(t.enquiry.error);
+        return;
+      }
+
+      setSent(true);
+      setForm(empty);
+    } catch {
+      setError(t.enquiry.error);
+    } finally {
+      setSending(false);
+    }
   };
 
   if (!mounted) return null;
@@ -310,7 +331,7 @@ export function ConversationModal() {
                             {t.enquiry.budget}*
                           </option>
                           {t.enquiry.budgets.map((item) => (
-                            <option key={item.value} value={item.label}>
+                            <option key={item.value} value={item.value}>
                               {item.label}
                             </option>
                           ))}
@@ -327,8 +348,9 @@ export function ConversationModal() {
                       </label>
                       <input
                         id="enquiry-start"
-                        className={fieldClass}
-                        placeholder={t.enquiry.start}
+                        className={`${fieldClass} [color-scheme:light]`}
+                        type="date"
+                        aria-label={t.enquiry.start}
                         value={form.start}
                         onChange={set("start")}
                       />
@@ -337,8 +359,9 @@ export function ConversationModal() {
                       </label>
                       <input
                         id="enquiry-launch"
-                        className={fieldClass}
-                        placeholder={t.enquiry.launch}
+                        className={`${fieldClass} [color-scheme:light]`}
+                        type="date"
+                        aria-label={t.enquiry.launch}
                         value={form.launch}
                         onChange={set("launch")}
                       />
@@ -354,6 +377,7 @@ export function ConversationModal() {
                       className={`${fieldClass} min-h-36 resize-y py-3`}
                       placeholder={`${t.enquiry.brief}*`}
                       required
+                      minLength={3}
                       value={form.brief}
                       onChange={set("brief")}
                     />
@@ -365,12 +389,17 @@ export function ConversationModal() {
                     </p>
                     <button
                       type="submit"
-                      disabled={!ready}
+                      disabled={!ready || sending}
                       className="inline-flex h-12 min-w-36 items-center justify-center rounded-md bg-foreground px-8 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:bg-foreground/25"
                     >
-                      {t.enquiry.send}
+                      {sending ? t.enquiry.sending : t.enquiry.send}
                     </button>
                   </div>
+                  {error ? (
+                    <p className="text-sm text-red-600" role="alert">
+                      {error}
+                    </p>
+                  ) : null}
                 </form>
               )}
             </motion.section>

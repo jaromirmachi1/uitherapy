@@ -13,10 +13,10 @@ export function SiteHeader() {
 
   return (
     <header className="site-header pointer-events-none fixed inset-x-0 top-0 z-50">
-      <div className="pointer-events-auto mx-auto flex max-w-[100rem] items-start justify-between px-6 pt-8 sm:px-12 sm:pt-12">
+      <div className="pointer-events-auto mx-auto flex max-w-[100rem] items-start justify-between gap-3 px-5 pt-6 sm:px-12 sm:pt-12">
         <Link
           href={localePath(locale)}
-          className="inline-flex overflow-hidden rounded-md"
+          className="inline-flex shrink-0 overflow-hidden rounded-md"
           aria-label="uitherapy home"
         >
           <Image
@@ -25,22 +25,22 @@ export function SiteHeader() {
             width={781}
             height={188}
             priority
-            className="h-8 w-auto"
+            className="h-7 w-auto sm:h-8"
           />
         </Link>
 
-        <div className="flex items-center gap-2">
-          <nav aria-label="Primary" className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+          <nav aria-label="Primary" className="flex items-center gap-1.5 sm:gap-2">
             <a
               href="#projects"
-              className="inline-flex h-9 items-center rounded-md border border-foreground/85 px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:px-4"
+              className="hidden h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:inline-flex"
             >
               {t.nav.projects}
             </a>
             <button
               type="button"
               onClick={openConversation}
-              className="inline-flex h-9 items-center rounded-md bg-foreground px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-white transition-colors hover:bg-accent sm:px-4"
+              className="inline-flex h-9 max-w-[11.5rem] items-center truncate rounded-md bg-foreground px-3 text-[0.62rem] font-medium uppercase tracking-[0.12em] text-white transition-colors hover:bg-accent sm:max-w-none sm:px-4 sm:text-[0.68rem] sm:tracking-[0.14em]"
             >
               {t.nav.contact}
             </button>
