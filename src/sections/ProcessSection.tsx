@@ -48,9 +48,9 @@ export function ProcessSection() {
               trackRef={trackRef}
               peek={26}
               scaleStep={0.07}
-              blur={0}
-              dim={0.32}
-              smooth={0.22}
+              blur={4}
+              dim={0.28}
+              smooth={0.32}
               depth={3}
               cardWidth={880}
               borderRadius={22}

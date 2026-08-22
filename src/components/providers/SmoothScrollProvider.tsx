@@ -34,16 +34,6 @@ export function SmoothScrollProvider({ children }: Props) {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.classList.toggle(
-      "ut-native-scroll",
-      mounted && !desktopSmoothScroll,
-    );
-    return () => {
-      document.documentElement.classList.remove("ut-native-scroll");
-    };
-  }, [desktopSmoothScroll, mounted]);
-
   const options = useMemo(
     () =>
       ({
