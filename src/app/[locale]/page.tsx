@@ -1,5 +1,4 @@
-import { AmbientBackground } from "@/components/AmbientBackground";
-import { GradientWaves } from "@/components/GradientWaves";
+import { SiteBackground } from "@/components/SiteBackground";
 import { InteractiveCursor } from "@/components/InteractiveCursor";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -13,21 +12,8 @@ export default function Home() {
   return (
     <>
       <InteractiveCursor />
-      <AmbientBackground />
+      <SiteBackground />
       <div className="relative z-10">
-        <div className="pointer-events-none fixed inset-0 -z-10" aria-hidden>
-          <GradientWaves
-            horizonColor="#e8e8e8"
-            waveColor="#1f5eff"
-            crestColor="#ffffff"
-            speed={0.38}
-            opacity={0.92}
-            brightness={1.22}
-            fogDepth={24}
-            amplitude={3.1}
-            detail="medium"
-          />
-        </div>
         <SkipLink />
         <SiteHeader />
         <main id="main" className="flex flex-col gap-3 py-3 sm:gap-6 sm:py-6">

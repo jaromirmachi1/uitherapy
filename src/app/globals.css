@@ -85,6 +85,12 @@
     color: var(--foreground);
   }
 
+  html.ut-native-scroll .ut-site-background,
+  .ut-site-background {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
   @media (pointer: fine) {
     html.has-interactive-cursor,
     html.has-interactive-cursor * {

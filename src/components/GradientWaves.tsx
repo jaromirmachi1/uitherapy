@@ -1,7 +1,7 @@
 "use client";
 
 import { Mesh, Program, Renderer, Triangle } from "ogl";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Detail = "low" | "medium" | "high";
 
@@ -144,6 +144,38 @@ function detailToSteps(detail: Detail) {
   return 70;
 }
 
+function prefersStaticBackground() {
+  if (typeof window === "undefined") return true;
+  return (
+    window.matchMedia("(hover: none), (pointer: coarse)").matches ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
+function StaticWaveBackground({
+  horizonColor,
+  waveColor,
+  className,
+}: {
+  horizonColor: string;
+  waveColor: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className ?? ""}`}
+      aria-hidden
+      style={{
+        background: [
+          `radial-gradient(ellipse 130% 70% at 50% 108%, color-mix(in srgb, ${waveColor} 28%, transparent) 0%, transparent 58%)`,
+          `radial-gradient(ellipse 90% 50% at 78% 18%, color-mix(in srgb, ${waveColor} 12%, transparent) 0%, transparent 62%)`,
+          `linear-gradient(180deg, ${horizonColor} 0%, ${horizonColor} 52%, #d7dbe6 100%)`,
+        ].join(", "),
+      }}
+    />
+  );
+}
+
 export function GradientWaves({
   horizonColor = "#f1f1f1",
   waveColor = "#1f5eff",
@@ -166,11 +198,28 @@ export function GradientWaves({
   className,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [useStaticBackground, setUseStaticBackground] = useState(true);
 
   useEffect(() => {
+    const update = () => setUseStaticBackground(prefersStaticBackground());
+    update();
+
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const touch = window.matchMedia("(hover: none), (pointer: coarse)");
+
+    motion.addEventListener("change", update);
+    touch.addEventListener("change", update);
+    return () => {
+      motion.removeEventListener("change", update);
+      touch.removeEventListener("change", update);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (useStaticBackground) return;
+
     const container = containerRef.current;
     if (!container) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const renderer = new Renderer({
       webgl: 2,
@@ -237,7 +286,6 @@ export function GradientWaves({
     setSize();
 
     let raf = 0;
-    let visible = true;
     let pageVisible = !document.hidden;
     const started = performance.now();
 
@@ -248,7 +296,7 @@ export function GradientWaves({
     };
 
     const start = () => {
-      if (visible && pageVisible && raf === 0) raf = requestAnimationFrame(loop);
+      if (pageVisible && raf === 0) raf = requestAnimationFrame(loop);
     };
     const stop = () => {
       if (raf !== 0) {
@@ -257,28 +305,18 @@ export function GradientWaves({
       }
     };
 
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visible = Boolean(entry?.isIntersecting);
-        if (visible) start();
-        else stop();
-      },
-      { threshold: 0.05 },
-    );
-    io.observe(container);
-
     const onVisibility = () => {
       pageVisible = !document.hidden;
       if (pageVisible) start();
       else stop();
     };
+
     document.addEventListener("visibilitychange", onVisibility);
     start();
 
     return () => {
       stop();
       resize.disconnect();
-      io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       canvas.remove();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
@@ -298,11 +336,22 @@ export function GradientWaves({
     swell,
     tilt,
     turbulence,
+    useStaticBackground,
     waveColor,
     waveRatio,
     waveScale,
     zoom,
   ]);
+
+  if (useStaticBackground) {
+    return (
+      <StaticWaveBackground
+        horizonColor={horizonColor}
+        waveColor={waveColor}
+        className={className}
+      />
+    );
+  }
 
   return (
     <div
