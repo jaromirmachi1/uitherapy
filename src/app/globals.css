@@ -54,6 +54,17 @@
     overflow-x: clip;
   }
 
+  html.ut-native-scroll {
+    height: auto;
+  }
+
+  html.ut-native-scroll body {
+    height: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

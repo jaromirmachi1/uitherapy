@@ -53,6 +53,8 @@ export function ScrollStack({
   const totalRef = useRef<HTMLSpanElement>(null);
   const targetProgress = useRef(0);
   const visualProgress = useRef(0);
+  const inRangeRef = useRef(true);
+  const startTickRef = useRef<() => void>(() => {});
   const items = Children.toArray(children);
   const count = items.length;
   const reduceMotion = useReducedMotion();
@@ -67,6 +69,7 @@ export function ScrollStack({
 
   useLenis(() => {
     targetProgress.current = readProgress();
+    if (inRangeRef.current) startTickRef.current();
   });
 
   useEffect(() => {
@@ -138,30 +141,37 @@ export function ScrollStack({
     };
 
     let raf = 0;
-    let inRange = true;
 
     const tick = () => {
-      targetProgress.current = readProgress();
       const next =
         visualProgress.current +
         (targetProgress.current - visualProgress.current) * smooth;
       const settled = Math.abs(targetProgress.current - next) < 0.0008;
       visualProgress.current = settled ? targetProgress.current : next;
       apply(visualProgress.current);
-      raf = inRange || !settled ? requestAnimationFrame(tick) : 0;
+      raf =
+        inRangeRef.current && !settled
+          ? requestAnimationFrame(tick)
+          : 0;
     };
 
     const start = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
+      if (!raf && inRangeRef.current) raf = requestAnimationFrame(tick);
     };
+
+    startTickRef.current = start;
 
     apply(readProgress());
     start();
 
     const io = new IntersectionObserver(
       ([entry]) => {
-        inRange = Boolean(entry?.isIntersecting);
-        if (inRange) start();
+        inRangeRef.current = Boolean(entry?.isIntersecting);
+        if (inRangeRef.current) start();
+        else if (raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
       },
       { rootMargin: "120% 0px" },
     );
@@ -179,6 +189,7 @@ export function ScrollStack({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
+      startTickRef.current = () => {};
     };
   }, [
     blur,
