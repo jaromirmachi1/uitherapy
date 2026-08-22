@@ -3,13 +3,15 @@ import { DM_Sans, Syne } from "next/font/google";
 import { notFound } from "next/navigation";
 import { ConversationModal } from "@/components/conversation/ConversationModal";
 import { ConversationProvider } from "@/components/conversation/ConversationProvider";
+import { LegalModal } from "@/components/legal/LegalModal";
+import { LegalProvider } from "@/components/legal/LegalProvider";
 import { GsapProvider } from "@/components/providers/GsapProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { isLocale, locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionary";
 import { I18nProvider } from "@/i18n/provider";
-import { JsonLdProfessionalService, JsonLdWebsite } from "@/seo/jsonld";
-import { getSiteUrl, siteName } from "@/seo/site";
+import { buildSiteMetadata } from "@/seo/metadata";
+import { JsonLdGraph } from "@/seo/jsonld";
 import "../globals.css";
 
 const display = Syne({
@@ -24,11 +26,11 @@ const sans = DM_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
-const siteUrl = getSiteUrl();
-
 export const viewport: Viewport = {
   themeColor: "#ffffff",
   colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export const dynamicParams = false;
@@ -44,51 +46,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: raw } = await params;
   if (!isLocale(raw)) return {};
-  const locale = raw;
-  const t = getDictionary(locale);
-  const canonical =
-    locale === "cs" ? siteUrl : `${siteUrl}/${locale}`;
-
-  return {
-    metadataBase: new URL(siteUrl),
-    title: {
-      default: t.seo.title,
-      template: `%s — ${siteName}`,
-    },
-    description: t.seo.description,
-    applicationName: siteName,
-    icons: {
-      icon: [
-        { url: "/uifavicon.ico", sizes: "32x32", type: "image/x-icon" },
-        { url: "/uifavicon.png", sizes: "32x32", type: "image/png" },
-      ],
-      shortcut: "/uifavicon.ico",
-      apple: [{ url: "/uifavicon.png", sizes: "32x32", type: "image/png" }],
-    },
-    alternates: {
-      canonical,
-      languages: {
-        cs: siteUrl,
-        en: `${siteUrl}/en`,
-        "x-default": siteUrl,
-      },
-    },
-    openGraph: {
-      type: "website",
-      locale: locale === "cs" ? "cs_CZ" : "en_US",
-      alternateLocale: locale === "cs" ? "en_US" : "cs_CZ",
-      url: canonical,
-      siteName,
-      title: `${siteName} — ${t.seo.tagline}`,
-      description: t.seo.description,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${siteName} — ${t.seo.tagline}`,
-      description: t.seo.description,
-    },
-    robots: { index: true, follow: true },
-  };
+  return buildSiteMetadata(raw);
 }
 
 export default async function LocaleLayout({
@@ -108,15 +66,17 @@ export default async function LocaleLayout({
       <body
         className={`${display.variable} ${sans.variable} font-sans antialiased`}
       >
-        <JsonLdWebsite description={dictionary.seo.description} />
-        <JsonLdProfessionalService description={dictionary.seo.description} />
+        <JsonLdGraph locale={locale} />
         <I18nProvider locale={locale} dictionary={dictionary}>
           <ConversationProvider>
-            <SmoothScrollProvider>
-              <GsapProvider />
-              {children}
-              <ConversationModal />
-            </SmoothScrollProvider>
+            <LegalProvider>
+              <SmoothScrollProvider>
+                <GsapProvider />
+                {children}
+                <ConversationModal />
+                <LegalModal />
+              </SmoothScrollProvider>
+            </LegalProvider>
           </ConversationProvider>
         </I18nProvider>
       </body>

@@ -137,14 +137,55 @@ const en = {
     ],
   },
   footer: {
-    blurb: "Frontend craft—layout, motion, performance, accessibility.",
+    legal: "Legal",
+  },
+  legal: {
+    title: "Privacy Policy",
+    close: "Close",
+    updated: "Last updated: August 2026",
+    sections: [
+      {
+        title: "Data controller",
+        body: "The data controller is uitherapy, operated by Jaromír Machalíček (sole trader registered under the Trade Licensing Act, IČO 14293811), business address Slatina 198, 742 93, Czech Republic. For privacy enquiries, contact core@uitherapy.com.",
+      },
+      {
+        title: "What we collect",
+        body: "When you submit the project enquiry form, we collect your name, email address, company name, website (optional), budget range, estimated start and launch dates (optional), and project brief. We also record the language version of the site you used.",
+      },
+      {
+        title: "Legal basis",
+        body: "We process this data on the basis of legitimate interest in responding to business enquiries and, where applicable, pre-contractual steps at your request before entering into a service agreement.",
+      },
+      {
+        title: "Retention",
+        body: "Enquiry data is kept only as long as needed to handle your request, follow up on a potential project, and maintain a reasonable business record—typically up to 24 months unless a longer period is required by law or an ongoing engagement.",
+      },
+      {
+        title: "Your rights",
+        body: "Under GDPR, you may request access, rectification, erasure, restriction of processing, objection, and data portability where applicable. You may lodge a complaint with your local supervisory authority. To exercise your rights, email core@uitherapy.com.",
+      },
+    ],
+    entityLine: {
+      privacyLink: "Privacy Policy",
+    },
   },
   seo: {
-    title: "uitherapy — Premium interfaces & technical SEO",
+    title: "uitherapy — Premium web design, frontend & technical SEO",
     description:
-      "uitherapy is a frontend studio crafting luxury-grade web experiences—motion, typography, accessibility, and technical SEO baked in from day one.",
+      "uitherapy is a senior frontend studio for premium marketing sites, ecommerce storefronts, and search-ready interfaces. Next.js, motion, accessibility, and technical SEO from day one.",
     tagline:
       "Premium interfaces, performance-first builds, and search-ready experiences.",
+    keywords: [
+      "frontend studio",
+      "web design",
+      "Next.js development",
+      "technical SEO",
+      "UI engineering",
+      "ecommerce web design",
+      "premium websites",
+      "React development",
+    ],
+    ogImageAlt: "uitherapy — premium frontend studio for search-ready web experiences",
   },
 };
 
@@ -283,14 +324,57 @@ const cs: typeof en = {
     ],
   },
   footer: {
-    blurb: "Frontend řemeslo — layout, pohyb, výkon, přístupnost.",
+    legal: "Právní informace",
+  },
+  legal: {
+    title: "Zásady ochrany osobních údajů",
+    close: "Zavřít",
+    updated: "Poslední aktualizace: srpen 2026",
+    sections: [
+      {
+        title: "Správce údajů",
+        body: "Správcem osobních údajů je uitherapy, provozovaný Jaromírem Machalíčkem (fyzická osoba podnikající dle živnostenského zákona, IČO 14293811), se sídlem Slatina 198, 742 93. V otázkách ochrany soukromí pište na core@uitherapy.com.",
+      },
+      {
+        title: "Jaké údaje shromažďujeme",
+        body: "Při odeslání poptávkového formuláře zpracováváme jméno, e-mail, název firmy, web (nepovinně), rozpočet, předpokládaný start a termín spuštění (nepovinně) a popis projektu. Ukládáme také jazykovou verzi webu, kterou jste použili.",
+      },
+      {
+        title: "Právní základ",
+        body: "Údaje zpracováváme na základě oprávněného zájmu na vyřízení obchodní poptávky a, kde je to relevantní, na kroky před uzavřením smlouvy na vaši žádost.",
+      },
+      {
+        title: "Doba uchování",
+        body: "Údaje z poptávky uchováváme pouze po dobu nezbytnou k vyřízení dotazu, následné komunikaci a vedení přiměřené obchodní evidence — obvykle nejdéle 24 měsíců, pokud zákon nebo probíhající spolupráce nevyžadují delší dobu.",
+      },
+      {
+        title: "Vaše práva",
+        body: "Podle GDPR máte právo na přístup, opravu, výmaz, omezení zpracování, námitku a přenositelnost údajů, pokud se vztahuje. Stížnost můžete podat u dozorového úřadu. Pro uplatnění práv napište na core@uitherapy.com.",
+      },
+    ],
+    entityLine: {
+      privacyLink: "Zásady ochrany osobních údajů",
+    },
   },
   seo: {
-    title: "uitherapy — Prémiová rozhraní a technické SEO",
+    title: "uitherapy — Prémiový webdesign, frontend a technické SEO",
     description:
-      "uitherapy je frontend studio pro luxusní webové zážitky — pohyb, typografie, přístupnost a technické SEO od prvního dne.",
+      "uitherapy je seniorské frontend studio pro prémiové weby, ecommerce a rozhraní připravená pro vyhledávače. Next.js, motion design, přístupnost a technické SEO od prvního dne.",
     tagline:
       "Prémiová rozhraní, výkon na prvním místě a zážitky připravené pro vyhledávače.",
+    keywords: [
+      "frontend studio",
+      "tvorba webu",
+      "webdesign",
+      "Next.js vývoj",
+      "technické SEO",
+      "ecommerce web",
+      "prémiové weby",
+      "React vývoj",
+      "UI design",
+    ],
+    ogImageAlt:
+      "uitherapy — prémiové frontend studio pro weby připravené na vyhledávání",
   },
 };
 

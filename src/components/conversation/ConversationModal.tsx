@@ -161,13 +161,16 @@ export function ConversationModal() {
           aria-modal="true"
           aria-labelledby={titleId}
           data-lenis-prevent
-          className="fixed inset-0 z-[125] overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch]"
+          className="fixed inset-0 z-[125] overflow-y-auto overscroll-contain bg-[#d7dbe6] touch-pan-y [-webkit-overflow-scrolling:touch]"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[#d7dbe6]" aria-hidden>
+          <div
+            className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#d7dbe6] max-sm:min-h-[100dvh] sm:absolute"
+            aria-hidden
+          >
             <div
               className="absolute inset-0"
               style={{
@@ -195,19 +198,20 @@ export function ConversationModal() {
             </p>
           </div>
 
-          <div className="relative z-10 flex justify-end px-5 pt-5 sm:px-8 sm:pt-7">
-            <button
-              ref={closeRef}
-              type="button"
-              onClick={closeConversation}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-2xl leading-none text-foreground/70 transition-colors hover:bg-white/70 hover:text-foreground"
-              aria-label={t.enquiry.close}
-            >
-              ×
-            </button>
-          </div>
+          <div className="relative z-10 flex min-h-[100dvh] flex-col max-sm:min-h-[100svh]">
+            <div className="relative flex justify-end px-5 pt-5 sm:px-8 sm:pt-7">
+              <button
+                ref={closeRef}
+                type="button"
+                onClick={closeConversation}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-md text-2xl leading-none text-foreground/70 transition-colors hover:bg-white/70 hover:text-foreground"
+                aria-label={t.enquiry.close}
+              >
+                ×
+              </button>
+            </div>
 
-          <div className="relative z-10 mx-auto grid w-full max-w-[92rem] grid-cols-1 items-start gap-5 px-5 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-8 lg:grid-cols-[minmax(20rem,0.85fr)_minmax(0,1.2fr)] lg:gap-8 lg:px-12 xl:gap-10 xl:px-16">
+            <div className="relative mx-auto grid w-full max-w-[92rem] flex-1 grid-cols-1 items-start gap-5 px-5 pb-[max(4rem,env(safe-area-inset-bottom))] sm:px-8 lg:grid-cols-[minmax(20rem,0.85fr)_minmax(0,1.2fr)] lg:gap-8 lg:px-12 xl:gap-10 xl:px-16">
             <motion.section
               className="rounded-[1.75rem] bg-white px-7 py-8 shadow-[0_24px_80px_rgba(43,43,43,0.08)] sm:px-10 lg:sticky lg:top-8"
               initial={reduce ? false : { opacity: 0, y: 18 }}
@@ -406,6 +410,7 @@ export function ConversationModal() {
                 </form>
               )}
             </motion.section>
+          </div>
           </div>
         </motion.div>
       ) : null}

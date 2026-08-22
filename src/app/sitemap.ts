@@ -1,26 +1,24 @@
 import type { MetadataRoute } from "next";
+import { languageAlternates } from "@/seo/urls";
 import { getSiteUrl } from "@/seo/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = getSiteUrl();
   const now = new Date();
-  const languages = {
-    cs: base,
-    en: `${base}/en`,
-  };
+  const languages = languageAlternates();
 
   return [
     {
       url: base,
       lastModified: now,
-      changeFrequency: "monthly",
+      changeFrequency: "weekly",
       priority: 1,
       alternates: { languages },
     },
     {
       url: `${base}/en`,
       lastModified: now,
-      changeFrequency: "monthly",
+      changeFrequency: "weekly",
       priority: 0.9,
       alternates: { languages },
     },

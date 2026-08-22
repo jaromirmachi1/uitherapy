@@ -195,14 +195,17 @@ export default function StaggeredText({
     }
   };
 
+  const isHeading = /^h[1-6]$/.test(as);
+
   return (
     <Tag
       ref={rootRef}
       id={id}
       className={className}
       style={style}
-      aria-label={text}
+      aria-label={isHeading ? undefined : text}
     >
+      {isHeading ? <span className="sr-only">{text}</span> : null}
       {segments.map((segment, index) => {
         const isWhitespace = /^\s+$/.test(segment);
         const order = staggerIndex(index, segments.length, staggerDirection);
