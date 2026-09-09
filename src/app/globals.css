@@ -171,4 +171,29 @@
   }
 }
 
+@keyframes ut-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.ut-marquee-track {
+  animation: ut-marquee 42s linear infinite;
+  width: max-content;
+}
+
+.ut-marquee:hover .ut-marquee-track,
+.ut-marquee:focus-within .ut-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ut-marquee-track {
+    animation: none;
+  }
+}
+
 
