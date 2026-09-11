@@ -20,7 +20,9 @@ export default function Home() {
           <div className="px-2.5 sm:px-6">
             <RingStatementSection />
           </div>
-          <ProcessSection />
+          <div className="px-2.5 sm:px-6">
+            <ProcessSection />
+          </div>
           <div className="px-2.5 sm:px-6">
             <ProjectsSection />
           </div>

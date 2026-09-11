@@ -1,239 +1,137 @@
 "use client";
 
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
-import { ScrollStack } from "@/components/reactbits/ScrollStack";
+import { TiltedCard } from "@/components/reactbits/TiltedCard";
+import { useConversation } from "@/components/conversation/ConversationProvider";
 import type { Dictionary } from "@/i18n/dictionary";
 import { useI18n } from "@/i18n/provider";
-import { motion, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { useReducedMotion } from "motion/react";
 
-export function ProcessSection() {
-  const { t } = useI18n();
-  const steps = t.process.steps;
-  const trackRef = useRef<HTMLDivElement>(null);
-  const reduceMotion = useReducedMotion();
-  const trackHeight = `${100 + Math.max(steps.length - 1, 0) * 40}dvh`;
-
+function ArrowIcon({ className }: { className?: string }) {
   return (
-    <section
-      id="process"
-      aria-labelledby="process-heading"
-      className="relative"
+    <svg
+      viewBox="0 0 16 16"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden
     >
-      <div
-        ref={trackRef}
-        className="relative"
-        style={{ height: reduceMotion ? undefined : trackHeight }}
-      >
-        <div className="sticky top-0 flex h-dvh w-full flex-col motion-reduce:relative motion-reduce:h-auto motion-reduce:min-h-dvh">
-          <div className="relative z-1 flex min-h-0 flex-1 flex-col px-6 py-16 sm:px-10 md:px-16 md:py-14 lg:px-20">
-            <ScrollReveal className="mx-auto w-full max-w-4xl shrink-0 text-center">
-              <header>
-                <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
-                  {t.process.kicker}
-                </p>
-                <h2
-                  id="process-heading"
-                  className="mt-5 font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.4vw,4.6rem)] font-medium leading-[0.88] tracking-[-0.055em] text-foreground"
-                >
-                  {t.process.heading}
-                </h2>
-                <p className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-neutral-600 sm:text-base">
-                  {t.process.body}
-                </p>
-              </header>
-            </ScrollReveal>
-
-            <ScrollStack
-              trackRef={trackRef}
-              peek={26}
-              scaleStep={0.07}
-              blur={4}
-              dim={0.28}
-              smooth={0.32}
-              depth={3}
-              cardWidth={880}
-              borderRadius={22}
-              showProgress
-              showCounter
-              className="mt-8"
-            >
-              {steps.map((step, index) => (
-                <ProcessCard key={step.title} step={step} index={index} />
-              ))}
-            </ScrollStack>
-          </div>
-        </div>
-      </div>
-    </section>
+      <path d="M4 12 12 4M6.5 4H12v5.5" />
+    </svg>
   );
 }
 
 function ProcessCard({
   step,
-  index,
+  onOpen,
 }: {
   step: Dictionary["process"]["steps"][number];
-  index: number;
+  onOpen: () => void;
 }) {
-  return (
-    <div className="flex h-full min-h-0 flex-col md:grid md:grid-cols-[1.05fr_0.95fr]">
-      <div className="relative min-h-40 flex-1 overflow-hidden bg-[#f7f7f7] md:min-h-0">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-30"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(color-mix(in srgb, var(--foreground) 40%, transparent) 0.7px, transparent 0.8px)",
-            backgroundSize: "14px 14px",
-          }}
-        />
-        <StepMotion index={index} />
-      </div>
+  const hasItems = step.items.length > 0;
 
-      <div className="flex flex-1 flex-col justify-end px-6 py-6 sm:px-8 sm:py-8">
-        <p className="text-[0.62rem] font-medium uppercase tracking-[0.28em] text-accent">
-          {step.label}
-        </p>
-        <h3 className="mt-2 font-[family-name:var(--font-display)] text-[clamp(1.85rem,3.4vw,2.7rem)] font-medium leading-[0.94] tracking-[-0.04em] text-foreground">
-          {step.title}
-        </h3>
-        <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600 sm:text-base">
+  return (
+    <TiltedCard className="h-full">
+      <article className="group relative flex h-full flex-col rounded-[1.45rem] bg-[#101218] p-5 shadow-[0_24px_60px_rgba(16,18,24,0.18)] ring-1 ring-accent/35 transition-[box-shadow,ring-color] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:ring-accent sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.55rem,2.4vw,1.95rem)] font-medium leading-[0.95] tracking-[-0.04em] text-white">
+            {step.title}
+          </h3>
+          <button
+            type="button"
+            onClick={onOpen}
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/8 text-white ring-1 ring-white/12 transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97]"
+            aria-label={step.title}
+          >
+            <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-px group-hover:-translate-y-px" />
+          </button>
+        </div>
+
+        <div className="mt-4 h-px w-full bg-white/12" aria-hidden />
+
+        <p className="mt-4 text-[0.88rem] leading-relaxed text-white/65">
           {step.text}
         </p>
-      </div>
-    </div>
+
+        {hasItems ? (
+          <ul className="mt-auto pt-5">
+            {step.items.map((item) => (
+              <li
+                key={item}
+                className="border-t border-white/12 py-3 text-[0.88rem] leading-snug text-white/82 first:border-t-0 first:pt-0 last:pb-0"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </article>
+    </TiltedCard>
   );
 }
 
-function StepMotion({ index }: { index: number }) {
+export function ProcessSection() {
+  const { t } = useI18n();
+  const { openConversation } = useConversation();
   const reduce = useReducedMotion();
-
-  if (index === 0) {
-    return (
-      <div className="absolute inset-0 flex items-center px-8 md:px-12" aria-hidden>
-        <div className="flex w-full flex-col gap-3">
-          {[0.72, 0.58, 0.8].map((width, i) => (
-            <motion.span
-              key={i}
-              className="h-2.5 rounded-full bg-accent origin-left"
-              style={{ width: `${width * 100}%`, marginLeft: i === 1 ? "1.5rem" : i === 2 ? "0.75rem" : 0 }}
-              initial={reduce ? false : { scaleX: 0.35, opacity: 0.45 }}
-              animate={
-                reduce
-                  ? undefined
-                  : {
-                      scaleX: [0.35, 1, 0.72, 1],
-                      opacity: [0.45, 1, 0.7, 1],
-                    }
-              }
-              transition={{
-                duration: 3.2,
-                delay: i * 0.22,
-                repeat: Infinity,
-                ease: [0.45, 0, 0.2, 1],
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (index === 1) {
-    return (
-      <div className="absolute inset-0 grid grid-cols-3 gap-2.5 p-7 md:p-10" aria-hidden>
-        {Array.from({ length: 9 }, (_, i) => {
-          const accent = i === 4 || i === 1 || i === 7;
-          return (
-            <motion.span
-              key={i}
-              className={`rounded-lg ${
-                accent
-                  ? "bg-accent"
-                  : "border border-accent/25 bg-accent/10"
-              }`}
-              initial={reduce ? false : { scale: 0.7, opacity: 0.35 }}
-              animate={
-                reduce
-                  ? undefined
-                  : {
-                      scale: accent ? [0.85, 1.06, 0.92, 1] : [0.92, 1, 0.96, 1],
-                      opacity: accent ? [0.55, 1, 0.75, 1] : [0.35, 0.7, 0.45, 0.65],
-                    }
-              }
-              transition={{
-                duration: 2.8,
-                delay: (i % 3) * 0.12 + Math.floor(i / 3) * 0.08,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-
-  if (index === 2) {
-    return (
-      <div className="absolute inset-0" aria-hidden>
-        <motion.span
-          className="absolute left-[12%] top-[14%] h-20 w-20 rounded-2xl bg-accent md:h-28 md:w-28"
-          animate={
-            reduce
-              ? undefined
-              : { y: [0, -10, 0], rotate: [0, -4, 0], borderRadius: ["1rem", "1.5rem", "1rem"] }
-          }
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.span
-          className="absolute bottom-[12%] right-[12%] h-24 w-24 rounded-2xl bg-accent/75 md:h-32 md:w-32"
-          animate={
-            reduce
-              ? undefined
-              : { y: [0, 12, 0], rotate: [0, 5, 0], borderRadius: ["1.25rem", "2rem", "1.25rem"] }
-          }
-          transition={{ duration: 4.6, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-        />
-        <motion.span
-          className="absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-2xl border-2 border-accent/50 bg-white/80 md:h-20 md:w-20"
-          animate={reduce ? undefined : { scale: [1, 1.08, 1], rotate: [0, 8, 0] }}
-          transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut", delay: 0.35 }}
-        />
-      </div>
-    );
-  }
+  const steps = t.process.steps;
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center" aria-hidden>
-      <motion.span
-        className="absolute h-32 w-32 rounded-full border border-accent/25 md:h-44 md:w-44"
-        animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.35, 0.7, 0.35] }}
-        transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.span
-        className="absolute h-24 w-24 rounded-full border-2 border-accent/55 md:h-28 md:w-28"
-        animate={reduce ? undefined : { scale: [1.05, 0.92, 1.05], rotate: [0, 180, 360] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.span
-        className="h-9 w-9 rounded-full bg-accent md:h-11 md:w-11"
-        animate={reduce ? undefined : { scale: [1, 1.18, 1] }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.span
-        className="absolute h-3 w-3 rounded-full bg-accent"
-        animate={
-          reduce
-            ? undefined
-            : {
-                x: [0, 52, 0, -52, 0],
-                y: [-48, 0, 48, 0, -48],
-              }
-        }
-        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </div>
+    <section
+      id="process"
+      aria-labelledby="process-heading"
+      className="site-block relative overflow-hidden"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.18]"
+        aria-hidden
+      >
+        <div className="absolute -right-[18%] top-[8%] h-[34rem] w-[34rem] rounded-full border border-accent/25" />
+        <div className="absolute -right-[8%] top-[18%] h-[22rem] w-[22rem] rounded-full border border-accent/15" />
+        <div className="absolute -left-24 bottom-[-20%] h-[28rem] w-[28rem] rounded-full bg-accent/8 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-[90rem] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(16rem,0.78fr)_minmax(0,1.55fr)] lg:gap-12 xl:gap-16">
+          <ScrollReveal>
+            <header className="lg:sticky lg:top-28">
+              <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
+                {t.process.kicker}
+              </p>
+              <h2
+                id="process-heading"
+                className="mt-4 max-w-[16ch] font-[family-name:var(--font-display)] text-[clamp(2.1rem,4.2vw,3.6rem)] font-medium leading-[0.88] tracking-[-0.05em] text-foreground text-balance"
+              >
+                {t.process.heading}
+              </h2>
+              <p className="mt-5 max-w-sm text-sm leading-relaxed text-neutral-600">
+                {t.process.body}
+              </p>
+              <button
+                type="button"
+                onClick={openConversation}
+                className="group mt-8 inline-flex h-12 items-center gap-2 rounded-full bg-foreground pl-6 pr-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97]"
+              >
+                {t.projects.requestQuote}
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/12 transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-px group-hover:-translate-y-px">
+                  <ArrowIcon className="h-3.5 w-3.5" />
+                </span>
+              </button>
+            </header>
+          </ScrollReveal>
+
+          <ScrollReveal blur={reduce ? 0 : 8} y={reduce ? 0 : 22}>
+            <ul className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+              {steps.map((step) => (
+                <li key={step.title}>
+                  <ProcessCard step={step} onOpen={openConversation} />
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+        </div>
+      </div>
+    </section>
   );
 }
