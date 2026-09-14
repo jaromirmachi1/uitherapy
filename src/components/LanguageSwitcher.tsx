@@ -19,7 +19,7 @@ export function LanguageSwitcher({ locale, label }: Props) {
   const pathname = usePathname() || "/";
 
   return (
-    <nav aria-label={label} className="ml-1 flex items-center sm:ml-2">
+    <nav aria-label={label} className="ml-0.5 flex items-center sm:ml-2">
       {locales.map((code) => {
         const active = code === locale;
         return (
@@ -30,7 +30,7 @@ export function LanguageSwitcher({ locale, label }: Props) {
             lang={code}
             aria-label={localeNames[code]}
             aria-current={active ? "page" : undefined}
-            className={`inline-flex h-8 items-center px-2.5 text-[0.68rem] font-medium uppercase tracking-[0.14em] transition-colors ${
+            className={`inline-flex h-9 items-center px-2 text-[0.62rem] font-medium uppercase tracking-[0.12em] transition-colors sm:h-8 sm:px-2.5 sm:text-[0.68rem] sm:tracking-[0.14em] ${
               active
                 ? "rounded-md bg-white text-foreground shadow-[0_1px_2px_rgba(43,43,43,0.06)]"
                 : "text-foreground/40 hover:text-foreground"

@@ -84,6 +84,13 @@
     html.has-interactive-cursor * {
       cursor: none;
     }
+
+    html.ut-modal-open.has-interactive-cursor,
+    html.ut-modal-open.has-interactive-cursor *,
+    html.ut-dialog-open.has-interactive-cursor,
+    html.ut-dialog-open.has-interactive-cursor * {
+      cursor: auto;
+    }
   }
 
   body.ut-loading {
@@ -97,8 +104,23 @@
     touch-action: none;
   }
 
-  html.ut-modal-open [data-lenis-prevent] {
+  html.ut-modal-open .interactive-cursor,
+  html.ut-modal-open .site-chrome,
+  html.ut-dialog-open .interactive-cursor,
+  html.ut-dialog-open .site-chrome {
+    display: none !important;
+  }
+
+  html.ut-modal-open [data-lenis-prevent],
+  html.ut-dialog-open [data-lenis-prevent] {
     touch-action: pan-y;
+  }
+
+  html.ut-dialog-open,
+  html.ut-dialog-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
   }
 
   main section[id] {
@@ -186,7 +208,9 @@
 }
 
 .ut-marquee:hover .ut-marquee-track,
-.ut-marquee:focus-within .ut-marquee-track {
+.ut-marquee:focus-within .ut-marquee-track,
+html.ut-modal-open .ut-marquee-track,
+html.ut-dialog-open .ut-marquee-track {
   animation-play-state: paused;
 }
 

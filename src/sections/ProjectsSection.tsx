@@ -1,97 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useState } from "react";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
+import { ProjectModal } from "@/components/projects/ProjectModal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
+import { projects, type ProjectEntry } from "@/content/projects";
 import { useI18n } from "@/i18n/provider";
 import { useReducedMotion } from "motion/react";
-
-type ProjectId =
-  | "panorama"
-  | "vojta"
-  | "laflare"
-  | "sadia"
-  | "dvd"
-  | "doktor"
-  | "golden"
-  | "speed"
-  | "prevezem";
-
-type ProjectEntry = {
-  id: ProjectId;
-  title: string;
-  year: string;
-  url: string;
-  image: string;
-  mockup?: string;
-};
-
-const projects: ProjectEntry[] = [
-  {
-    id: "vojta",
-    title: "Vojta Hubne",
-    year: "2025",
-    url: "https://www.vojtahubne.cz",
-    image: "/projects/vojta.webp",
-    mockup: "/projects/vojta-browser-2k.webp",
-  },
-  {
-    id: "panorama",
-    title: "Panorama Žabiny",
-    year: "2026",
-    url: "https://panorama-sooty.vercel.app",
-    image: "/projects/panorama.webp",
-  },
-  {
-    id: "laflare",
-    title: "Laflare Club",
-    year: "2025",
-    url: "https://laflareclub.com",
-    image: "/projects/laflare.webp",
-  },
-  {
-    id: "sadia",
-    title: "Sadia",
-    year: "2025",
-    url: "https://www.sadiaestate.cz",
-    image: "/projects/sadia.webp",
-  },
-  {
-    id: "dvd",
-    title: "DVD Culture",
-    year: "2025",
-    url: "https://www.dvdculture.com",
-    image: "/projects/dvd.webp",
-  },
-  {
-    id: "doktor",
-    title: "Doktor Barber",
-    year: "2025",
-    url: "https://doktorbarber.cz",
-    image: "/projects/doktor.webp",
-  },
-  {
-    id: "golden",
-    title: "Golden Touch",
-    year: "2025",
-    url: "https://martin-press.vercel.app",
-    image: "/projects/golden.webp",
-  },
-  {
-    id: "speed",
-    title: "Speed Coffee",
-    year: "2025",
-    url: "https://www.speedcoffee.shop",
-    image: "/projects/speed.webp",
-  },
-  {
-    id: "prevezem",
-    title: "Prevezem",
-    year: "2025",
-    url: "https://www.prevezem.cz",
-    image: "/projects/prevezem.webp",
-  },
-];
 
 function ArrowIcon({ className }: { className?: string }) {
   return (
@@ -127,9 +43,9 @@ function MarqueeCard({
   project,
   copy,
   openLabel,
-  newTab,
   viewProject,
   inert = false,
+  onOpen,
 }: {
   project: ProjectEntry;
   copy: {
@@ -139,18 +55,18 @@ function MarqueeCard({
     alt: string;
   };
   openLabel: string;
-  newTab: string;
   viewProject: string;
   inert?: boolean;
+  onOpen: (project: ProjectEntry) => void;
 }) {
   return (
-    <a
-      href={project.url}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      type="button"
+      onClick={() => onOpen(project)}
       tabIndex={inert ? -1 : undefined}
       aria-hidden={inert || undefined}
-      className="group grid w-[min(38rem,85vw)] shrink-0 grid-cols-1 overflow-hidden rounded-[1.25rem] bg-[#f6f6f6] sm:w-[42rem] sm:grid-cols-[1.15fr_0.85fr]"
+      disabled={inert}
+      className="group grid w-[min(38rem,85vw)] shrink-0 grid-cols-1 overflow-hidden rounded-[1.25rem] bg-[#f6f6f6] text-left sm:w-[42rem] sm:grid-cols-[1.15fr_0.85fr] disabled:pointer-events-none"
     >
       <span className="relative block aspect-[4/3] sm:aspect-auto sm:min-h-[18rem]">
         <Image
@@ -177,9 +93,9 @@ function MarqueeCard({
         </span>
       </span>
       <span className="sr-only">
-        {viewProject}: {project.title} {newTab}
+        {viewProject}: {project.title}
       </span>
-    </a>
+    </button>
   );
 }
 
@@ -187,9 +103,13 @@ export function ProjectsSection() {
   const { t } = useI18n();
   const { openConversation } = useConversation();
   const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState<ProjectEntry | null>(null);
   const [featured, ...rest] = projects;
   const featuredCopy = t.projects.items[featured.id];
   const marqueeItems = reduceMotion ? rest : [...rest, ...rest];
+  const openProject = useCallback((project: ProjectEntry) => {
+    setActive(project);
+  }, []);
 
   return (
     <section
@@ -214,11 +134,10 @@ export function ProjectsSection() {
 
         <ScrollReveal className="mt-10 border-t border-black/10 pt-10 lg:mt-14 lg:pt-14" blur={0} y={20}>
           <article>
-            <a
-              href={featured.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group grid items-start gap-8 md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12"
+            <button
+              type="button"
+              onClick={() => openProject(featured)}
+              className="group grid w-full items-start gap-8 text-left md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12"
             >
               <span className="relative isolate block w-full min-h-[14rem] aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-[#111111] ring-1 ring-black/8 md:min-h-0 md:aspect-[5/4] xl:aspect-[4/3]">
                 <Image
@@ -261,10 +180,10 @@ export function ProjectsSection() {
                   </blockquote>
                 ) : null}
                 <span className="sr-only">
-                  {t.projects.viewProject}: {featured.title} {t.projects.newTab}
+                  {t.projects.viewProject}: {featured.title}
                 </span>
               </span>
-            </a>
+            </button>
           </article>
         </ScrollReveal>
       </div>
@@ -297,9 +216,9 @@ export function ProjectsSection() {
                     project={project}
                     copy={t.projects.items[project.id]}
                     openLabel={t.projects.open}
-                    newTab={t.projects.newTab}
                     viewProject={t.projects.viewProject}
                     inert={duplicate}
+                    onOpen={openProject}
                   />
                 </li>
               );
@@ -317,6 +236,8 @@ export function ProjectsSection() {
           </button>
         </div>
       </div>
+
+      <ProjectModal project={active} onClose={() => setActive(null)} />
     </section>
   );
 }

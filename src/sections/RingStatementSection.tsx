@@ -66,7 +66,7 @@ export function RingStatementSection() {
           delay={70}
           duration={0.7}
           staggerDirection="forward"
-          className="mt-10 max-w-[18ch] font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
+          className="mt-10 max-w-[20ch] text-balance font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
         />
 
         <motion.p

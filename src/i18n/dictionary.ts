@@ -26,7 +26,7 @@ const en = {
   hero: {
     proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
     proofLabel: "uitherapy focus",
-    heading: "Creative web therapy for brands that can't afford to miss",
+    heading: "We fix websites, sadly not people",
     body: "A senior frontend studio building premium marketing sites, ecommerce fronts, and search-ready interfaces.",
   },
   process: {
@@ -96,10 +96,25 @@ const en = {
     latestBody: "New projects typically start within two weeks.",
     viewProject: "View project",
     open: "Open",
+    close: "Close",
+    visitSite: "Visit site",
+    highlights: "See the highlights",
+    builtWith: "This was built with",
+    studio: "uitherapy",
     moreWork: "More work",
     requestQuote: "Start a conversation",
     techLabel: "Technologies used",
     newTab: "(opens in a new tab)",
+    highlightLabels: {
+      hero: "Homepage hero",
+      scroll: "Page scroll",
+      catalog: "Catalog",
+      detail: "Detail page",
+      mobile: "Mobile",
+      checkout: "Checkout",
+      booking: "Booking",
+      gate: "Entrance",
+    },
     items: {
       panorama: {
         category: "Web design and development",
@@ -320,7 +335,7 @@ const cs: typeof en = {
   hero: {
     proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
     proofLabel: "Zaměření uitherapy",
-    heading: "Webová terapie pro značky, které nesmí minout",
+    heading: "Terapie pro weby, bohužel ne pro lidi",
     body: "Senior frontend studio pro prémiové marketingové weby, e-commerce a rozhraní připravená pro vyhledávače.",
   },
   process: {
@@ -390,10 +405,25 @@ const cs: typeof en = {
     latestBody: "Nové projekty obvykle začínají do dvou týdnů.",
     viewProject: "Zobrazit projekt",
     open: "Otevřít",
+    close: "Zavřít",
+    visitSite: "Navštívit web",
+    highlights: "Podívejte se na detaily",
+    builtWith: "Postaveno na",
+    studio: "uitherapy",
     moreWork: "Další práce",
     requestQuote: "Domluvme se",
     techLabel: "Použité technologie",
     newTab: "(otevře se v novém okně)",
+    highlightLabels: {
+      hero: "Hero úvodní stránky",
+      scroll: "Průchod stránkou",
+      catalog: "Katalog",
+      detail: "Detail",
+      mobile: "Mobil",
+      checkout: "Pokladna",
+      booking: "Rezervace",
+      gate: "Vstup",
+    },
     items: {
       panorama: {
         category: "Webdesign a vývoj",
