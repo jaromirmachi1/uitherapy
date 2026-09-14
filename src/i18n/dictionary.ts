@@ -118,10 +118,11 @@ const en = {
         subcategory: "Brand · Storefront",
         summary: "Dark premium storefront for a weight-loss supplement brand.",
         location: "Czechia",
-        story: "",
+        story:
+          "A conversion-first e-commerce front for a Czech supplement brand. Dark campaign visuals, a product catalog, and a store that feels like a film still — not a template shop.",
         quote: "",
         attribution: "",
-        alt: "Vojta Hubne e-commerce homepage",
+        alt: "Vojta Hubne storefront in a browser window",
       },
       laflare: {
         category: "Culture",
@@ -411,10 +412,11 @@ const cs: typeof en = {
         subcategory: "Značka · Eshop",
         summary: "Tmavý prémiový eshop pro značku hubnoucích produktů.",
         location: "Česko",
-        story: "",
+        story:
+          "Konverzně stavěný e-shop pro českou značku doplňků stravy. Tmavý kampaňový vizuál, katalog produktů a storefront, který působí jako záběr z kampaně — ne jako šablona.",
         quote: "",
         attribution: "",
-        alt: "Úvodní stránka Vojta Hubne",
+        alt: "E-shop Vojta Hubne v okně prohlížeče",
       },
       laflare: {
         category: "Kultura",

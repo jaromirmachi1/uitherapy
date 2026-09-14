@@ -23,22 +23,24 @@ type ProjectEntry = {
   year: string;
   url: string;
   image: string;
+  mockup?: string;
 };
 
 const projects: ProjectEntry[] = [
-  {
-    id: "panorama",
-    title: "Panorama Žabiny",
-    year: "2026",
-    url: "https://panorama-sooty.vercel.app",
-    image: "/projects/panorama.webp",
-  },
   {
     id: "vojta",
     title: "Vojta Hubne",
     year: "2025",
     url: "https://www.vojtahubne.cz",
     image: "/projects/vojta.webp",
+    mockup: "/projects/vojta-browser-2k.webp",
+  },
+  {
+    id: "panorama",
+    title: "Panorama Žabiny",
+    year: "2026",
+    url: "https://panorama-sooty.vercel.app",
+    image: "/projects/panorama.webp",
   },
   {
     id: "laflare",
@@ -218,14 +220,17 @@ export function ProjectsSection() {
               rel="noopener noreferrer"
               className="group grid items-stretch gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.9fr)] md:gap-10"
             >
-              <span className="relative block min-h-[18rem] overflow-hidden rounded-[1.25rem] bg-[#ececec] md:min-h-[26rem]">
+              <span className="relative isolate block aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-[#1a1a1a] ring-1 ring-black/8 md:aspect-[5/4]">
                 <Image
-                  src={featured.image}
+                  src={featured.mockup ?? featured.image}
                   alt={featuredCopy.alt}
                   fill
-                  className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03]"
                   sizes="(max-width: 1024px) 92vw, 55vw"
+                  quality={80}
                   priority
+                  placeholder="blur"
+                  blurDataURL="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABMAPzmKu1YvKSWksBgIAeAnCWMAxkAQ7Nte6+TpwWohQeAA/sxp0MuskzN2L+J4kacve1tbYjbJowJvXpxbIZyNsil5xmvNRdLObcVcxfsGu0tSQmPVDTVdlTCfAQAAAA=="
                 />
               </span>
               <span className="flex min-h-0 flex-col">
