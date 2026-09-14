@@ -34,9 +34,17 @@ export function ScrollReveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y, filter: `blur(${blur}px)` }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-8% 0px", amount: 0.18 }}
+      initial={
+        blur > 0
+          ? { opacity: 0, y, filter: `blur(${blur}px)` }
+          : { opacity: 0, y }
+      }
+      whileInView={
+        blur > 0
+          ? { opacity: 1, y: 0, filter: "blur(0px)" }
+          : { opacity: 1, y: 0 }
+      }
+      viewport={{ once: true, margin: "0px 0px -6% 0px", amount: 0.12 }}
       transition={{ ...revealTransition, delay }}
     >
       {children}

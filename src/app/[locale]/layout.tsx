@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Syne } from "next/font/google";
+import { Inter_Tight, Syne } from "next/font/google";
 import { notFound } from "next/navigation";
 import { ConversationModal } from "@/components/conversation/ConversationModal";
 import { ConversationProvider } from "@/components/conversation/ConversationProvider";
@@ -20,7 +20,7 @@ const display = Syne({
   weight: ["500", "600", "700", "800"],
 });
 
-const sans = DM_Sans({
+const sans = Inter_Tight({
   subsets: ["latin", "latin-ext"],
   variable: "--font-body",
   weight: ["400", "500", "600", "700"],

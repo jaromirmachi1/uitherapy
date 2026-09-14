@@ -212,21 +212,21 @@ export function ProjectsSection() {
           </header>
         </ScrollReveal>
 
-        <ScrollReveal className="mt-10 border-t border-black/10 pt-10 lg:mt-14 lg:pt-14">
+        <ScrollReveal className="mt-10 border-t border-black/10 pt-10 lg:mt-14 lg:pt-14" blur={0} y={20}>
           <article>
             <a
               href={featured.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group grid items-stretch gap-8 md:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.9fr)] md:gap-10"
+              className="group grid items-start gap-8 md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12"
             >
-              <span className="relative isolate block aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-[#1a1a1a] ring-1 ring-black/8 md:aspect-[5/4]">
+              <span className="relative isolate block w-full min-h-[14rem] aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-[#111111] ring-1 ring-black/8 md:min-h-0 md:aspect-[5/4] xl:aspect-[4/3]">
                 <Image
                   src={featured.mockup ?? featured.image}
                   alt={featuredCopy.alt}
                   fill
-                  className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03]"
-                  sizes="(max-width: 1024px) 92vw, 55vw"
+                  className="object-contain object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03] md:object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1536px) 48vw, 42vw"
                   quality={80}
                   priority
                   placeholder="blur"
@@ -247,7 +247,7 @@ export function ProjectsSection() {
                     featured.year,
                   ]}
                 />
-                <p className="mt-6 text-sm leading-relaxed text-neutral-600 sm:text-[0.98rem]">
+                <p className="mt-6 max-w-[38ch] text-sm leading-relaxed tracking-[-0.015em] text-[#222222] sm:text-[0.98rem] lg:mt-8 lg:max-w-[42ch] lg:text-[1.125rem] lg:leading-[1.55] xl:text-[1.2rem] xl:leading-[1.5]">
                   {featuredCopy.story}
                 </p>
                 {featuredCopy.quote ? (
