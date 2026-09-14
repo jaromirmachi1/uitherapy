@@ -3,6 +3,7 @@ import { InteractiveCursor } from "@/components/InteractiveCursor";
 import { SkipLink } from "@/components/SkipLink";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { ArticlesSection } from "@/sections/ArticlesSection";
 import { ContactSection } from "@/sections/ContactSection";
 import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
@@ -25,6 +26,9 @@ export default function Home() {
           </div>
           <div className="px-2.5 sm:px-6">
             <ProjectsSection />
+          </div>
+          <div className="px-2.5 sm:px-6">
+            <ArticlesSection />
           </div>
           <div className="px-2.5 sm:px-6">
             <ContactSection />

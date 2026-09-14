@@ -26,6 +26,20 @@ export function middleware(request: NextRequest) {
 
   if (pathnameLocale) return;
 
+  // Czech public URLs → internal /cs/articles routes
+  if (pathname === "/clanky" || pathname.startsWith("/clanky/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/clanky/, `/${defaultLocale}/articles`);
+    return NextResponse.rewrite(url);
+  }
+
+  // Canonical Czech articles path is /clanky
+  if (pathname === "/articles" || pathname.startsWith("/articles/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/articles/, "/clanky");
+    return NextResponse.redirect(url);
+  }
+
   const url = request.nextUrl.clone();
   url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
   return NextResponse.rewrite(url);

@@ -1,11 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   localeLabels,
   localeNames,
-  localePath,
   locales,
   type Locale,
 } from "@/i18n/config";
+import { localeSwitchHref } from "@/i18n/locale-switch";
 
 type Props = {
   locale: Locale;
@@ -13,6 +16,8 @@ type Props = {
 };
 
 export function LanguageSwitcher({ locale, label }: Props) {
+  const pathname = usePathname() || "/";
+
   return (
     <nav aria-label={label} className="ml-1 flex items-center sm:ml-2">
       {locales.map((code) => {
@@ -20,7 +25,7 @@ export function LanguageSwitcher({ locale, label }: Props) {
         return (
           <Link
             key={code}
-            href={localePath(code)}
+            href={localeSwitchHref(code, pathname)}
             hrefLang={code}
             lang={code}
             aria-label={localeNames[code]}

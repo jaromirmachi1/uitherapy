@@ -6,7 +6,16 @@ import { useConversation } from "@/components/conversation/ConversationProvider"
 import { useI18n } from "@/i18n/provider";
 import { useReducedMotion } from "motion/react";
 
-type ProjectId = "panorama" | "golden" | "dvd";
+type ProjectId =
+  | "panorama"
+  | "vojta"
+  | "laflare"
+  | "sadia"
+  | "dvd"
+  | "doktor"
+  | "golden"
+  | "speed"
+  | "prevezem";
 
 type ProjectEntry = {
   id: ProjectId;
@@ -21,22 +30,64 @@ const projects: ProjectEntry[] = [
     id: "panorama",
     title: "Panorama Žabiny",
     year: "2026",
-    url: "https://www.panoramazabiny.cz",
-    image: "/panoramaph.webp",
+    url: "https://panorama-sooty.vercel.app",
+    image: "/projects/panorama.webp",
   },
   {
-    id: "golden",
-    title: "Golden Touch",
+    id: "vojta",
+    title: "Vojta Hubne",
     year: "2025",
-    url: "https://www.goldentouchova.cz",
-    image: "/barbermartini.webp",
+    url: "https://www.vojtahubne.cz",
+    image: "/projects/vojta.webp",
+  },
+  {
+    id: "laflare",
+    title: "Laflare Club",
+    year: "2025",
+    url: "https://laflareclub.com",
+    image: "/projects/laflare.webp",
+  },
+  {
+    id: "sadia",
+    title: "Sadia",
+    year: "2025",
+    url: "https://www.sadiaestate.cz",
+    image: "/projects/sadia.webp",
   },
   {
     id: "dvd",
     title: "DVD Culture",
     year: "2025",
     url: "https://www.dvdculture.com",
-    image: "/dvdculture.webp",
+    image: "/projects/dvd.webp",
+  },
+  {
+    id: "doktor",
+    title: "Doktor Barber",
+    year: "2025",
+    url: "https://doktorbarber.cz",
+    image: "/projects/doktor.webp",
+  },
+  {
+    id: "golden",
+    title: "Golden Touch",
+    year: "2025",
+    url: "https://martin-press.vercel.app",
+    image: "/projects/golden.webp",
+  },
+  {
+    id: "speed",
+    title: "Speed Coffee",
+    year: "2025",
+    url: "https://www.speedcoffee.shop",
+    image: "/projects/speed.webp",
+  },
+  {
+    id: "prevezem",
+    title: "Prevezem",
+    year: "2025",
+    url: "https://www.prevezem.cz",
+    image: "/projects/prevezem.webp",
   },
 ];
 
@@ -104,7 +155,7 @@ function MarqueeCard({
           src={project.image}
           alt={copy.alt}
           fill
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
           sizes="(max-width: 640px) 85vw, 24rem"
         />
       </span>
@@ -172,7 +223,7 @@ export function ProjectsSection() {
                   src={featured.image}
                   alt={featuredCopy.alt}
                   fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   sizes="(max-width: 1024px) 92vw, 55vw"
                   priority
                 />
@@ -194,14 +245,16 @@ export function ProjectsSection() {
                 <p className="mt-6 text-sm leading-relaxed text-neutral-600 sm:text-[0.98rem]">
                   {featuredCopy.story}
                 </p>
-                <blockquote className="mt-auto pt-8">
-                  <p className="font-[family-name:var(--font-display)] text-[clamp(1.05rem,1.8vw,1.35rem)] font-medium leading-[1.2] tracking-[-0.03em] text-foreground">
-                    “{featuredCopy.quote}”
-                  </p>
-                  <footer className="mt-3 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400">
-                    — {featuredCopy.attribution}
-                  </footer>
-                </blockquote>
+                {featuredCopy.quote ? (
+                  <blockquote className="mt-auto pt-8">
+                    <p className="font-[family-name:var(--font-display)] text-[clamp(1.05rem,1.8vw,1.35rem)] font-medium leading-[1.2] tracking-[-0.03em] text-foreground">
+                      “{featuredCopy.quote}”
+                    </p>
+                    <footer className="mt-3 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400">
+                      — {featuredCopy.attribution}
+                    </footer>
+                  </blockquote>
+                ) : null}
                 <span className="sr-only">
                   {t.projects.viewProject}: {featured.title} {t.projects.newTab}
                 </span>

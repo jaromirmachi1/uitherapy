@@ -2,20 +2,28 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useConversation } from "@/components/conversation/ConversationProvider";
 import {
+  articlesPath,
   localeLabels,
   localeNames,
   localePath,
   locales,
 } from "@/i18n/config";
+import { localeSwitchHref } from "@/i18n/locale-switch";
 import { useI18n } from "@/i18n/provider";
 
 export function SiteHeader() {
   const { locale, t } = useI18n();
   const { openConversation } = useConversation();
+  const pathname = usePathname() || "/";
   const alternate = locales.find((code) => code !== locale) ?? locale;
+  const homeProjects =
+    localePath(locale) === "/"
+      ? "/#projects"
+      : `${localePath(locale)}#projects`;
 
   return (
     <>
@@ -41,12 +49,18 @@ export function SiteHeader() {
               aria-label="Primary"
               className="flex items-center gap-1.5 sm:gap-2"
             >
-              <a
-                href="#projects"
+              <Link
+                href={homeProjects}
                 className="hidden h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:inline-flex"
               >
                 {t.nav.projects}
-              </a>
+              </Link>
+              <Link
+                href={articlesPath(locale)}
+                className="hidden h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:inline-flex"
+              >
+                {t.nav.articles}
+              </Link>
               <button
                 type="button"
                 onClick={openConversation}
@@ -65,7 +79,7 @@ export function SiteHeader() {
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 sm:hidden">
         <div className="pointer-events-auto px-5 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.75rem))] pt-3">
           <Link
-            href={localePath(alternate)}
+            href={localeSwitchHref(alternate, pathname)}
             hrefLang={alternate}
             lang={alternate}
             aria-label={localeNames[alternate]}

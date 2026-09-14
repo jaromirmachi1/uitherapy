@@ -22,3 +22,10 @@ export function localePath(locale: Locale, hash = "") {
   const base = locale === defaultLocale ? "/" : `/${locale}`;
   return hash ? `${base}${hash}` : base;
 }
+
+/** Public articles index: `/clanky` (cs) · `/en/articles` (en) */
+export function articlesPath(locale: Locale, slug?: string) {
+  const suffix = slug ? `/${slug}` : "";
+  if (locale === defaultLocale) return `/clanky${suffix}`;
+  return `/en/articles${suffix}`;
+}
