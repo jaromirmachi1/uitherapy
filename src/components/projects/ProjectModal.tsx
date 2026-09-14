@@ -150,14 +150,14 @@ export function ProjectModal({
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-1/2 z-20 inline-flex h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-5 text-[0.66rem] font-medium uppercase tracking-[0.16em] text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97] sm:h-12 sm:px-6"
+              className="absolute bottom-4 left-1/2 z-20 inline-flex h-11 -translate-x-1/2 items-center gap-2 rounded-full bg-foreground px-5 text-[0.66rem] font-medium uppercase tracking-[0.16em] text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97] sm:bottom-5 sm:h-12 sm:px-6"
             >
               {t.projects.visitSite}
               <ArrowIcon className="h-3.5 w-3.5" />
               <span className="sr-only">{t.projects.newTab}</span>
             </a>
 
-            <article className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-[max(5.5rem,calc(env(safe-area-inset-bottom)+4.5rem))]">
+            <article className="min-h-0 flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] pb-24">
               <div className="mx-auto max-w-[72rem] px-5 pt-16 text-center sm:px-10 sm:pt-20">
                 <h2
                   id={titleId}

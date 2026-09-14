@@ -271,10 +271,19 @@ export function GradientWaves({
 
     const mesh = new Mesh(gl, { geometry, program });
 
+    let lastCssW = 0;
+    let lastCssH = 0;
+
     const setSize = () => {
       const rect = container.getBoundingClientRect();
       const w = Math.max(1, Math.floor(rect.width));
       const h = Math.max(1, Math.floor(rect.height));
+      // Ignore Safari chrome show/hide noise (~40–100px height churn).
+      if (lastCssW > 0 && Math.abs(w - lastCssW) < 2 && Math.abs(h - lastCssH) < 96) {
+        return;
+      }
+      lastCssW = w;
+      lastCssH = h;
       renderer.setSize(w, h);
       const res = program.uniforms.iResolution.value as Float32Array;
       res[0] = gl.drawingBufferWidth;

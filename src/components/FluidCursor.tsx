@@ -34,6 +34,12 @@ export function FluidCursor({ colors, intensity = 0.42, className }: Props) {
     const noHover = window.matchMedia("(hover: none)").matches;
     const isTouchPrimary = coarsePointer || noHover;
 
+    // Touch + Safari chrome show/hide thrash WebGL resize/paint. Keep a static wash.
+    if (isTouchPrimary) {
+      setStaticMode(true);
+      return;
+    }
+
     const palette = resolvePalette(colors);
     if (palette.length === 0) {
       setStaticMode(true);

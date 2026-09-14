@@ -79,6 +79,11 @@
     transform: translate3d(0, 0, 0);
   }
 
+  .site-header.site-chrome {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
   @media (pointer: fine) {
     html.has-interactive-cursor,
     html.has-interactive-cursor * {

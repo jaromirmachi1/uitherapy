@@ -34,7 +34,7 @@ export default function Home() {
             <ContactSection />
           </div>
         </main>
-        <div className="px-2.5 pb-20 sm:px-6 sm:pb-6">
+        <div className="px-2.5 pb-6 sm:px-6 sm:pb-6">
           <SiteFooter />
         </div>
       </div>
