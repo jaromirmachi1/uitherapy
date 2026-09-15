@@ -44,12 +44,11 @@ export const projects: ProjectEntry[] = [
     year: "2025",
     url: "https://www.vojtahubne.cz",
     image: "/projects/vojta.webp",
-    mockup: "/projects/vojta-browser-2k.webp",
     tech: ["Next.js", "Motion", "SEO", "E-commerce"],
     highlights: [
-      { src: "/projects/vojta-browser-2k.webp", kind: "hero", object: "center" },
-      { src: "/projects/vojta.webp", kind: "catalog", object: "top" },
-      { src: "/projects/vojta.webp", kind: "detail", object: "center" },
+      { src: "/projects/vojta.webp", kind: "hero", object: "top" },
+      { src: "/projects/vojta.webp", kind: "catalog", object: "center" },
+      { src: "/projects/vojta.webp", kind: "detail", object: "bottom" },
       {
         src: "/projects/vojta.webp",
         kind: "mobile",

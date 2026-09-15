@@ -137,7 +137,7 @@ const en = {
           "A conversion-first e-commerce front for a Czech supplement brand. Dark campaign visuals, a product catalog, and a store that feels like a film still — not a template shop.",
         quote: "",
         attribution: "",
-        alt: "Vojta Hubne storefront in a browser window",
+        alt: "Vojta Hubne e-commerce homepage with before-and-after hero",
       },
       laflare: {
         category: "Culture",
@@ -446,7 +446,7 @@ const cs: typeof en = {
           "Konverzně stavěný e-shop pro českou značku doplňků stravy. Tmavý kampaňový vizuál, katalog produktů a storefront, který působí jako záběr z kampaně — ne jako šablona.",
         quote: "",
         attribution: "",
-        alt: "E-shop Vojta Hubne v okně prohlížeče",
+        alt: "Úvodní stránka e-shopu Vojta Hubne s před-a-po hero",
       },
       laflare: {
         category: "Kultura",

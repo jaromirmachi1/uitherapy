@@ -139,14 +139,18 @@ export function ProjectsSection() {
               onClick={() => openProject(featured)}
               className="group grid w-full items-start gap-8 text-left md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12"
             >
-              <span className="relative isolate block w-full min-h-[14rem] aspect-[4/3] overflow-hidden rounded-[1.45rem] bg-[#111111] ring-1 ring-black/8 md:min-h-0 md:aspect-[5/4] xl:aspect-[4/3]">
+              <span className="relative isolate block w-full min-h-[16rem] aspect-square overflow-hidden rounded-[1.45rem] bg-[#0a0a0a] ring-1 ring-black/8 md:min-h-0 md:aspect-[4/5] xl:aspect-square">
+                <span
+                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_18%,rgba(201,162,39,0.18),transparent_52%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.12),transparent_48%)]"
+                  aria-hidden
+                />
                 <Image
                   src={featured.mockup ?? featured.image}
                   alt={featuredCopy.alt}
                   fill
-                  className="object-contain object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03] md:object-cover"
+                  className="object-contain object-center p-[6%] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02] sm:p-[7%]"
                   sizes="(max-width: 768px) 100vw, (max-width: 1536px) 48vw, 42vw"
-                  quality={80}
+                  quality={82}
                   priority
                   placeholder="blur"
                   blurDataURL="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABMAPzmKu1YvKSWksBgIAeAnCWMAxkAQ7Nte6+TpwWohQeAA/sxp0MuskzN2L+J4kacve1tbYjbJowJvXpxbIZyNsil5xmvNRdLObcVcxfsGu0tSQmPVDTVdlTCfAQAAAA=="
