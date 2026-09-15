@@ -24,7 +24,7 @@ const en = {
       "Articles from uitherapy on Next.js, technical SEO, motion, and brand presentation — practical notes from a senior frontend studio.",
   },
   hero: {
-    proof: ["Websites", "Eshops", "Branding", "Marketing"] as const,
+    proof: ["Websites", "Eshops", "Branding", "Marketing"],
     proofLabel: "uitherapy focus",
     heading: "We fix websites, sadly not people",
     body: "A senior frontend studio building premium marketing sites, ecommerce fronts, and search-ready interfaces.",
@@ -333,7 +333,7 @@ const cs: typeof en = {
       "Články uitherapy o Next.js, technickém SEO, motion a prezentaci značky — praktické poznámky ze seniorního frontend studia.",
   },
   hero: {
-    proof: ["Webové stránky", "Eshopy", "Branding", "Marketing"] as const,
+    proof: ["Webové stránky", "Eshopy", "Branding", "Marketing"],
     proofLabel: "Zaměření uitherapy",
     heading: "Terapie pro weby. Bohužel ne pro lidi.",
     body: "Senior frontend studio pro prémiové marketingové weby, e-commerce a rozhraní připravená pro vyhledávače.",
