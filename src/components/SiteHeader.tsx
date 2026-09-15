@@ -4,16 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useConversation } from "@/components/conversation/ConversationProvider";
-import { articlesPath, localePath } from "@/i18n/config";
+import { localePath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 
 export function SiteHeader() {
   const { locale, t } = useI18n();
   const { openConversation } = useConversation();
-  const homeProjects =
-    localePath(locale) === "/"
-      ? "/#projects"
-      : `${localePath(locale)}#projects`;
 
   return (
     <header className="site-header site-chrome pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -34,22 +30,7 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-          <nav
-            aria-label="Primary"
-            className="flex items-center gap-1.5 sm:gap-2"
-          >
-            <Link
-              href={homeProjects}
-              className="hidden h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:inline-flex"
-            >
-              {t.nav.projects}
-            </Link>
-            <Link
-              href={articlesPath(locale)}
-              className="hidden h-9 items-center rounded-md border border-foreground/85 px-4 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-white sm:inline-flex"
-            >
-              {t.nav.articles}
-            </Link>
+          <nav aria-label="Primary" className="flex items-center">
             <button
               type="button"
               onClick={openConversation}

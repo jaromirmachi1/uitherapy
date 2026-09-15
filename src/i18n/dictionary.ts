@@ -24,14 +24,14 @@ const en = {
       "Articles from uitherapy on Next.js, technical SEO, motion, and brand presentation — practical notes from a senior frontend studio.",
   },
   hero: {
-    proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
+    proof: ["Websites", "Eshops", "Branding", "Marketing"] as const,
     proofLabel: "uitherapy focus",
     heading: "We fix websites, sadly not people",
     body: "A senior frontend studio building premium marketing sites, ecommerce fronts, and search-ready interfaces.",
   },
   process: {
     kicker: "Services",
-    heading: "From brief to launch, no black box.",
+    heading: "From brief to launch",
     body: "Websites, AI content, branding, and marketing — one studio for polished interfaces that convert.",
     more: "And more…",
     learnMore: "Find out more",
@@ -88,7 +88,7 @@ const en = {
   },
   projects: {
     kicker: "Selected",
-    heading: "See for yourself",
+    heading: "Projects",
     intro:
       "Interfaces in the wild—swap for your own captures when we ship together.",
     spine: "Strategy · UI · build · ship",
@@ -213,7 +213,7 @@ const en = {
   },
   contact: {
     kicker: "Contact",
-    heading: "Let's ship something unforgettable.",
+    heading: "Let's ship something you don't have to be ashamed of.",
     body: "Product, timeline, references—we reply within two business days.",
     back: "Back to projects",
     mailSubject: "Project inquiry — uitherapy",
@@ -333,14 +333,14 @@ const cs: typeof en = {
       "Články uitherapy o Next.js, technickém SEO, motion a prezentaci značky — praktické poznámky ze seniorního frontend studia.",
   },
   hero: {
-    proof: ["SEO-ready", "Next.js", "Ecommerce", "Motion"] as const,
+    proof: ["Webové stránky", "Eshopy", "Branding", "Marketing"] as const,
     proofLabel: "Zaměření uitherapy",
-    heading: "Terapie pro weby, bohužel ne pro lidi",
+    heading: "Terapie pro weby. Bohužel ne pro lidi.",
     body: "Senior frontend studio pro prémiové marketingové weby, e-commerce a rozhraní připravená pro vyhledávače.",
   },
   process: {
     kicker: "Služby",
-    heading: "Od briefu po spuštění — transparentně, žádná tajemství.",
+    heading: "Od briefu po spuštění",
     body: "Weby, AI obsah, branding i marketing — jedno studio pro rozhraní, která konvertují.",
     more: "A další…",
     learnMore: "Zjistit více",
@@ -397,7 +397,7 @@ const cs: typeof en = {
   },
   projects: {
     kicker: "Vybrané",
-    heading: "Podívejte se sami",
+    heading: "Projekty",
     intro:
       "Rozhraní venku ve světě — až budeme tvořit spolu, nahradíme je vašimi záběry.",
     spine: "Strategie · UI · stavba · spuštění",
@@ -522,7 +522,7 @@ const cs: typeof en = {
   },
   contact: {
     kicker: "Kontakt",
-    heading: "Pojďme spustit něco, na co se nezapomíná.",
+    heading: "Pojďme spustit něco, za co už se nemusíte stydět.",
     body: "Produkt, termín, reference — odpovíme do dvou pracovních dnů.",
     back: "Zpět k projektům",
     mailSubject: "Poptávka projektu — uitherapy",
