@@ -5,7 +5,11 @@ import { useCallback, useState } from "react";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ProjectModal } from "@/components/projects/ProjectModal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
-import { projects, type ProjectEntry } from "@/content/projects";
+import {
+  featuredProjectIds,
+  projects,
+  type ProjectEntry,
+} from "@/content/projects";
 import { useI18n } from "@/i18n/provider";
 import { useReducedMotion } from "motion/react";
 
@@ -53,12 +57,17 @@ function MarqueeCard({
     location: string;
     summary: string;
     alt: string;
+    tags?: string[];
   };
   openLabel: string;
   viewProject: string;
   inert?: boolean;
   onOpen: (project: ProjectEntry) => void;
 }) {
+  const tags =
+    copy.tags && copy.tags.length > 0
+      ? copy.tags
+      : [copy.category, copy.location, project.year];
   return (
     <button
       type="button"
@@ -66,25 +75,25 @@ function MarqueeCard({
       tabIndex={inert ? -1 : undefined}
       aria-hidden={inert || undefined}
       disabled={inert}
-      className="group grid w-[min(38rem,85vw)] shrink-0 grid-cols-1 overflow-hidden rounded-[1.25rem] bg-[#f6f6f6] text-left sm:w-[42rem] sm:grid-cols-[1.15fr_0.85fr] disabled:pointer-events-none"
+      className="group flex w-[min(34rem,88vw)] shrink-0 flex-col overflow-hidden rounded-[1.25rem] bg-[#f6f6f6] text-left sm:w-[38rem] disabled:pointer-events-none"
     >
-      <span className="relative block aspect-[4/3] sm:aspect-auto sm:min-h-[18rem]">
+      <span className="relative block aspect-[16/10] w-full overflow-hidden bg-[#111111]">
         <Image
           src={project.image}
           alt={copy.alt}
           fill
           className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-          sizes="(max-width: 640px) 85vw, 24rem"
+          sizes="(max-width: 640px) 88vw, 38rem"
         />
       </span>
-      <span className="flex flex-col px-5 py-5 sm:px-6 sm:py-6">
+      <span className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
         <span className="flex items-start justify-between gap-3">
           <span className="font-[family-name:var(--font-display)] text-[1.55rem] font-medium leading-[0.95] tracking-[-0.04em] text-foreground">
             {project.title}
           </span>
           <ArrowIcon className="mt-1 h-4 w-4 shrink-0 text-foreground/50 transition-colors group-hover:text-accent" />
         </span>
-        <ProjectTags tags={[copy.category, copy.location, project.year]} />
+        <ProjectTags tags={tags} />
         <span className="mt-4 text-sm leading-relaxed text-neutral-600">
           {copy.summary}
         </span>
@@ -99,14 +108,116 @@ function MarqueeCard({
   );
 }
 
+function FeaturedProject({
+  project,
+  copy,
+  viewProject,
+  reverse = false,
+  priority = false,
+  onOpen,
+}: {
+  project: ProjectEntry;
+  copy: {
+    category: string;
+    location: string;
+    story: string;
+    quote: string;
+    attribution: string;
+    alt: string;
+    tags?: string[];
+  };
+  viewProject: string;
+  reverse?: boolean;
+  priority?: boolean;
+  onOpen: (project: ProjectEntry) => void;
+}) {
+  const cover = project.frame === "cover";
+  const tags =
+    copy.tags && copy.tags.length > 0
+      ? copy.tags
+      : [copy.category, copy.location, project.year];
+
+  return (
+    <article>
+      <button
+        type="button"
+        onClick={() => onOpen(project)}
+        className={`group grid w-full items-start gap-8 text-left md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12 ${
+          reverse ? "md:[&>*:first-child]:order-2" : ""
+        }`}
+      >
+        <span
+          className={`relative isolate block w-full min-h-[16rem] aspect-square overflow-hidden rounded-[1.45rem] ring-1 ring-black/8 md:min-h-0 md:aspect-[4/5] xl:aspect-square ${
+            cover ? "bg-[#1a2220]" : "bg-[#0a0a0a]"
+          }`}
+        >
+          <span
+            className={`pointer-events-none absolute inset-0 ${
+              cover
+                ? "bg-[radial-gradient(ellipse_at_40%_20%,rgba(120,150,110,0.22),transparent_55%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.1),transparent_48%)]"
+                : "bg-[radial-gradient(ellipse_at_50%_18%,rgba(201,162,39,0.18),transparent_52%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.12),transparent_48%)]"
+            }`}
+            aria-hidden
+          />
+          <Image
+            src={project.mockup ?? project.image}
+            alt={copy.alt}
+            fill
+            className={
+              cover
+                ? "object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02]"
+                : "object-contain object-center p-[6%] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02] sm:p-[7%]"
+            }
+            sizes="(max-width: 768px) 100vw, (max-width: 1536px) 48vw, 42vw"
+            quality={82}
+            priority={priority}
+            placeholder="blur"
+            blurDataURL="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABMAPzmKu1YvKSWksBgIAeAnCWMAxkAQ7Nte6+TpwWohQeAA/sxp0MuskzN2L+J4kacve1tbYjbJowJvXpxbIZyNsil5xmvNRdLObcVcxfsGu0tSQmPVDTVdlTCfAQAAAA=="
+          />
+        </span>
+        <span className="flex min-h-0 flex-col">
+          <span className="flex items-start justify-between gap-4">
+            <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.85rem,3.6vw,3.1rem)] font-medium leading-[0.92] tracking-[-0.045em] text-foreground">
+              {project.title}
+            </h3>
+            <ArrowIcon className="mt-2 h-5 w-5 shrink-0 text-foreground/40 transition-colors group-hover:text-accent" />
+          </span>
+          <ProjectTags tags={tags} />
+          <p className="mt-6 max-w-[38ch] text-sm leading-relaxed tracking-[-0.015em] text-[#222222] sm:text-[0.98rem] lg:mt-8 lg:max-w-[42ch] lg:text-[1.125rem] lg:leading-[1.55] xl:text-[1.2rem] xl:leading-[1.5]">
+            {copy.story}
+          </p>
+          {copy.quote ? (
+            <blockquote className="mt-auto pt-8">
+              <p className="font-[family-name:var(--font-display)] text-[clamp(1.05rem,1.8vw,1.35rem)] font-medium leading-[1.2] tracking-[-0.03em] text-foreground">
+                “{copy.quote}”
+              </p>
+              <footer className="mt-3 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400">
+                — {copy.attribution}
+              </footer>
+            </blockquote>
+          ) : null}
+          <span className="sr-only">
+            {viewProject}: {project.title}
+          </span>
+        </span>
+      </button>
+    </article>
+  );
+}
+
 export function ProjectsSection() {
   const { t } = useI18n();
   const { openConversation } = useConversation();
   const reduceMotion = useReducedMotion();
   const [active, setActive] = useState<ProjectEntry | null>(null);
-  const [featured, ...rest] = projects;
-  const featuredCopy = t.projects.items[featured.id];
+
+  const featured = featuredProjectIds
+    .map((id) => projects.find((project) => project.id === id))
+    .filter((project): project is ProjectEntry => Boolean(project));
+  const featuredIds = new Set(featured.map((project) => project.id));
+  const rest = projects.filter((project) => !featuredIds.has(project.id));
   const marqueeItems = reduceMotion ? rest : [...rest, ...rest];
+
   const openProject = useCallback((project: ProjectEntry) => {
     setActive(project);
   }, []);
@@ -132,64 +243,20 @@ export function ProjectsSection() {
           </header>
         </ScrollReveal>
 
-        <ScrollReveal className="mt-10 border-t border-black/10 pt-10 lg:mt-14 lg:pt-14" blur={0} y={20}>
-          <article>
-            <button
-              type="button"
-              onClick={() => openProject(featured)}
-              className="group grid w-full items-start gap-8 text-left md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12"
-            >
-              <span className="relative isolate block w-full min-h-[16rem] aspect-square overflow-hidden rounded-[1.45rem] bg-[#0a0a0a] ring-1 ring-black/8 md:min-h-0 md:aspect-[4/5] xl:aspect-square">
-                <span
-                  className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_18%,rgba(201,162,39,0.18),transparent_52%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.12),transparent_48%)]"
-                  aria-hidden
-                />
-                <Image
-                  src={featured.mockup ?? featured.image}
-                  alt={featuredCopy.alt}
-                  fill
-                  className="object-contain object-center p-[6%] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02] sm:p-[7%]"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1536px) 48vw, 42vw"
-                  quality={82}
-                  priority
-                  placeholder="blur"
-                  blurDataURL="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABMAPzmKu1YvKSWksBgIAeAnCWMAxkAQ7Nte6+TpwWohQeAA/sxp0MuskzN2L+J4kacve1tbYjbJowJvXpxbIZyNsil5xmvNRdLObcVcxfsGu0tSQmPVDTVdlTCfAQAAAA=="
-                />
-              </span>
-              <span className="flex min-h-0 flex-col">
-                <span className="flex items-start justify-between gap-4">
-                  <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.85rem,3.6vw,3.1rem)] font-medium leading-[0.92] tracking-[-0.045em] text-foreground">
-                    {featured.title}
-                  </h3>
-                  <ArrowIcon className="mt-2 h-5 w-5 shrink-0 text-foreground/40 transition-colors group-hover:text-accent" />
-                </span>
-                <ProjectTags
-                  tags={[
-                    featuredCopy.category,
-                    featuredCopy.location,
-                    featured.year,
-                  ]}
-                />
-                <p className="mt-6 max-w-[38ch] text-sm leading-relaxed tracking-[-0.015em] text-[#222222] sm:text-[0.98rem] lg:mt-8 lg:max-w-[42ch] lg:text-[1.125rem] lg:leading-[1.55] xl:text-[1.2rem] xl:leading-[1.5]">
-                  {featuredCopy.story}
-                </p>
-                {featuredCopy.quote ? (
-                  <blockquote className="mt-auto pt-8">
-                    <p className="font-[family-name:var(--font-display)] text-[clamp(1.05rem,1.8vw,1.35rem)] font-medium leading-[1.2] tracking-[-0.03em] text-foreground">
-                      “{featuredCopy.quote}”
-                    </p>
-                    <footer className="mt-3 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400">
-                      — {featuredCopy.attribution}
-                    </footer>
-                  </blockquote>
-                ) : null}
-                <span className="sr-only">
-                  {t.projects.viewProject}: {featured.title}
-                </span>
-              </span>
-            </button>
-          </article>
-        </ScrollReveal>
+        <div className="mt-10 space-y-16 border-t border-black/10 pt-10 lg:mt-14 lg:space-y-24 lg:pt-14">
+          {featured.map((project, index) => (
+            <ScrollReveal key={project.id} blur={0} y={20}>
+              <FeaturedProject
+                project={project}
+                copy={t.projects.items[project.id]}
+                viewProject={t.projects.viewProject}
+                reverse={index % 2 === 1}
+                priority={index === 0}
+                onOpen={openProject}
+              />
+            </ScrollReveal>
+          ))}
+        </div>
       </div>
 
       <div className="border-t border-black/10 pb-16 pt-10 lg:pb-20 lg:pt-12">

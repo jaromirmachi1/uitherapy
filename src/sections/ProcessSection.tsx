@@ -15,6 +15,7 @@ import {
   useSpring,
   type SpringOptions,
 } from "motion/react";
+import { projects } from "@/content/projects";
 
 const EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
 
@@ -25,6 +26,10 @@ const followSpring: SpringOptions = {
 };
 
 type ProjectId = keyof Dictionary["projects"]["items"];
+
+const projectImageById = Object.fromEntries(
+  projects.map((project) => [project.id, project.image]),
+) as Record<ProjectId, string>;
 
 const SERVICE_SCREENS: ProjectId[][] = [
   ["panorama", "vojta", "sadia"],
@@ -279,7 +284,7 @@ export function ProcessSection() {
                     learnMore={t.process.learnMore}
                     onOpen={openConversation}
                     screens={SERVICE_SCREENS[index].map((id) => ({
-                      src: `/projects/${id}.webp`,
+                      src: projectImageById[id] ?? `/projects/${id}.webp`,
                       alt: t.projects.items[id].alt,
                     }))}
                   />

@@ -106,7 +106,14 @@ export function ProjectModal({
   if (!mounted) return null;
 
   const labels = t.projects.highlightLabels;
-  const rest = project?.highlights.slice(1) ?? [];
+  const desks =
+    project?.highlights.filter((shot) => !shot.portrait) ?? [];
+  const phones =
+    project?.highlights.filter((shot) => shot.portrait) ?? [];
+  const deskGrid = desks.length >= 2;
+  const leadShots = deskGrid ? [] : desks.slice(0, 1);
+  const deskShots = deskGrid ? desks : [];
+  const rest = phones.length > 0 ? phones : deskGrid ? [] : desks.slice(1);
 
   return createPortal(
     <AnimatePresence>
@@ -166,7 +173,11 @@ export function ProjectModal({
                   {project.title}
                 </h2>
                 <ul className="mt-5 flex flex-wrap justify-center gap-1.5">
-                  {[copy.category, copy.location, project.year].map((tag) => (
+                  {(
+                    copy.tags && copy.tags.length > 0
+                      ? copy.tags
+                      : [copy.category, copy.location, project.year]
+                  ).map((tag) => (
                     <li
                       key={tag}
                       className="inline-flex h-7 items-center rounded-full bg-[#ececec] px-3 text-[0.68rem] tracking-[0.04em] text-foreground"
@@ -175,28 +186,32 @@ export function ProjectModal({
                     </li>
                   ))}
                 </ul>
-                <p className="mx-auto mt-6 max-w-[62ch] text-[0.98rem] leading-relaxed tracking-[-0.015em] text-[#222222] sm:text-[1.05rem] sm:leading-[1.55]">
+                <p className="mx-auto mt-6 max-w-[62ch] text-[1.05rem] leading-relaxed tracking-[-0.015em] text-foreground sm:text-[1.15rem] sm:leading-[1.55]">
                   {copy.story || copy.summary}
                 </p>
               </div>
 
               <section className="mx-auto mt-12 max-w-[88rem] px-4 sm:mt-16 sm:px-8">
-                <h3 className="mb-6 font-[family-name:var(--font-display)] text-[clamp(1.3rem,2.6vw,1.85rem)] font-medium tracking-[-0.035em] text-foreground">
-                  {t.projects.highlights}
-                </h3>
+                {(leadShots.length > 0 || deskShots.length > 0) && (
+                  <h3 className="mb-6 font-[family-name:var(--font-display)] text-[clamp(1.3rem,2.6vw,1.85rem)] font-medium tracking-[-0.035em] text-foreground">
+                    {t.projects.highlights}
+                  </h3>
+                )}
                 <ul className="grid gap-5">
-                  {project.highlights.slice(0, 1).map((shot) => (
-                    <li key={`${shot.kind}-lead`}>
+                  {leadShots.map((shot) => (
+                    <li key={`${shot.kind}-lead-${shot.src}`}>
                       <figure>
-                        <span className="relative block aspect-[16/9] overflow-hidden rounded-[1rem] bg-[#111111] sm:rounded-[1.25rem]">
+                        <span className="relative block aspect-[16/10] overflow-hidden rounded-[1rem] bg-[#111111] sm:aspect-[16/9] sm:rounded-[1.25rem]">
                           <Image
                             src={shot.src}
                             alt={`${copy.alt}. ${labels[shot.kind]}`}
                             fill
-                            priority
-                            className={`object-cover ${objectClass[shot.object ?? "center"]}`}
+                            priority={shot === leadShots[0]}
+                            className={`${
+                              shot.contain ? "object-contain" : "object-cover"
+                            } ${objectClass[shot.object ?? "center"]}`}
                             sizes="100vw"
-                            quality={80}
+                            quality={82}
                           />
                         </span>
                         <figcaption className="mt-3 px-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/70">
@@ -205,29 +220,25 @@ export function ProjectModal({
                       </figure>
                     </li>
                   ))}
-                  {rest.length > 0 ? (
+                  {deskShots.length > 0 ? (
                     <li>
-                      <ul className="grid gap-5 sm:grid-cols-2">
-                        {rest.map((shot) => (
-                          <li
-                            key={`${shot.kind}-${shot.src}-${shot.object}`}
-                            className={shot.portrait ? "sm:col-span-2" : undefined}
-                          >
+                      <ul className="grid gap-4 sm:grid-cols-2 sm:gap-5">
+                        {deskShots.map((shot, index) => (
+                          <li key={`${shot.kind}-desk-${shot.src}`}>
                             <figure>
-                              <span
-                                className={`relative block overflow-hidden rounded-[1rem] bg-[#111111] sm:rounded-[1.25rem] ${
-                                  shot.portrait
-                                    ? "mx-auto aspect-[9/16] max-w-[14rem]"
-                                    : "aspect-[16/10]"
-                                }`}
-                              >
+                              <span className="relative block aspect-[16/10] overflow-hidden rounded-[1rem] bg-[#111111] sm:rounded-[1.25rem]">
                                 <Image
                                   src={shot.src}
                                   alt={`${copy.alt}. ${labels[shot.kind]}`}
                                   fill
-                                  className={`object-cover ${objectClass[shot.object ?? "center"]}`}
+                                  priority={index < 2}
+                                  className={`${
+                                    shot.contain
+                                      ? "object-contain"
+                                      : "object-cover"
+                                  } ${objectClass[shot.object ?? "top"]}`}
                                   sizes="(max-width: 640px) 100vw, 50vw"
-                                  quality={75}
+                                  quality={80}
                                 />
                               </span>
                               <figcaption className="mt-3 px-1 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/70">
@@ -240,6 +251,75 @@ export function ProjectModal({
                     </li>
                   ) : null}
                 </ul>
+
+                {copy.about && copy.about.length > 0 ? (
+                  <section className="mt-14 max-w-[36rem] sm:mt-20 lg:mt-24">
+                    <h3 className="font-[family-name:var(--font-display)] text-[clamp(2.4rem,4.8vw,4rem)] font-medium leading-[0.92] tracking-[-0.045em] text-foreground">
+                      {t.projects.aboutProject}
+                    </h3>
+                    <div className="mt-8 space-y-6 text-[1.02rem] leading-[1.55] tracking-[-0.015em] text-foreground sm:mt-10 sm:space-y-7 sm:text-[1.08rem] sm:leading-[1.6]">
+                      {copy.about.map((paragraph) => (
+                        <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </section>
+                ) : null}
+
+                {rest.length > 0 ? (
+                  <ul className="mt-14 grid gap-5 sm:mt-20 lg:mt-24">
+                    <li>
+                      <ul
+                        className={`grid gap-4 ${
+                          rest.every((shot) => shot.portrait)
+                            ? rest.length >= 3
+                              ? "mx-auto max-w-[48rem] grid-cols-3 sm:gap-5"
+                              : "mx-auto max-w-[34rem] grid-cols-2 sm:gap-6"
+                            : "sm:grid-cols-2"
+                        }`}
+                      >
+                        {rest.map((shot) => (
+                          <li
+                            key={`${shot.kind}-${shot.src}-${shot.object}`}
+                          >
+                            <figure>
+                              <span
+                                className={`relative block overflow-hidden rounded-[1rem] bg-[#111111] sm:rounded-[1.25rem] ${
+                                  shot.portrait
+                                    ? rest.length >= 3
+                                      ? "mx-auto aspect-[9/19.5] w-full max-w-[14rem]"
+                                      : "mx-auto aspect-[9/19.5] w-full max-w-[15rem]"
+                                    : "aspect-[16/10]"
+                                }`}
+                              >
+                                <Image
+                                  src={shot.src}
+                                  alt={`${copy.alt}. ${labels[shot.kind]}`}
+                                  fill
+                                  className={`${
+                                    shot.portrait
+                                      ? "object-cover object-top"
+                                      : `object-cover ${objectClass[shot.object ?? "center"]}`
+                                  }`}
+                                  sizes={
+                                    shot.portrait
+                                      ? rest.length >= 3
+                                        ? "(max-width: 640px) 30vw, 14rem"
+                                        : "(max-width: 640px) 45vw, 15rem"
+                                      : "(max-width: 640px) 100vw, 50vw"
+                                  }
+                                  quality={78}
+                                />
+                              </span>
+                              <figcaption className="mt-3 px-1 text-center text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/70">
+                                {labels[shot.kind]}
+                              </figcaption>
+                            </figure>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  </ul>
+                ) : null}
               </section>
 
               <footer className="mx-auto mt-12 max-w-[72rem] px-5 sm:px-10">

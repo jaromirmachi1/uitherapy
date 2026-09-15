@@ -41,11 +41,23 @@ export function buildSiteMetadata(locale: Locale): Metadata {
     },
     icons: {
       icon: [
-        { url: "/uifavicon.ico", sizes: "32x32", type: "image/x-icon" },
-        { url: "/uifavicon.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        {
+          url: "/android-chrome-192x192.png",
+          sizes: "192x192",
+          type: "image/png",
+        },
+        {
+          url: "/android-chrome-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+        },
       ],
-      shortcut: "/uifavicon.ico",
-      apple: [{ url: "/uifavicon.png", sizes: "32x32", type: "image/png" }],
+      shortcut: "/favicon.ico",
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
     },
     alternates: {
       canonical,

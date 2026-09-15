@@ -11,7 +11,7 @@ export const legalEntityIco = "IČO 14293811";
 export const legalEntityAddress = "Slatina 198, 742 93";
 export const legalEntityCountry = "CZ";
 
-export const siteLogoPath = "/uitherapyblack.png";
+export const siteLogoPath = "/uitherapy-logo.png";
 
 const fallbackUrl = "https://uitherapy.com";
 
