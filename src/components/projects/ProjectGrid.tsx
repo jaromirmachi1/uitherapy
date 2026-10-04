@@ -13,7 +13,10 @@ import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ProjectModal } from "@/components/projects/ProjectModal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
 import {
+  mobileFrameImage,
   portraitImage,
+  projectTint,
+  showcaseImage,
   wideImage,
   type ProjectEntry,
 } from "@/content/projects";
@@ -166,6 +169,10 @@ function ProjectTile({
         ? "(max-width: 768px) 100vw, 76vw"
         : "100vw";
   const { handlers, x, y, scale, glow, spotlight } = useTilePointer();
+  // Framed captures (vojta.webp style) on a tinted stage when available.
+  const framed =
+    slot === "narrow" ? mobileFrameImage(project) : showcaseImage(project);
+  const tint = projectTint(project);
 
   return (
     <button
@@ -175,31 +182,78 @@ function ProjectTile({
       {...handlers}
       className={`${tileBase} bg-[#0f1115] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
     >
-      {/* Mobile: always the landscape capture. */}
-      <Image
-        src={wide}
-        alt={copy.alt}
-        fill
-        sizes="100vw"
-        priority={priority}
-        className="object-cover object-top md:hidden"
-      />
-      {/* Desktop: portrait capture on narrow tiles; drifts with the cursor. */}
-      <motion.span
-        className="absolute -inset-[3%] hidden md:block"
-        style={{ x, y, scale }}
-      >
+      {framed ? (
+        <>
+          {/* Stage: the site's own colour, deepened, with a soft floor glow. */}
+          <span
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(90% 70% at 50% 110%, color-mix(in oklab, ${tint} 70%, white 10%), transparent 70%), color-mix(in oklab, ${tint} 38%, #0b0b0d)`,
+            }}
+          />
+          <span
+            aria-hidden
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(255,255,255,0.7) 0.6px, transparent 0.7px)",
+              backgroundSize: "16px 16px",
+            }}
+          />
+          <motion.span
+            className={`absolute left-0 right-0 mx-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.45)] ${
+              slot === "narrow"
+                ? "top-[7%] aspect-[900/1934] w-[70%]"
+                : slot === "full"
+                  ? "top-[8%] aspect-[1800/1837] w-[min(46%,40rem)]"
+                  : "top-[8%] aspect-[1800/1837] w-[62%] md:w-[min(58%,38rem)]"
+            }`}
+            style={{ x, y, scale }}
+          >
+            <Image
+              src={framed}
+              alt={copy.alt}
+              fill
+              sizes={
+                slot === "narrow"
+                  ? "(max-width: 768px) 70vw, 18vw"
+                  : "(max-width: 768px) 62vw, 40rem"
+              }
+              priority={priority}
+              className="object-contain object-top"
+            />
+          </motion.span>
+        </>
+      ) : (
+        <>
+        {/* Mobile: always the landscape capture. */}
         <Image
-          src={desktopSrc}
-          alt=""
+          src={wide}
+          alt={copy.alt}
           fill
-          sizes={desktopSizes}
+          sizes="100vw"
           priority={priority}
-          className={`object-cover ${
-            slot === "narrow" && !portrait ? "object-left-top" : "object-top"
-          }`}
+          className="object-cover object-top md:hidden"
         />
-      </motion.span>
+        {/* Desktop: portrait capture on narrow tiles; drifts with the cursor. */}
+        <motion.span
+          className="absolute -inset-[3%] hidden md:block"
+          style={{ x, y, scale }}
+        >
+          <Image
+            src={desktopSrc}
+            alt=""
+            fill
+            sizes={desktopSizes}
+            priority={priority}
+            className={`object-cover ${
+              slot === "narrow" && !portrait ? "object-left-top" : "object-top"
+            }`}
+          />
+        </motion.span>
+        </>
+      )}
 
       {/* Hover overlay + spotlight. */}
       <span

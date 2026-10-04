@@ -1,3 +1,5 @@
+import captures from "./project-captures.json";
+
 export type ProjectId =
   | "panorama"
   | "vojta"
@@ -48,6 +50,8 @@ export type ProjectEntry = {
   mockup?: string;
   /** Landscape capture for grid tiles when `image` isn't one. */
   tileImage?: string;
+  /** Hand-made framed showcase (overrides the generated one). */
+  showcase?: string;
   /** Featured case-study frame: inset padded mock, or full-bleed cover. */
   frame?: "inset" | "cover";
   tech: string[];
@@ -90,6 +94,7 @@ export const projects: ProjectEntry[] = [
     url: "https://www.vojtahubne.cz",
     image: "/projects/vojta.webp",
     tileImage: "/projects/vojta-home-desk.webp",
+    showcase: "/projects/vojta.webp",
     frame: "inset",
     tech: ["Next.js", "Motion", "SEO", "E-commerce"],
     services: ["ecommerce", "seo"],
@@ -294,3 +299,39 @@ export const featuredProjects: ProjectEntry[] = orderedProjects.slice(
   0,
   featuredProjectIds.length,
 );
+
+/** Output of `npm run capture` (scripts/capture-projects.mjs). */
+type Capture = {
+  desk?: string;
+  desk2?: string;
+  mobile?: string;
+  showcase?: string;
+  mobileFrame?: string;
+  tint?: string;
+};
+
+const captureMap = captures as Partial<Record<ProjectId, Capture>>;
+
+// Projects that only had one placeholder image get fresh captures in the modal.
+for (const project of projects) {
+  const capture = captureMap[project.id];
+  const single = new Set(project.highlights.map((h) => h.src)).size === 1;
+  if (single && capture?.desk && capture.desk2 && capture.mobile) {
+    project.highlights = deskPair(capture.desk, capture.desk2, capture.mobile);
+  }
+}
+
+/** Framed tall capture (vojta.webp style) for wide tiles. */
+export function showcaseImage(project: ProjectEntry): string | null {
+  return project.showcase ?? captureMap[project.id]?.showcase ?? null;
+}
+
+/** Framed phone capture for narrow tiles. */
+export function mobileFrameImage(project: ProjectEntry): string | null {
+  return captureMap[project.id]?.mobileFrame ?? null;
+}
+
+/** Dominant colour of the site, used to tint its tile. */
+export function projectTint(project: ProjectEntry): string {
+  return captureMap[project.id]?.tint ?? "#111214";
+}

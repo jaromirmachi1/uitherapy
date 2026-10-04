@@ -1,0 +1,14 @@
+{
+  "$comment": "Projects captured by `npm run capture`. Add a project here, run the script, done. Optional per project: hide (extra CSS selectors to hide), click (selectors to click before capturing, e.g. a gate), skipShowcase (keep a hand-made <id>.webp), waitMs.",
+  "projects": [
+    { "id": "vojta", "url": "https://www.vojtahubne.cz", "skipShowcase": true },
+    { "id": "sadia", "url": "https://www.sadiaestate.cz" },
+    { "id": "panorama", "url": "https://panorama-sooty.vercel.app" },
+    { "id": "laflare", "url": "https://laflareclub.com" },
+    { "id": "dvd", "url": "https://www.dvdculture.com" },
+    { "id": "doktor", "url": "https://doktorbarber.cz" },
+    { "id": "golden", "url": "https://martin-press.vercel.app" },
+    { "id": "speed", "url": "https://www.speedcoffee.shop" },
+    { "id": "prevezem", "url": "https://www.prevezem.cz" }
+  ]
+}
