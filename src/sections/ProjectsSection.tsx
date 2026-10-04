@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Magnetic } from "@/components/Magnetic";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
 import { featuredProjects } from "@/content/projects";
@@ -58,6 +59,7 @@ export function ProjectsSection() {
         <ProjectGrid items={featuredProjects} />
 
         <div className="flex justify-center px-2 py-10 lg:py-14">
+          <Magnetic strength={0.3}>
           <Link
             href={projectsPath(locale)}
             className="group inline-flex h-12 items-center gap-2 rounded-full bg-foreground pl-6 pr-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97]"
@@ -67,6 +69,7 @@ export function ProjectsSection() {
               <ArrowIcon className="h-3.5 w-3.5" />
             </span>
           </Link>
+          </Magnetic>
         </div>
       </div>
     </section>

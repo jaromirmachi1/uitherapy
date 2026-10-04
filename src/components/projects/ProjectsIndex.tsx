@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ProjectGrid } from "@/components/projects/ProjectGrid";
@@ -69,13 +70,21 @@ export function ProjectsIndex() {
                 type="button"
                 aria-pressed={active}
                 onClick={() => setFilter(key)}
-                className={`inline-flex h-9 items-center rounded-md px-3 font-[family-name:var(--font-display)] text-[1.05rem] font-medium tracking-[-0.03em] transition-colors duration-200 ${
+                className={`relative inline-flex h-9 items-center rounded-md px-3 font-[family-name:var(--font-display)] text-[1.05rem] font-medium tracking-[-0.03em] transition-colors duration-300 ${
                   active
-                    ? "bg-accent text-white"
-                    : "text-foreground/55 hover:bg-black/[0.04] hover:text-foreground"
+                    ? "text-white"
+                    : "text-foreground/55 hover:text-foreground"
                 }`}
               >
-                <span className="inline-block first-letter:uppercase">{label}</span>
+                {active ? (
+                  <motion.span
+                    layoutId="projects-filter-pill"
+                    className="absolute inset-0 rounded-md bg-accent"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    aria-hidden
+                  />
+                ) : null}
+                <span className="relative inline-block first-letter:uppercase">{label}</span>
                 <sup className="relative -top-[0.55em] ml-1 align-baseline font-sans text-[0.6rem] font-medium tabular-nums opacity-70">
                   {counts[key]}
                 </sup>

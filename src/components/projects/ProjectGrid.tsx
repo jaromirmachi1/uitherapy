@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "motion/react";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { ProjectModal } from "@/components/projects/ProjectModal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
@@ -84,6 +91,58 @@ function ArrowIcon({ className }: { className?: string }) {
 const tileBase =
   "group relative block w-full overflow-hidden rounded-[1.25rem] text-left aspect-[16/10] md:aspect-auto md:h-[clamp(22rem,36vw,35rem)]";
 
+const parallaxSpring = { stiffness: 120, damping: 20, mass: 0.6 };
+
+/**
+ * Cursor-driven parallax + spotlight for a tile.
+ * Image drifts against the cursor; a soft light follows it.
+ */
+function useTilePointer() {
+  const reduce = useReducedMotion();
+  const fine = useRef(false);
+  const px = useMotionValue(50);
+  const py = useMotionValue(50);
+  const x = useSpring(0, parallaxSpring);
+  const y = useSpring(0, parallaxSpring);
+  const scale = useSpring(1, parallaxSpring);
+  const glow = useSpring(0, { stiffness: 200, damping: 30 });
+  const spotlight = useMotionTemplate`radial-gradient(circle at ${px}% ${py}%, rgba(255,255,255,0.22), transparent 42%)`;
+
+  useEffect(() => {
+    fine.current = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
+  }, []);
+
+  const enabled = () => fine.current && !reduce;
+
+  const handlers = {
+    onMouseEnter: () => {
+      if (!enabled()) return;
+      scale.set(1.06);
+      glow.set(1);
+    },
+    onMouseMove: (event: React.MouseEvent<HTMLElement>) => {
+      if (!enabled()) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = (event.clientY - rect.top) / rect.height;
+      px.set(nx * 100);
+      py.set(ny * 100);
+      x.set((0.5 - nx) * 28);
+      y.set((0.5 - ny) * 22);
+    },
+    onMouseLeave: () => {
+      x.set(0);
+      y.set(0);
+      scale.set(1);
+      glow.set(0);
+    },
+  };
+
+  return { handlers, x, y, scale, glow, spotlight };
+}
+
 function ProjectTile({
   project,
   slot,
@@ -102,15 +161,18 @@ function ProjectTile({
   const desktopSrc = slot === "narrow" ? (portrait ?? wide) : wide;
   const desktopSizes =
     slot === "narrow"
-      ? "(max-width: 768px) 100vw, 24vw"
+      ? "(max-width: 768px) 100vw, 26vw"
       : slot === "wide"
-        ? "(max-width: 768px) 100vw, 72vw"
+        ? "(max-width: 768px) 100vw, 76vw"
         : "100vw";
+  const { handlers, x, y, scale, glow, spotlight } = useTilePointer();
 
   return (
     <button
       type="button"
       onClick={() => onOpen(project)}
+      data-cursor-label={t.projects.cursorView}
+      {...handlers}
       className={`${tileBase} bg-[#0f1115] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
     >
       {/* Mobile: always the landscape capture. */}
@@ -122,30 +184,53 @@ function ProjectTile({
         priority={priority}
         className="object-cover object-top md:hidden"
       />
-      {/* Desktop: portrait capture on narrow tiles when available. */}
-      <Image
-        src={desktopSrc}
-        alt=""
-        fill
-        sizes={desktopSizes}
-        priority={priority}
-        className={`hidden object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.03] md:block ${
-          slot === "narrow" && !portrait ? "object-left-top" : "object-top"
-        }`}
-      />
+      {/* Desktop: portrait capture on narrow tiles; drifts with the cursor. */}
+      <motion.span
+        className="absolute -inset-[3%] hidden md:block"
+        style={{ x, y, scale }}
+      >
+        <Image
+          src={desktopSrc}
+          alt=""
+          fill
+          sizes={desktopSizes}
+          priority={priority}
+          className={`object-cover ${
+            slot === "narrow" && !portrait ? "object-left-top" : "object-top"
+          }`}
+        />
+      </motion.span>
 
-      {/* Hover overlay + centred title (pointer devices). */}
+      {/* Hover overlay + spotlight. */}
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[#101218]/60 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:opacity-100 group-focus-visible:opacity-100"
+        className="pointer-events-none absolute inset-0 bg-[#101218]/55 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:opacity-100 group-focus-visible:opacity-100"
       />
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden mix-blend-soft-light md:block"
+        style={{ background: spotlight, opacity: glow }}
+      />
+
+      {/* Centred title, letters rise in (pointer devices). */}
       <span className="pointer-events-none absolute inset-0 hidden items-center justify-center overflow-hidden p-8 text-center [@media(hover:hover)]:flex">
-        <span className="flex translate-y-8 flex-col items-center opacity-0 transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-          <span className="font-[family-name:var(--font-display)] text-[clamp(1.5rem,2.6vw,2.4rem)] font-medium leading-[0.95] tracking-[-0.04em] text-white">
-            {project.title}
+        <span className="flex flex-col items-center">
+          <span
+            aria-hidden
+            className="flex overflow-hidden font-[family-name:var(--font-display)] text-[clamp(1.5rem,2.6vw,2.4rem)] font-medium leading-[1.05] tracking-[-0.04em] text-white"
+          >
+            {Array.from(project.title).map((char, index) => (
+              <span
+                key={index}
+                className="inline-block translate-y-full whitespace-pre transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-0 group-focus-visible:translate-y-0"
+                style={{ transitionDelay: `${index * 18}ms` }}
+              >
+                {char}
+              </span>
+            ))}
           </span>
           <span
-            className={`mt-3 max-w-[34ch] text-sm leading-relaxed text-white/75 ${
+            className={`mt-3 max-w-[34ch] translate-y-3 text-sm leading-relaxed text-white/75 opacity-0 transition-[transform,opacity] delay-150 duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-0 group-hover:opacity-100 ${
               slot === "narrow" ? "hidden xl:block" : ""
             }`}
           >
@@ -161,23 +246,22 @@ function ProjectTile({
         </span>
       </span>
 
-      {/* Service pills. */}
+      {/* Service pills — stagger up slightly on hover. */}
       <span className="pointer-events-none absolute left-3 top-3 flex flex-col items-start gap-1 [@media(hover:hover)]:bottom-3 [@media(hover:hover)]:top-auto">
-        {project.services.map((key) => (
+        {project.services.map((key, index) => (
           <span
             key={key}
-            className="inline-flex h-6 items-center rounded-full bg-white px-2.5 text-[0.68rem] font-medium lowercase tracking-[0.01em] text-foreground"
+            className="inline-flex h-6 items-center rounded-full bg-white px-2.5 text-[0.68rem] font-medium lowercase tracking-[0.01em] text-foreground transition-[transform,background-color,color] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:-translate-y-1 group-hover:bg-accent group-hover:text-white"
+            style={{ transitionDelay: `${index * 40}ms` }}
           >
             {t.projects.services[key]}
           </span>
         ))}
       </span>
 
-      <span
-        aria-hidden
-        className="pointer-events-none absolute right-3 top-3 inline-flex h-9 w-9 scale-75 items-center justify-center rounded-full bg-accent text-white opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-100 group-hover:opacity-100"
-      >
-        <ArrowIcon className="h-3.5 w-3.5" />
+      {/* Year, revealed top-right. */}
+      <span className="pointer-events-none absolute right-4 top-4 hidden -translate-y-2 text-[0.65rem] font-medium tabular-nums tracking-[0.18em] text-white/80 opacity-0 transition-[transform,opacity] duration-400 group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:hover)]:block">
+        {project.year}
       </span>
 
       <span className="sr-only">
@@ -195,13 +279,14 @@ function CtaTile({ slot }: { slot: Slot }) {
     <button
       type="button"
       onClick={openConversation}
+      data-cursor-label={t.projects.cursorTalk}
       className={`${tileBase} flex flex-col justify-between bg-accent p-6 text-white transition-colors duration-300 hover:bg-accent-hover sm:p-8 ${
         slot === "full" ? "md:h-[clamp(14rem,22vw,20rem)]" : ""
       }`}
     >
       <span aria-hidden className="pointer-events-none absolute inset-0">
-        <span className="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-white/20" />
-        <span className="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-white/15" />
+        <span className="absolute -right-24 -top-24 h-72 w-72 rounded-full border border-white/20 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-125" />
+        <span className="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-white/15 transition-transform delay-75 duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-150" />
       </span>
       <span className="relative font-[family-name:var(--font-display)] text-[clamp(1.6rem,2.4vw,2.2rem)] font-medium leading-[0.98] tracking-[-0.04em] text-balance">
         {t.projects.ctaTile.title}

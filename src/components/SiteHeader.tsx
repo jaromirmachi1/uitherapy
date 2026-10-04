@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { Magnetic } from "@/components/Magnetic";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useConversation } from "@/components/conversation/ConversationProvider";
 import { articlesPath, localePath, projectsPath } from "@/i18n/config";
@@ -10,6 +13,7 @@ import { useI18n } from "@/i18n/provider";
 export function SiteHeader() {
   const { locale, t } = useI18n();
   const { openConversation } = useConversation();
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
 
   return (
     <header className="site-header site-chrome pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -31,22 +35,35 @@ export function SiteHeader() {
 
         <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
           <nav aria-label="Primary" className="flex items-center gap-1.5 sm:gap-2">
-            <ul className="hidden h-9 items-center rounded-md bg-white/85 px-1 shadow-[0_1px_2px_rgba(43,43,43,0.06)] backdrop-blur md:flex">
+            <ul
+              className="hidden h-9 items-center rounded-md bg-white/85 px-1 shadow-[0_1px_2px_rgba(43,43,43,0.06)] backdrop-blur md:flex"
+              onMouseLeave={() => setHoveredNav(null)}
+            >
               {[
                 { href: projectsPath(locale), label: t.nav.projects },
                 { href: localePath(locale, "#services"), label: t.nav.services },
                 { href: articlesPath(locale), label: t.nav.articles },
               ].map((link) => (
-                <li key={link.href}>
+                <li key={link.href} className="relative">
+                  {hoveredNav === link.href ? (
+                    <motion.span
+                      layoutId="nav-hover-pill"
+                      className="absolute inset-0 rounded bg-foreground/[0.07]"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                      aria-hidden
+                    />
+                  ) : null}
                   <Link
                     href={link.href}
-                    className="inline-flex h-7 items-center rounded px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:text-foreground"
+                    onMouseEnter={() => setHoveredNav(link.href)}
+                    className="relative inline-flex h-7 items-center rounded px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:text-foreground"
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
+            <Magnetic strength={0.25}>
             <button
               type="button"
               onClick={openConversation}
@@ -54,6 +71,7 @@ export function SiteHeader() {
             >
               {t.nav.contact}
             </button>
+            </Magnetic>
           </nav>
           <LanguageSwitcher locale={locale} label={t.nav.language} />
         </div>

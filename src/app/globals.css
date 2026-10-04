@@ -197,3 +197,39 @@
     transform: translateY(0);
   }
 }
+
+/* Cursor: labelled disc state (see InteractiveCursor). */
+.interactive-cursor .cursor-ring {
+  transition:
+    width 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+    height 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.interactive-cursor .cursor-label {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.2s ease,
+    transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.interactive-cursor[data-label="true"] .cursor-ring {
+  width: 5.75rem;
+  height: 5.75rem;
+  border-color: transparent;
+  background-color: var(--accent);
+  box-shadow: 0 14px 40px rgba(31, 94, 255, 0.35);
+}
+
+.interactive-cursor[data-label="true"] .cursor-label {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.08s;
+}
+
+.interactive-cursor[data-label="true"] .cursor-dot,
+.interactive-cursor[data-label="true"] .cursor-trail {
+  opacity: 0 !important;
+}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Magnetic } from "@/components/Magnetic";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
 import { useI18n } from "@/i18n/provider";
@@ -62,6 +63,7 @@ export function ContactSection() {
           </div>
         </ScrollReveal>
         <ScrollReveal className="mt-12 flex flex-col gap-6 sm:flex-row sm:items-center" delay={0.12}>
+          <Magnetic strength={0.3}>
           <motion.button
             type="button"
             onClick={openConversation}
@@ -72,6 +74,7 @@ export function ContactSection() {
           >
             {t.contact.openForm}
           </motion.button>
+          </Magnetic>
           <p className="text-sm text-neutral-600">
             {t.contact.emailLead}{" "}
             <a

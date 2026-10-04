@@ -4,23 +4,34 @@ import { useEffect, useRef } from "react";
 
 const INTERACTIVE_SELECTOR =
   'a, button, [role="button"], input, textarea, select, [data-cursor="interactive"]';
+const LABEL_SELECTOR = "[data-cursor-label]";
 
+/**
+ * Dot + lagging ring cursor.
+ * - Grows over anything interactive.
+ * - Over `[data-cursor-label="…"]` the ring morphs into a filled accent
+ *   disc carrying that label (used on project tiles and CTAs).
+ */
 export function InteractiveCursor() {
   const rootRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
   const trailRefs = useRef<HTMLSpanElement[]>([]);
 
   useEffect(() => {
     const finePointer = window.matchMedia("(pointer: fine)").matches;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (!finePointer || reduceMotion) return;
 
     const root = rootRef.current;
     const dot = dotRef.current;
     const ring = ringRef.current;
+    const label = labelRef.current;
     const trails = trailRefs.current;
-    if (!root || !dot || !ring) return;
+    if (!root || !dot || !ring || !label) return;
 
     document.documentElement.classList.add("has-interactive-cursor");
 
@@ -30,14 +41,17 @@ export function InteractiveCursor() {
     let ringY = mouseY;
     let raf = 0;
     let active = false;
+    let labelled = false;
 
     const render = () => {
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
+      // Labelled disc follows more tightly so the text stays readable.
+      const ease = labelled ? 0.24 : 0.18;
+      ringX += (mouseX - ringX) * ease;
+      ringY += (mouseY - ringY) * ease;
 
       dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${
-        active ? 1.65 : 1
+        labelled ? 1 : active ? 1.65 : 1
       })`;
 
       trails.forEach((trail, index) => {
@@ -52,32 +66,30 @@ export function InteractiveCursor() {
       raf = requestAnimationFrame(render);
     };
 
+    const sync = (target: EventTarget | null) => {
+      const el = target instanceof Element ? target : null;
+      const labelHost = el?.closest<HTMLElement>(LABEL_SELECTOR) ?? null;
+      const text = labelHost?.dataset.cursorLabel ?? "";
+      active = Boolean(el?.closest(INTERACTIVE_SELECTOR));
+      labelled = text.length > 0;
+      if (labelled) label.textContent = text;
+      root.dataset.active = String(active);
+      root.dataset.label = String(labelled);
+    };
+
     const move = (event: MouseEvent) => {
       mouseX = event.clientX;
       mouseY = event.clientY;
       root.style.opacity = "1";
     };
 
-    const setActive = (value: boolean) => {
-      active = value;
-      root.dataset.active = String(value);
-    };
-
-    const over = (event: MouseEvent) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest(INTERACTIVE_SELECTOR)) setActive(true);
-    };
-
+    const over = (event: MouseEvent) => sync(event.target);
     const out = (event: MouseEvent) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest(INTERACTIVE_SELECTOR)) setActive(false);
+      if (!event.relatedTarget) sync(null);
     };
-
     const leave = () => {
       root.style.opacity = "0";
-      setActive(false);
+      sync(null);
     };
 
     window.addEventListener("mousemove", move, { passive: true });
@@ -104,19 +116,24 @@ export function InteractiveCursor() {
     >
       <span
         ref={dotRef}
-        className="absolute left-0 top-0 h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_rgba(31,94,255,0.95)]"
+        className="cursor-dot absolute left-0 top-0 h-2 w-2 rounded-full bg-accent shadow-[0_0_18px_rgba(31,94,255,0.95)] transition-opacity duration-200"
       />
       <span
         ref={ringRef}
-        className="absolute left-0 top-0 h-11 w-11 rounded-full border border-foreground/40 transition-[border-color,background-color] duration-200"
-      />
+        className="cursor-ring absolute left-0 top-0 flex h-11 w-11 items-center justify-center rounded-full border border-foreground/40"
+      >
+        <span
+          ref={labelRef}
+          className="cursor-label whitespace-nowrap text-[0.62rem] font-medium uppercase tracking-[0.16em] text-white"
+        />
+      </span>
       {[0, 1, 2].map((item) => (
         <span
           key={item}
           ref={(node) => {
             if (node) trailRefs.current[item] = node;
           }}
-          className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-accent/70 opacity-60 blur-[1px]"
+          className="cursor-trail absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-accent/70 blur-[1px] transition-opacity duration-200"
           style={{ opacity: 0.48 - item * 0.12 }}
         />
       ))}
