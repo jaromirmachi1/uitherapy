@@ -3,6 +3,7 @@
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
 import { useConversation } from "@/components/conversation/ConversationProvider";
 import { useI18n } from "@/i18n/provider";
+import { siteEmail } from "@/seo/site";
 import { motion } from "motion/react";
 
 const NOISE =
@@ -71,13 +72,15 @@ export function ContactSection() {
           >
             {t.contact.openForm}
           </motion.button>
-          <motion.a
-            href="#projects"
-            className="text-[0.65rem] font-semibold uppercase tracking-[0.25em] text-neutral-500 transition-colors hover:text-accent"
-            whileHover={{ x: -4 }}
-          >
-            ← {t.contact.back}
-          </motion.a>
+          <p className="text-sm text-neutral-600">
+            {t.contact.emailLead}{" "}
+            <a
+              href={`mailto:${siteEmail}`}
+              className="font-medium text-foreground underline decoration-foreground/25 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+            >
+              {siteEmail}
+            </a>
+          </p>
         </ScrollReveal>
       </div>
     </section>

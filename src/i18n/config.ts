@@ -29,3 +29,8 @@ export function articlesPath(locale: Locale, slug?: string) {
   if (locale === defaultLocale) return `/clanky${suffix}`;
   return `/en/articles${suffix}`;
 }
+
+/** Public projects index: `/projekty` (cs) · `/en/projects` (en) */
+export function projectsPath(locale: Locale) {
+  return locale === defaultLocale ? "/projekty" : "/en/projects";
+}

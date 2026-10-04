@@ -1,5 +1,10 @@
 import { articles as catalog } from "@/content/articles";
-import { articlesPath, localePath, type Locale } from "@/i18n/config";
+import {
+  articlesPath,
+  localePath,
+  projectsPath,
+  type Locale,
+} from "@/i18n/config";
 
 /** Resolve locale switch target when on articles routes. */
 export function articlesLocaleHref(locale: Locale, pathname: string): string | null {
@@ -23,5 +28,12 @@ export function articlesLocaleHref(locale: Locale, pathname: string): string | n
 }
 
 export function localeSwitchHref(locale: Locale, pathname: string): string {
+  if (
+    pathname === "/projekty" ||
+    pathname === "/projects" ||
+    pathname === "/en/projects"
+  ) {
+    return projectsPath(locale);
+  }
   return articlesLocaleHref(locale, pathname) ?? localePath(locale);
 }

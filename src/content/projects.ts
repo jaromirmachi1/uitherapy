@@ -20,6 +20,16 @@ export type HighlightKind =
   | "gate"
   | "partner";
 
+/** Service filters used on the projects grid (labels live in the dictionary). */
+export type ServiceKey = "ecommerce" | "brand" | "motion" | "seo";
+
+export const serviceKeys: ServiceKey[] = [
+  "brand",
+  "motion",
+  "seo",
+  "ecommerce",
+];
+
 export type ProjectHighlight = {
   src: string;
   kind: HighlightKind;
@@ -36,14 +46,29 @@ export type ProjectEntry = {
   url: string;
   image: string;
   mockup?: string;
+  /** Landscape capture for grid tiles when `image` isn't one. */
+  tileImage?: string;
   /** Featured case-study frame: inset padded mock, or full-bleed cover. */
   frame?: "inset" | "cover";
   tech: string[];
+  /** Services delivered — drive the tag pills and the filter row. */
+  services: ServiceKey[];
   highlights: ProjectHighlight[];
 };
 
-/** Large case studies shown above the marquee. Order = display order. */
-export const featuredProjectIds: ProjectId[] = ["vojta", "sadia"];
+/**
+ * Homepage selection. Order = display order; the grid pairs them into
+ * alternating wide / narrow rows, so keep projects with a mobile capture
+ * in positions that land on a narrow tile.
+ */
+export const featuredProjectIds: ProjectId[] = [
+  "vojta",
+  "panorama",
+  "doktor",
+  "sadia",
+  "laflare",
+  "dvd",
+];
 
 function deskPair(
   desk: string,
@@ -64,8 +89,10 @@ export const projects: ProjectEntry[] = [
     year: "2025",
     url: "https://www.vojtahubne.cz",
     image: "/projects/vojta.webp",
+    tileImage: "/projects/vojta-home-desk.webp",
     frame: "inset",
     tech: ["Next.js", "Motion", "SEO", "E-commerce"],
+    services: ["ecommerce", "seo"],
     highlights: [
       {
         src: "/projects/vojta-home-desk.webp",
@@ -115,6 +142,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/sadia.webp",
     frame: "inset",
     tech: ["Next.js", "SEO", "Real estate"],
+    services: ["brand", "seo"],
     highlights: [
       { src: "/projects/sadia.webp", kind: "hero", object: "top" },
       { src: "/projects/sadia.webp", kind: "scroll", object: "center" },
@@ -134,6 +162,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/panorama.webp",
     frame: "inset",
     tech: ["Next.js", "Motion", "SEO"],
+    services: ["motion", "seo"],
     highlights: deskPair(
       "/projects/panorama-desk.webp",
       "/projects/panorama-desk-2.webp",
@@ -148,6 +177,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/laflare.webp",
     frame: "inset",
     tech: ["Next.js", "Motion", "Culture"],
+    services: ["brand", "motion"],
     highlights: [
       { src: "/projects/laflare.webp", kind: "gate", object: "center" },
       { src: "/projects/laflare.webp", kind: "hero", object: "top" },
@@ -167,6 +197,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/dvd.webp",
     frame: "inset",
     tech: ["Next.js", "Motion", "Portfolio"],
+    services: ["brand", "motion"],
     highlights: deskPair(
       "/projects/dvd-desk.webp",
       "/projects/dvd-desk-2.webp",
@@ -181,6 +212,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/doktor.webp",
     frame: "inset",
     tech: ["Next.js", "Booking", "Local"],
+    services: ["brand"],
     highlights: deskPair(
       "/projects/doktor-desk.webp",
       "/projects/doktor-desk-2.webp",
@@ -195,6 +227,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/golden-site.webp",
     frame: "inset",
     tech: ["Next.js", "Motion"],
+    services: ["brand", "motion"],
     highlights: deskPair(
       "/projects/golden-desk.webp",
       "/projects/golden-desk-2.webp",
@@ -209,6 +242,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/speed.webp",
     frame: "inset",
     tech: ["Next.js", "Brand"],
+    services: ["brand", "seo"],
     highlights: [
       { src: "/projects/speed.webp", kind: "hero", object: "top" },
       { src: "/projects/speed.webp", kind: "detail", object: "center" },
@@ -228,6 +262,7 @@ export const projects: ProjectEntry[] = [
     image: "/projects/prevezem.webp",
     frame: "inset",
     tech: ["Next.js", "SEO", "Conversion"],
+    services: ["seo"],
     highlights: deskPair(
       "/projects/prevezem-desk.webp",
       "/projects/prevezem-desk-2.webp",
@@ -235,3 +270,27 @@ export const projects: ProjectEntry[] = [
     ),
   },
 ];
+
+/** Landscape capture for wide tiles. */
+export function wideImage(project: ProjectEntry): string {
+  return project.tileImage ?? project.image;
+}
+
+/** Portrait (mobile) capture for narrow tiles, if the project has one. */
+export function portraitImage(project: ProjectEntry): string | null {
+  return project.highlights.find((h) => h.portrait && h.src !== project.image)
+    ?.src ?? null;
+}
+
+/** Featured projects first, then the rest — the order used on /projects. */
+export const orderedProjects: ProjectEntry[] = [
+  ...featuredProjectIds
+    .map((id) => projects.find((project) => project.id === id))
+    .filter((project): project is ProjectEntry => Boolean(project)),
+  ...projects.filter((project) => !featuredProjectIds.includes(project.id)),
+];
+
+export const featuredProjects: ProjectEntry[] = orderedProjects.slice(
+  0,
+  featuredProjectIds.length,
+);

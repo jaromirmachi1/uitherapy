@@ -4,6 +4,7 @@ const en = {
   skip: "Skip to main content",
   nav: {
     projects: "Projects",
+    services: "Services",
     articles: "Articles",
     contact: "Start a conversation",
     language: "Language",
@@ -104,6 +105,28 @@ const en = {
     studio: "uitherapy",
     moreWork: "More work",
     requestQuote: "Start a conversation",
+    featuredHeading: "Featured projects",
+    allProjects: "All projects",
+    exploreMore: "Explore all projects",
+    filterLabel: "Filter projects by service",
+    filterAll: "All projects",
+    empty: "Nothing here yet — but there could be.",
+    services: {
+      ecommerce: "e-commerce",
+      brand: "branding",
+      motion: "motion",
+      seo: "SEO",
+    },
+    ctaTile: {
+      title: "Your project could be next.",
+      body: "New projects usually start within two weeks.",
+    },
+    pageTitle: "Projects",
+    pageIntro:
+      "Websites, storefronts and brands we designed and built — from Brno developers to culture labels.",
+    seoTitle: "Projects",
+    seoDescription:
+      "Selected work by uitherapy — premium websites, e-commerce storefronts and brand sites built with Next.js, motion and technical SEO.",
     techLabel: "Technologies used",
     newTab: "(opens in a new tab)",
     highlightLabels: {
@@ -274,11 +297,15 @@ const en = {
       },
     },
   },
+  testimonial: {
+    kicker: "Client words",
+  },
   contact: {
     kicker: "Contact",
     heading: "Let's ship something you don't have to be ashamed of.",
     body: "Product, timeline, references—we reply within two business days.",
     back: "Back to projects",
+    emailLead: "Or write to",
     mailSubject: "Project inquiry — uitherapy",
     openForm: "Start a conversation",
   },
@@ -376,6 +403,7 @@ const cs: typeof en = {
   skip: "Přeskočit na hlavní obsah",
   nav: {
     projects: "Projekty",
+    services: "Služby",
     articles: "Články",
     contact: "Domluvme se",
     language: "Jazyk",
@@ -476,6 +504,28 @@ const cs: typeof en = {
     studio: "uitherapy",
     moreWork: "Další práce",
     requestQuote: "Domluvme se",
+    featuredHeading: "Vybrané projekty",
+    allProjects: "Všechny projekty",
+    exploreMore: "Zobrazit všechny projekty",
+    filterLabel: "Filtrovat projekty podle služby",
+    filterAll: "Všechny projekty",
+    empty: "Zatím tu nic není — ale mohlo by.",
+    services: {
+      ecommerce: "e-shop",
+      brand: "branding",
+      motion: "motion",
+      seo: "SEO",
+    },
+    ctaTile: {
+      title: "Další může být váš projekt.",
+      body: "Nové projekty obvykle začínají do dvou týdnů.",
+    },
+    pageTitle: "Projekty",
+    pageIntro:
+      "Weby, e-shopy a značky, které jsme navrhli a postavili — od brněnských developerů po kulturní labely.",
+    seoTitle: "Projekty",
+    seoDescription:
+      "Vybraná práce uitherapy — prémiové weby, e-shopy a značkové stránky postavené na Next.js, motion a technickém SEO.",
     techLabel: "Použité technologie",
     newTab: "(otevře se v novém okně)",
     highlightLabels: {
@@ -646,11 +696,15 @@ const cs: typeof en = {
       },
     },
   },
+  testimonial: {
+    kicker: "Reference",
+  },
   contact: {
     kicker: "Kontakt",
     heading: "Pojďme spustit něco, za co už se nemusíte stydět.",
     body: "Produkt, termín, reference — odpovíme do dvou pracovních dnů.",
     back: "Zpět k projektům",
+    emailLead: "Nebo napište na",
     mailSubject: "Poptávka projektu — uitherapy",
     openForm: "Domluvme se",
   },

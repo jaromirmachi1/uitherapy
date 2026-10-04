@@ -5,9 +5,10 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ArticlesSection } from "@/sections/ArticlesSection";
 import { ContactSection } from "@/sections/ContactSection";
-import { ProcessSection } from "@/sections/ProcessSection";
 import { ProjectsSection } from "@/sections/ProjectsSection";
 import { RingStatementSection } from "@/sections/RingStatementSection";
+import { ServicesSection } from "@/sections/ServicesSection";
+import { TestimonialSection } from "@/sections/TestimonialSection";
 
 export default function Home() {
   return (
@@ -22,10 +23,13 @@ export default function Home() {
             <RingStatementSection />
           </div>
           <div className="px-2.5 sm:px-6">
-            <ProcessSection />
+            <ProjectsSection />
           </div>
           <div className="px-2.5 sm:px-6">
-            <ProjectsSection />
+            <ServicesSection />
+          </div>
+          <div className="px-2.5 sm:px-6">
+            <TestimonialSection />
           </div>
           <div className="px-2.5 sm:px-6">
             <ArticlesSection />

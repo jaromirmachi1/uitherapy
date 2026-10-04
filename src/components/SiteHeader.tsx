@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useConversation } from "@/components/conversation/ConversationProvider";
-import { localePath } from "@/i18n/config";
+import { articlesPath, localePath, projectsPath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 
 export function SiteHeader() {
@@ -30,7 +30,23 @@ export function SiteHeader() {
         </Link>
 
         <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-          <nav aria-label="Primary" className="flex items-center">
+          <nav aria-label="Primary" className="flex items-center gap-1.5 sm:gap-2">
+            <ul className="hidden h-9 items-center rounded-md bg-white/85 px-1 shadow-[0_1px_2px_rgba(43,43,43,0.06)] backdrop-blur md:flex">
+              {[
+                { href: projectsPath(locale), label: t.nav.projects },
+                { href: localePath(locale, "#services"), label: t.nav.services },
+                { href: articlesPath(locale), label: t.nav.articles },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="inline-flex h-7 items-center rounded px-3 text-[0.68rem] font-medium uppercase tracking-[0.14em] text-foreground/60 transition-colors hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <button
               type="button"
               onClick={openConversation}

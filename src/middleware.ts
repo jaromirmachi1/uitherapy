@@ -33,6 +33,20 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
+  // Czech public URL → internal /cs/projects route
+  if (pathname === "/projekty") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}/projects`;
+    return NextResponse.rewrite(url);
+  }
+
+  // Canonical Czech projects path is /projekty
+  if (pathname === "/projects") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/projekty";
+    return NextResponse.redirect(url);
+  }
+
   // Canonical Czech articles path is /clanky
   if (pathname === "/articles" || pathname.startsWith("/articles/")) {
     const url = request.nextUrl.clone();

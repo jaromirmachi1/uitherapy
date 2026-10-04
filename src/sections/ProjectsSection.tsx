@@ -1,17 +1,11 @@
 "use client";
 
-import Image from "next/image";
-import { useCallback, useState } from "react";
+import Link from "next/link";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
-import { ProjectModal } from "@/components/projects/ProjectModal";
-import { useConversation } from "@/components/conversation/ConversationProvider";
-import {
-  featuredProjectIds,
-  projects,
-  type ProjectEntry,
-} from "@/content/projects";
+import { ProjectGrid } from "@/components/projects/ProjectGrid";
+import { featuredProjects } from "@/content/projects";
+import { projectsPath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
-import { useReducedMotion } from "motion/react";
 
 function ArrowIcon({ className }: { className?: string }) {
   return (
@@ -28,199 +22,8 @@ function ArrowIcon({ className }: { className?: string }) {
   );
 }
 
-function ProjectTags({ tags }: { tags: string[] }) {
-  return (
-    <ul className="mt-3 flex flex-wrap gap-1.5">
-      {tags.map((tag) => (
-        <li
-          key={tag}
-          className="inline-flex h-7 items-center rounded-full border border-black/12 px-3 text-[0.68rem] tracking-[0.04em] text-foreground"
-        >
-          {tag}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function MarqueeCard({
-  project,
-  copy,
-  openLabel,
-  viewProject,
-  inert = false,
-  onOpen,
-}: {
-  project: ProjectEntry;
-  copy: {
-    category: string;
-    location: string;
-    summary: string;
-    alt: string;
-    tags?: string[];
-  };
-  openLabel: string;
-  viewProject: string;
-  inert?: boolean;
-  onOpen: (project: ProjectEntry) => void;
-}) {
-  const tags =
-    copy.tags && copy.tags.length > 0
-      ? copy.tags
-      : [copy.category, copy.location, project.year];
-  return (
-    <button
-      type="button"
-      onClick={() => onOpen(project)}
-      tabIndex={inert ? -1 : undefined}
-      aria-hidden={inert || undefined}
-      disabled={inert}
-      className="group flex w-[min(34rem,88vw)] shrink-0 flex-col overflow-hidden rounded-[1.25rem] bg-[#f6f6f6] text-left sm:w-[38rem] disabled:pointer-events-none"
-    >
-      <span className="relative block aspect-[16/10] w-full overflow-hidden bg-[#111111]">
-        <Image
-          src={project.image}
-          alt={copy.alt}
-          fill
-          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-          sizes="(max-width: 640px) 88vw, 38rem"
-        />
-      </span>
-      <span className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
-        <span className="flex items-start justify-between gap-3">
-          <span className="font-[family-name:var(--font-display)] text-[1.55rem] font-medium leading-[0.95] tracking-[-0.04em] text-foreground">
-            {project.title}
-          </span>
-          <ArrowIcon className="mt-1 h-4 w-4 shrink-0 text-foreground/50 transition-colors group-hover:text-accent" />
-        </span>
-        <ProjectTags tags={tags} />
-        <span className="mt-4 text-sm leading-relaxed text-neutral-600">
-          {copy.summary}
-        </span>
-        <span className="mt-auto pt-6 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400 transition-colors group-hover:text-accent">
-          {openLabel}
-        </span>
-      </span>
-      <span className="sr-only">
-        {viewProject}: {project.title}
-      </span>
-    </button>
-  );
-}
-
-function FeaturedProject({
-  project,
-  copy,
-  viewProject,
-  reverse = false,
-  priority = false,
-  onOpen,
-}: {
-  project: ProjectEntry;
-  copy: {
-    category: string;
-    location: string;
-    story: string;
-    quote: string;
-    attribution: string;
-    alt: string;
-    tags?: string[];
-  };
-  viewProject: string;
-  reverse?: boolean;
-  priority?: boolean;
-  onOpen: (project: ProjectEntry) => void;
-}) {
-  const cover = project.frame === "cover";
-  const tags =
-    copy.tags && copy.tags.length > 0
-      ? copy.tags
-      : [copy.category, copy.location, project.year];
-
-  return (
-    <article>
-      <button
-        type="button"
-        onClick={() => onOpen(project)}
-        className={`group grid w-full items-start gap-8 text-left md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,1fr)] md:gap-10 xl:grid-cols-[minmax(0,1.05fr)_minmax(22rem,1fr)] xl:gap-12 ${
-          reverse ? "md:[&>*:first-child]:order-2" : ""
-        }`}
-      >
-        <span
-          className={`relative isolate block w-full min-h-[16rem] aspect-square overflow-hidden rounded-[1.45rem] ring-1 ring-black/8 md:min-h-0 md:aspect-[4/5] xl:aspect-square ${
-            cover ? "bg-[#1a2220]" : "bg-[#0a0a0a]"
-          }`}
-        >
-          <span
-            className={`pointer-events-none absolute inset-0 ${
-              cover
-                ? "bg-[radial-gradient(ellipse_at_40%_20%,rgba(120,150,110,0.22),transparent_55%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.1),transparent_48%)]"
-                : "bg-[radial-gradient(ellipse_at_50%_18%,rgba(201,162,39,0.18),transparent_52%),radial-gradient(ellipse_at_80%_90%,rgba(31,94,255,0.12),transparent_48%)]"
-            }`}
-            aria-hidden
-          />
-          <Image
-            src={project.mockup ?? project.image}
-            alt={copy.alt}
-            fill
-            className={
-              cover
-                ? "object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02]"
-                : "object-contain object-center p-[6%] transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.02] sm:p-[7%]"
-            }
-            sizes="(max-width: 768px) 100vw, (max-width: 1536px) 48vw, 42vw"
-            quality={82}
-            priority={priority}
-            placeholder="blur"
-            blurDataURL="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAAAwBACdASoYABMAPzmKu1YvKSWksBgIAeAnCWMAxkAQ7Nte6+TpwWohQeAA/sxp0MuskzN2L+J4kacve1tbYjbJowJvXpxbIZyNsil5xmvNRdLObcVcxfsGu0tSQmPVDTVdlTCfAQAAAA=="
-          />
-        </span>
-        <span className="flex min-h-0 flex-col">
-          <span className="flex items-start justify-between gap-4">
-            <h3 className="font-[family-name:var(--font-display)] text-[clamp(1.85rem,3.6vw,3.1rem)] font-medium leading-[0.92] tracking-[-0.045em] text-foreground">
-              {project.title}
-            </h3>
-            <ArrowIcon className="mt-2 h-5 w-5 shrink-0 text-foreground/40 transition-colors group-hover:text-accent" />
-          </span>
-          <ProjectTags tags={tags} />
-          <p className="mt-6 max-w-[38ch] text-sm leading-relaxed tracking-[-0.015em] text-[#222222] sm:text-[0.98rem] lg:mt-8 lg:max-w-[42ch] lg:text-[1.125rem] lg:leading-[1.55] xl:text-[1.2rem] xl:leading-[1.5]">
-            {copy.story}
-          </p>
-          {copy.quote ? (
-            <blockquote className="mt-auto pt-8">
-              <p className="font-[family-name:var(--font-display)] text-[clamp(1.05rem,1.8vw,1.35rem)] font-medium leading-[1.2] tracking-[-0.03em] text-foreground">
-                “{copy.quote}”
-              </p>
-              <footer className="mt-3 text-[0.62rem] font-medium uppercase tracking-[0.16em] text-neutral-400">
-                — {copy.attribution}
-              </footer>
-            </blockquote>
-          ) : null}
-          <span className="sr-only">
-            {viewProject}: {project.title}
-          </span>
-        </span>
-      </button>
-    </article>
-  );
-}
-
 export function ProjectsSection() {
-  const { t } = useI18n();
-  const { openConversation } = useConversation();
-  const reduceMotion = useReducedMotion();
-  const [active, setActive] = useState<ProjectEntry | null>(null);
-
-  const featured = featuredProjectIds
-    .map((id) => projects.find((project) => project.id === id))
-    .filter((project): project is ProjectEntry => Boolean(project));
-  const featuredIds = new Set(featured.map((project) => project.id));
-  const rest = projects.filter((project) => !featuredIds.has(project.id));
-  const marqueeItems = reduceMotion ? rest : [...rest, ...rest];
-
-  const openProject = useCallback((project: ProjectEntry) => {
-    setActive(project);
-  }, []);
+  const { locale, t } = useI18n();
 
   return (
     <section
@@ -228,87 +31,44 @@ export function ProjectsSection() {
       aria-labelledby="projects-heading"
       className="site-block"
     >
-      <div className="mx-auto max-w-[90rem] px-4 py-16 sm:px-6 lg:px-10 lg:pb-12 lg:pt-24">
+      <div className="mx-auto max-w-[90rem] px-2.5 pb-2.5 pt-14 sm:px-4 sm:pb-4 lg:pt-20">
         <ScrollReveal>
-          <header>
-            <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
-              {t.projects.kicker}
-            </p>
-            <h2
-              id="projects-heading"
-              className="mt-5 max-w-[12ch] font-[family-name:var(--font-display)] text-[clamp(2.4rem,5.6vw,4.75rem)] font-medium leading-[0.88] tracking-[-0.055em] text-foreground"
+          <header className="flex items-end justify-between gap-6 px-2 pb-8 sm:px-4 lg:px-6 lg:pb-10">
+            <div>
+              <p className="text-[0.65rem] font-medium uppercase tracking-[0.35em] text-accent">
+                {t.projects.kicker}
+              </p>
+              <h2
+                id="projects-heading"
+                className="mt-4 font-[family-name:var(--font-display)] text-[clamp(2.1rem,4.6vw,3.9rem)] font-medium leading-[0.9] tracking-[-0.05em] text-foreground"
+              >
+                {t.projects.featuredHeading}
+              </h2>
+            </div>
+            <Link
+              href={projectsPath(locale)}
+              className="group hidden shrink-0 items-center gap-2 pb-1 text-[0.68rem] font-medium uppercase tracking-[0.16em] text-foreground transition-colors hover:text-accent sm:inline-flex"
             >
-              {t.projects.heading}
-            </h2>
+              {t.projects.allProjects}
+              <ArrowIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-px group-hover:translate-x-px" />
+            </Link>
           </header>
         </ScrollReveal>
 
-        <div className="mt-10 space-y-16 border-t border-black/10 pt-10 lg:mt-14 lg:space-y-24 lg:pt-14">
-          {featured.map((project, index) => (
-            <ScrollReveal key={project.id} blur={0} y={20}>
-              <FeaturedProject
-                project={project}
-                copy={t.projects.items[project.id]}
-                viewProject={t.projects.viewProject}
-                reverse={index % 2 === 1}
-                priority={index === 0}
-                onOpen={openProject}
-              />
-            </ScrollReveal>
-          ))}
+        <ProjectGrid items={featuredProjects} />
+
+        <div className="flex justify-center px-2 py-10 lg:py-14">
+          <Link
+            href={projectsPath(locale)}
+            className="group inline-flex h-12 items-center gap-2 rounded-full bg-foreground pl-6 pr-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-white transition-[transform,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-accent active:scale-[0.97]"
+          >
+            {t.projects.exploreMore}
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/12 transition-transform duration-200 group-hover:-translate-y-px group-hover:translate-x-px">
+              <ArrowIcon className="h-3.5 w-3.5" />
+            </span>
+          </Link>
         </div>
       </div>
-
-      <div className="border-t border-black/10 pb-16 pt-10 lg:pb-20 lg:pt-12">
-        <div className="mx-auto flex max-w-[90rem] items-end justify-between gap-6 px-4 sm:px-6 lg:px-10">
-          <p className="font-[family-name:var(--font-display)] text-[clamp(1.35rem,2.4vw,1.9rem)] font-medium tracking-[-0.04em] text-foreground">
-            {t.projects.moreWork}
-          </p>
-          <button
-            type="button"
-            onClick={openConversation}
-            className="hidden text-[0.65rem] font-medium uppercase tracking-[0.16em] text-neutral-500 transition-colors hover:text-accent sm:inline-flex"
-          >
-            {t.projects.requestQuote} →
-          </button>
-        </div>
-
-        <div
-          className={`ut-marquee mt-8 ${reduceMotion ? "overflow-x-auto" : "overflow-hidden"}`}
-        >
-          <ul
-            className={`flex gap-4 px-4 sm:gap-5 sm:px-6 lg:px-10 ${reduceMotion ? "" : "ut-marquee-track"}`}
-          >
-            {marqueeItems.map((project, index) => {
-              const duplicate = index >= rest.length;
-              return (
-                <li key={`${project.id}-${index}`}>
-                  <MarqueeCard
-                    project={project}
-                    copy={t.projects.items[project.id]}
-                    openLabel={t.projects.open}
-                    viewProject={t.projects.viewProject}
-                    inert={duplicate}
-                    onOpen={openProject}
-                  />
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        <div className="mt-8 px-4 sm:hidden sm:px-6">
-          <button
-            type="button"
-            onClick={openConversation}
-            className="inline-flex h-12 items-center rounded-full bg-foreground px-7 text-[0.68rem] font-medium uppercase tracking-[0.16em] text-white transition-colors hover:bg-accent"
-          >
-            {t.projects.requestQuote}
-          </button>
-        </div>
-      </div>
-
-      <ProjectModal project={active} onClose={() => setActive(null)} />
     </section>
   );
 }

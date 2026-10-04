@@ -1,4 +1,9 @@
-import { articlesPath, defaultLocale, type Locale } from "@/i18n/config";
+import {
+  articlesPath,
+  defaultLocale,
+  projectsPath,
+  type Locale,
+} from "@/i18n/config";
 import { getSiteUrl } from "./site";
 
 export function localePath(locale: Locale, hash = ""): string {
@@ -40,5 +45,18 @@ export function languageAlternates(): Record<string, string> {
     cs: base,
     en: `${base}/en`,
     "x-default": base,
+  };
+}
+
+export function projectsUrl(locale: Locale): string {
+  return `${getSiteUrl()}${projectsPath(locale)}`;
+}
+
+export function projectsLanguageAlternates(): Record<string, string> {
+  const base = getSiteUrl();
+  return {
+    cs: `${base}${projectsPath("cs")}`,
+    en: `${base}${projectsPath("en")}`,
+    "x-default": `${base}${projectsPath("cs")}`,
   };
 }
