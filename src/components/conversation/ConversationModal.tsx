@@ -12,27 +12,27 @@ const NOISE =
   "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
 const fieldClass =
-  "h-12 w-full rounded-xl bg-[#ececec] px-4 text-sm text-foreground outline-none transition-[box-shadow,background-color] placeholder:text-foreground/35 focus:bg-white focus:shadow-[0_0_0_2px_var(--accent)]";
+  "h-12 w-full rounded-xl border border-black/10 bg-white px-4 text-[0.95rem] text-foreground outline-none transition-[border-color,box-shadow] placeholder:text-foreground/35 hover:border-black/25 focus:border-accent focus:shadow-[0_0_0_3px_rgba(31,94,255,0.18)] aria-[invalid=true]:border-red-500";
 
 type FormState = {
+  services: string[];
+  budget: string;
+  timeline: string;
   name: string;
   email: string;
   company: string;
-  website: string;
-  budget: string;
-  start: string;
-  launch: string;
   brief: string;
 };
 
+type FieldKey = "name" | "email" | "budget" | "brief";
+
 const empty: FormState = {
+  services: [],
+  budget: "",
+  timeline: "",
   name: "",
   email: "",
   company: "",
-  website: "",
-  budget: "",
-  start: "",
-  launch: "",
   brief: "",
 };
 
@@ -49,6 +49,7 @@ export function ConversationModal() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(empty);
+  const [attempted, setAttempted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -94,6 +95,7 @@ export function ConversationModal() {
       setSent(false);
       setSending(false);
       setError(null);
+      setAttempted(false);
       setForm(empty);
     }
   }, [isOpen]);
@@ -102,38 +104,75 @@ export function ConversationModal() {
     setForm((current) => ({ ...current, budget: "" }));
   }, [locale]);
 
-  const ready =
-    form.name.trim().length > 1 &&
-    /\S+@\S+\.\S+/.test(form.email) &&
-    form.budget.length > 0 &&
-    form.brief.trim().length >= 3;
+  // Keys in on-screen order, so the first error gets focus.
+  const invalid: Record<FieldKey, boolean> = {
+    budget: form.budget.length === 0,
+    name: form.name.trim().length < 2,
+    email: !/\S+@\S+\.\S+/.test(form.email),
+    brief: form.brief.trim().length < 3,
+  };
+  const showError = (key: FieldKey) => attempted && invalid[key];
 
-  const set =
-    (key: keyof FormState) =>
-    (
-      event: React.ChangeEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >,
-    ) => {
+  const setText =
+    (key: "name" | "email" | "company" | "brief") =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setForm((current) => ({ ...current, [key]: event.target.value }));
     };
 
+  const toggleService = (value: string) =>
+    setForm((current) => ({
+      ...current,
+      services: current.services.includes(value)
+        ? current.services.filter((item) => item !== value)
+        : [...current.services, value],
+    }));
+
+  const labelFor = (
+    list: readonly { value: string; label: string }[],
+    value: string,
+  ) => list.find((item) => item.value === value)?.label ?? value;
+
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!ready || sending) return;
+    if (sending) return;
+
+    const firstInvalid = (Object.keys(invalid) as FieldKey[]).find(
+      (key) => invalid[key],
+    );
+    if (firstInvalid) {
+      setAttempted(true);
+      panelRef.current
+        ?.querySelector<HTMLElement>(`[data-field="${firstInvalid}"]`)
+        ?.focus();
+      return;
+    }
 
     setSending(true);
     setError(null);
 
     try {
-      const budgetLabel =
-        t.enquiry.budgets.find((item) => item.value === form.budget)?.label ??
-        form.budget;
+      const budget =
+        form.budget === "unknown"
+          ? t.enquiry.budgetUnknown
+          : labelFor(t.enquiry.budgets, form.budget);
 
       const response = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, budget: budgetLabel, locale }),
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          brief: form.brief,
+          budget,
+          services: form.services
+            .map((value) => labelFor(t.enquiry.services, value))
+            .join(", "),
+          timeline: form.timeline
+            ? labelFor(t.enquiry.timelines, form.timeline)
+            : "",
+          locale,
+        }),
       });
 
       if (!response.ok) {
@@ -143,6 +182,7 @@ export function ConversationModal() {
 
       setSent(true);
       setForm(empty);
+      setAttempted(false);
     } catch {
       setError(t.enquiry.error);
     } finally {
@@ -168,7 +208,7 @@ export function ConversationModal() {
           transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#d7dbe6] max-sm:min-h-[100dvh] sm:absolute"
+            className="pointer-events-none fixed inset-0 z-0 min-h-[100lvh] overflow-hidden bg-[#d7dbe6]"
             aria-hidden
           >
             <div
@@ -227,18 +267,51 @@ export function ConversationModal() {
               <p className="mt-4 max-w-md text-sm leading-relaxed text-neutral-600 sm:text-base">
                 {t.enquiry.intro}
               </p>
-              <p className="mt-6 text-sm leading-relaxed text-neutral-600">
+
+              <div className="mt-8 flex items-center gap-4">
+                <span
+                  aria-hidden
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-accent font-[family-name:var(--font-display)] text-sm font-semibold text-white"
+                >
+                  {t.enquiry.person
+                    .split(" ")
+                    .map((part) => part[0])
+                    .join("")}
+                </span>
+                <span className="flex flex-col">
+                  <span className="text-sm font-medium text-foreground">
+                    {t.enquiry.person}
+                  </span>
+                  <span className="text-xs text-neutral-500">
+                    {t.enquiry.role}
+                  </span>
+                </span>
+              </div>
+
+              <div className="mt-8 hidden border-t border-black/10 pt-6 sm:block">
+                <p className="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-neutral-400">
+                  {t.enquiry.nextTitle}
+                </p>
+                <ol className="mt-4 flex flex-col gap-3">
+                  {t.enquiry.nextSteps.map((step, index) => (
+                    <li key={step} className="flex gap-3 text-sm leading-relaxed text-neutral-700">
+                      <span className="mt-[0.1rem] font-mono text-xs tabular-nums text-accent">
+                        0{index + 1}
+                      </span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <p className="mt-8 text-sm leading-relaxed text-neutral-600">
                 {t.enquiry.emailLead}{" "}
                 <a
                   href={`mailto:${siteEmail}`}
-                  className="underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
+                  className="text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent"
                 >
-                  {t.enquiry.emailCta}
-                </a>{" "}
-                {t.enquiry.emailTrail}
-              </p>
-              <p className="mt-6 text-xs uppercase tracking-[0.18em] text-neutral-400">
-                {t.enquiry.timezone}
+                  {siteEmail}
+                </a>
               </p>
             </motion.section>
 
@@ -262,146 +335,154 @@ export function ConversationModal() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={submit} className="flex flex-col gap-10">
-                  <FormBlock index={1} label={t.enquiry.you}>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <label className="sr-only" htmlFor="enquiry-name">
-                        {t.enquiry.name}
-                      </label>
-                      <input
+                <form
+                  onSubmit={submit}
+                  noValidate
+                  className="flex flex-col gap-9"
+                >
+                  <FormBlock label={t.enquiry.servicesLabel} hint={t.enquiry.servicesHint}>
+                    <div className="flex flex-wrap gap-2">
+                      {t.enquiry.services.map((item) => (
+                        <Chip
+                          key={item.value}
+                          type="checkbox"
+                          name="services"
+                          label={item.label}
+                          checked={form.services.includes(item.value)}
+                          onChange={() => toggleService(item.value)}
+                        />
+                      ))}
+                    </div>
+                  </FormBlock>
+
+                  <FormBlock
+                    label={`${t.enquiry.budget}*`}
+                    error={showError("budget") ? t.enquiry.errors.budget : undefined}
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        ...t.enquiry.budgets,
+                        { value: "unknown", label: t.enquiry.budgetUnknown },
+                      ].map((item, index) => (
+                        <Chip
+                          key={item.value}
+                          type="radio"
+                          name="budget"
+                          label={item.label}
+                          checked={form.budget === item.value}
+                          onChange={() =>
+                            setForm((current) => ({ ...current, budget: item.value }))
+                          }
+                          dataField={index === 0 ? "budget" : undefined}
+                          invalid={showError("budget")}
+                        />
+                      ))}
+                    </div>
+                  </FormBlock>
+
+                  <FormBlock label={t.enquiry.timelineLabel} hint={t.enquiry.optional}>
+                    <div className="flex flex-wrap gap-2">
+                      {t.enquiry.timelines.map((item) => (
+                        <Chip
+                          key={item.value}
+                          type="radio"
+                          name="timeline"
+                          label={item.label}
+                          checked={form.timeline === item.value}
+                          onChange={() =>
+                            setForm((current) => ({
+                              ...current,
+                              timeline: current.timeline === item.value ? "" : item.value,
+                            }))
+                          }
+                        />
+                      ))}
+                    </div>
+                  </FormBlock>
+
+                  <FormBlock label={t.enquiry.contactLabel}>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Field
                         id="enquiry-name"
-                        className={fieldClass}
-                        placeholder={`${t.enquiry.name}*`}
-                        autoComplete="name"
-                        required
-                        value={form.name}
-                        onChange={set("name")}
-                      />
-                      <label className="sr-only" htmlFor="enquiry-email">
-                        {t.enquiry.email}
-                      </label>
-                      <input
+                        label={`${t.enquiry.name}*`}
+                        error={showError("name") ? t.enquiry.errors.name : undefined}
+                      >
+                        <input
+                          id="enquiry-name"
+                          data-field="name"
+                          className={fieldClass}
+                          autoComplete="name"
+                          aria-invalid={showError("name")}
+                          value={form.name}
+                          onChange={setText("name")}
+                        />
+                      </Field>
+                      <Field
                         id="enquiry-email"
-                        className={fieldClass}
-                        type="email"
-                        placeholder={`${t.enquiry.email}*`}
-                        autoComplete="email"
-                        required
-                        value={form.email}
-                        onChange={set("email")}
-                      />
-                    </div>
-                  </FormBlock>
-
-                  <FormBlock index={2} label={t.enquiry.company}>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <label className="sr-only" htmlFor="enquiry-company">
-                        {t.enquiry.companyName}
-                      </label>
-                      <input
+                        label={`${t.enquiry.email}*`}
+                        error={showError("email") ? t.enquiry.errors.email : undefined}
+                      >
+                        <input
+                          id="enquiry-email"
+                          data-field="email"
+                          className={fieldClass}
+                          type="email"
+                          autoComplete="email"
+                          aria-invalid={showError("email")}
+                          value={form.email}
+                          onChange={setText("email")}
+                        />
+                      </Field>
+                      <Field
                         id="enquiry-company"
-                        className={fieldClass}
-                        placeholder={t.enquiry.companyName}
-                        autoComplete="organization"
-                        value={form.company}
-                        onChange={set("company")}
-                      />
-                      <label className="sr-only" htmlFor="enquiry-website">
-                        {t.enquiry.website}
-                      </label>
-                      <input
-                        id="enquiry-website"
-                        className={fieldClass}
-                        type="text"
-                        placeholder={t.enquiry.website}
-                        autoComplete="url"
-                        value={form.website}
-                        onChange={set("website")}
-                      />
+                        label={t.enquiry.companyName}
+                        hint={t.enquiry.optional}
+                        className="sm:col-span-2"
+                      >
+                        <input
+                          id="enquiry-company"
+                          className={fieldClass}
+                          autoComplete="organization"
+                          value={form.company}
+                          onChange={setText("company")}
+                        />
+                      </Field>
+                      <Field
+                        id="enquiry-brief"
+                        label={`${t.enquiry.brief}*`}
+                        error={showError("brief") ? t.enquiry.errors.brief : undefined}
+                        className="sm:col-span-2"
+                      >
+                        <textarea
+                          id="enquiry-brief"
+                          data-field="brief"
+                          className={`${fieldClass} h-auto min-h-36 resize-y py-3 leading-relaxed`}
+                          placeholder={t.enquiry.briefPlaceholder}
+                          aria-invalid={showError("brief")}
+                          value={form.brief}
+                          onChange={setText("brief")}
+                        />
+                      </Field>
                     </div>
                   </FormBlock>
 
-                  <FormBlock index={3} label={t.enquiry.project}>
-                    <div className="grid gap-3 md:grid-cols-3">
-                      <label className="sr-only" htmlFor="enquiry-budget">
-                        {t.enquiry.budget}
-                      </label>
-                      <div className="relative">
-                        <select
-                          id="enquiry-budget"
-                          className={`${fieldClass} appearance-none pr-10`}
-                          required
-                          value={form.budget}
-                          onChange={set("budget")}
-                        >
-                          <option value="" disabled>
-                            {t.enquiry.budget}*
-                          </option>
-                          {t.enquiry.budgets.map((item) => (
-                            <option key={item.value} value={item.value}>
-                              {item.label}
-                            </option>
-                          ))}
-                        </select>
-                        <span
-                          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-foreground/40"
-                          aria-hidden
-                        >
-                          ⌄
-                        </span>
-                      </div>
-                      <label className="sr-only" htmlFor="enquiry-start">
-                        {t.enquiry.start}
-                      </label>
-                      <input
-                        id="enquiry-start"
-                        className={`${fieldClass} [color-scheme:light]`}
-                        type="date"
-                        aria-label={t.enquiry.start}
-                        value={form.start}
-                        onChange={set("start")}
-                      />
-                      <label className="sr-only" htmlFor="enquiry-launch">
-                        {t.enquiry.launch}
-                      </label>
-                      <input
-                        id="enquiry-launch"
-                        className={`${fieldClass} [color-scheme:light]`}
-                        type="date"
-                        aria-label={t.enquiry.launch}
-                        value={form.launch}
-                        onChange={set("launch")}
-                      />
-                    </div>
-                  </FormBlock>
-
-                  <FormBlock index={4} label={t.enquiry.more}>
-                    <label className="sr-only" htmlFor="enquiry-brief">
-                      {t.enquiry.brief}
-                    </label>
-                    <textarea
-                      id="enquiry-brief"
-                      className={`${fieldClass} min-h-36 resize-y py-3`}
-                      placeholder={`${t.enquiry.brief}*`}
-                      required
-                      minLength={3}
-                      value={form.brief}
-                      onChange={set("brief")}
-                    />
-                  </FormBlock>
-
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <p className="max-w-sm text-xs leading-relaxed text-neutral-400">
                       {t.enquiry.privacy}
                     </p>
                     <button
                       type="submit"
-                      disabled={!ready || sending}
-                      className="inline-flex h-12 min-w-36 items-center justify-center rounded-md bg-foreground px-8 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:bg-foreground/25"
+                      disabled={sending}
+                      className="inline-flex h-12 min-w-44 items-center justify-center rounded-full bg-foreground px-8 text-[0.72rem] font-medium uppercase tracking-[0.16em] text-white transition-colors hover:bg-accent disabled:cursor-wait disabled:opacity-60"
                     >
                       {sending ? t.enquiry.sending : t.enquiry.send}
                     </button>
                   </div>
+                  {attempted && Object.values(invalid).some(Boolean) ? (
+                    <p className="-mt-4 text-sm text-red-600" role="alert">
+                      {t.enquiry.required}
+                    </p>
+                  ) : null}
                   {error ? (
                     <p className="text-sm text-red-600" role="alert">
                       {error}
@@ -420,25 +501,103 @@ export function ConversationModal() {
 }
 
 function FormBlock({
-  index,
   label,
+  hint,
+  error,
   children,
 }: {
-  index: number;
   label: string;
+  hint?: string;
+  error?: string;
   children: React.ReactNode;
 }) {
   return (
     <fieldset className="border-0 p-0">
-      <legend className="mb-4 flex w-full items-baseline justify-between gap-4 border-b border-black/10 pb-3">
-        <span className="font-mono text-xs tabular-nums text-neutral-400">
-          {index}
-        </span>
-        <span className="text-[0.62rem] font-medium uppercase tracking-[0.22em] text-neutral-400">
+      <legend className="mb-3 flex w-full items-baseline justify-between gap-4">
+        <span className="font-[family-name:var(--font-display)] text-lg font-medium tracking-[-0.025em] text-foreground">
           {label}
         </span>
+        {hint ? (
+          <span className="text-xs text-neutral-400">{hint}</span>
+        ) : null}
       </legend>
       {children}
+      {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
     </fieldset>
+  );
+}
+
+function Chip({
+  type,
+  name,
+  label,
+  checked,
+  onChange,
+  dataField,
+  invalid,
+}: {
+  type: "checkbox" | "radio";
+  name: string;
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+  dataField?: string;
+  invalid?: boolean;
+}) {
+  return (
+    <label className="relative cursor-pointer">
+      <input
+        type={type}
+        name={name}
+        checked={checked}
+        onChange={onChange}
+        onClick={type === "radio" && checked ? onChange : undefined}
+        data-field={dataField}
+        className="peer sr-only"
+      />
+      <span
+        className={`inline-flex h-11 items-center rounded-full border px-5 text-sm transition-[background-color,border-color,color] duration-200 peer-focus-visible:shadow-[0_0_0_3px_rgba(31,94,255,0.25)] ${
+          checked
+            ? "border-foreground bg-foreground text-white"
+            : invalid
+              ? "border-red-400 bg-white text-foreground hover:border-foreground/40"
+              : "border-black/12 bg-white text-foreground hover:border-foreground/40"
+        }`}
+      >
+        {label}
+      </span>
+    </label>
+  );
+}
+
+function Field({
+  id,
+  label,
+  hint,
+  error,
+  className = "",
+  children,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  error?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <label
+        htmlFor={id}
+        className="flex items-baseline justify-between gap-3 text-sm font-medium text-foreground/80"
+      >
+        {label}
+        {hint ? (
+          <span className="text-xs font-normal text-neutral-400">{hint}</span>
+        ) : null}
+      </label>
+      {children}
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    </div>
   );
 }

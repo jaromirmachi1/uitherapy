@@ -10,6 +10,8 @@ type EnquiryBody = {
   email?: string;
   company?: string;
   website?: string;
+  services?: string;
+  timeline?: string;
   budget?: string;
   start?: string;
   launch?: string;
@@ -42,6 +44,8 @@ export async function POST(request: Request) {
   const email = body.email?.trim() ?? "";
   const company = body.company?.trim() ?? "";
   const website = body.website?.trim() ?? "";
+  const services = body.services?.trim() ?? "";
+  const timeline = body.timeline?.trim() ?? "";
   const budget = body.budget?.trim() ?? "";
   const start = body.start?.trim() ?? "";
   const launch = body.launch?.trim() ?? "";
@@ -58,7 +62,9 @@ export async function POST(request: Request) {
     email,
     company,
     website,
+    services,
     budget,
+    timeline,
     start,
     launch,
     brief,

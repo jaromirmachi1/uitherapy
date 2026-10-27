@@ -346,40 +346,65 @@ const en = {
     openForm: "Start a conversation",
   },
   enquiry: {
-    title: "Project enquiry",
+    title: "Let’s talk about your project",
     intro:
-      "Share your project details and timeline, and we’ll get back to you shortly.",
-    emailLead: "You can also",
-    emailCta: "send us an email",
-    emailTrail: "— we generally respond within 48h.",
-    timezone: "Czechia, CET timezone",
+      "A few clicks and two sentences are enough. I’ll read it myself and get back to you within two business days.",
+    person: "Jaromír Machalíček",
+    role: "Founder, uitherapy",
+    nextTitle: "What happens next",
+    nextSteps: [
+      "I reply within two business days.",
+      "A short call or a meeting in person — no obligations.",
+      "You get a proposal with scope, timeline and price.",
+    ],
+    emailLead: "Prefer email? Write to",
     close: "Close",
-    you: "You",
-    company: "Your company",
-    project: "Your project",
-    more: "Tell us more",
+    servicesLabel: "What do you need?",
+    servicesHint: "Pick any that apply",
+    services: [
+      { value: "web", label: "Website" },
+      { value: "eshop", label: "E-shop" },
+      { value: "brand", label: "Branding" },
+      { value: "marketing", label: "Marketing" },
+      { value: "other", label: "Something else" },
+    ],
+    budget: "Budget",
+    budgetUnknown: "Not sure yet",
+    timelineLabel: "When?",
+    timelines: [
+      { value: "asap", label: "As soon as possible" },
+      { value: "1-3m", label: "Within 1–3 months" },
+      { value: "later", label: "No rush" },
+    ],
+    contactLabel: "Your details",
     name: "Name",
     email: "Email",
-    companyName: "Company name",
-    website: "Website",
-    budget: "Budget range",
-    start: "Estimated start date",
-    launch: "Expected launch date",
-    brief: "My project is ...",
-    send: "Send",
-    sending: "Sending",
+    companyName: "Company or website",
+    optional: "optional",
+    brief: "About the project",
+    briefPlaceholder:
+      "What are you making, what bothers you about the current state, any sites you like…",
+    send: "Send enquiry",
+    sending: "Sending…",
+    required: "Please fill in the highlighted fields.",
+    errors: {
+      name: "Add your name.",
+      email: "Add an email we can reply to.",
+      budget: "Pick a budget — “Not sure yet” is fine.",
+      brief: "Write at least a sentence about the project.",
+    },
     privacy:
       "By sending this form you agree we may use these details to reply about your project.",
     successTitle: "Received.",
     successBody:
-      "We’ll read this through and write back within two business days.",
+      "Thanks — I’ll read it through and write back within two business days.",
     error:
       "Something went wrong sending this. Try again, or email us directly.",
     budgets: [
-      { value: "5-10k", label: "€5k – €10k" },
-      { value: "10-15k", label: "€10k – €15k" },
-      { value: "15-25k", label: "€15k – €25k" },
-      { value: "25k+", label: "€25k+" },
+      { value: "to-30k", label: "Up to €1.2k" },
+      { value: "30-80k", label: "€1.2k – €3k" },
+      { value: "80-150k", label: "€3k – €6k" },
+      { value: "150k+", label: "€6k+" },
     ],
   },
   footer: {
@@ -396,7 +421,7 @@ const en = {
       },
       {
         title: "What we collect",
-        body: "When you submit the project enquiry form, we collect your name, email address, company name, website (optional), budget range, estimated start and launch dates (optional), and project brief. We also record the language version of the site you used.",
+        body: "When you submit the project enquiry form, we collect your name, email address, company name, website (optional), the services you pick, budget range, timeline (optional), and project brief. We also record the language version of the site you used.",
       },
       {
         title: "Legal basis",
@@ -416,9 +441,9 @@ const en = {
     },
   },
   seo: {
-    title: "uitherapy — Premium web design, frontend & technical SEO",
+    title: "uitherapy — Premium websites, e-shops and branding",
     description:
-      "uitherapy is a senior frontend studio for premium marketing sites, ecommerce storefronts, and search-ready interfaces. Next.js, motion, accessibility, and technical SEO from day one.",
+      "We design and build websites, Shopify stores and brands that look a cut above the competition and rank well on Google. Next.js, motion and technical SEO included. See our work.",
     tagline:
       "Premium interfaces, performance-first builds, and search-ready experiences.",
     keywords: [
@@ -431,7 +456,7 @@ const en = {
       "premium websites",
       "React development",
     ],
-    ogImageAlt: "uitherapy — premium frontend studio for search-ready web experiences",
+    ogImageAlt: "uitherapy — We fix websites. Sadly not people. Websites, e-shops, branding and motion.",
   },
 };
 
@@ -781,38 +806,64 @@ const cs: typeof en = {
     openForm: "Domluvme se",
   },
   enquiry: {
-    title: "Poptávka projektu",
-    intro: "Napište detaily a termín projektu — ozveme se vám v krátkém čase.",
-    emailLead: "Můžete také",
-    emailCta: "poslat e-mail",
-    emailTrail: "— obvykle odpovídáme do 48 hodin.",
-    timezone: "Česko, časové pásmo CET",
+    title: "Pojďme probrat váš projekt",
+    intro:
+      "Stačí pár kliknutí a dvě věty. Přečtu to osobně a ozvu se do dvou pracovních dnů.",
+    person: "Jaromír Machalíček",
+    role: "Zakladatel, uitherapy",
+    nextTitle: "Co bude dál",
+    nextSteps: [
+      "Ozvu se do dvou pracovních dnů.",
+      "Krátký hovor nebo osobní setkání — k ničemu nezavazuje.",
+      "Pošlu návrh s rozsahem, termínem a cenou.",
+    ],
+    emailLead: "Raději e-mailem? Pište na",
     close: "Zavřít",
-    you: "Vy",
-    company: "Vaše firma",
-    project: "Váš projekt",
-    more: "Řekněte víc",
+    servicesLabel: "Co potřebujete?",
+    servicesHint: "Vyberte vše, co platí",
+    services: [
+      { value: "web", label: "Web" },
+      { value: "eshop", label: "E-shop" },
+      { value: "brand", label: "Branding" },
+      { value: "marketing", label: "Marketing" },
+      { value: "other", label: "Něco jiného" },
+    ],
+    budget: "Rozpočet",
+    budgetUnknown: "Zatím nevím",
+    timelineLabel: "Kdy?",
+    timelines: [
+      { value: "asap", label: "Co nejdřív" },
+      { value: "1-3m", label: "Během 1–3 měsíců" },
+      { value: "later", label: "Nespěchá to" },
+    ],
+    contactLabel: "Kontakt",
     name: "Jméno",
     email: "E-mail",
-    companyName: "Název firmy",
-    website: "Web",
-    budget: "Rozpočet",
-    start: "Předpokládaný start",
-    launch: "Očekávané spuštění",
-    brief: "Můj projekt je ...",
-    send: "Odeslat",
-    sending: "Odesílám",
+    companyName: "Firma nebo web",
+    optional: "nepovinné",
+    brief: "O projektu",
+    briefPlaceholder:
+      "Co děláte, co vám vadí na současném stavu, jaké weby se vám líbí…",
+    send: "Odeslat poptávku",
+    sending: "Odesílám…",
+    required: "Doplňte prosím zvýrazněná pole.",
+    errors: {
+      name: "Doplňte jméno.",
+      email: "Doplňte e-mail, na který můžeme odpovědět.",
+      budget: "Vyberte rozpočet — „Zatím nevím“ je v pořádku.",
+      brief: "Napište aspoň větu o projektu.",
+    },
     privacy:
       "Odesláním souhlasíte, že tyto údaje použijeme k odpovědi na poptávku.",
     successTitle: "Máme to.",
-    successBody: "Přečteme to a ozveme se do dvou pracovních dnů.",
+    successBody: "Díky — přečtu to a ozvu se do dvou pracovních dnů.",
     error:
       "Odeslání se nepovedlo. Zkuste to znovu, nebo nám napište e-mailem.",
     budgets: [
-      { value: "50-100k", label: "50–100 tis. Kč" },
-      { value: "100-200k", label: "100–200 tis. Kč" },
-      { value: "200-400k", label: "200–400 tis. Kč" },
-      { value: "400k+", label: "400 tis. Kč+" },
+      { value: "to-30k", label: "do 30 tis. Kč" },
+      { value: "30-80k", label: "30–80 tis. Kč" },
+      { value: "80-150k", label: "80–150 tis. Kč" },
+      { value: "150k+", label: "150 tis. Kč+" },
     ],
   },
   footer: {
@@ -829,7 +880,7 @@ const cs: typeof en = {
       },
       {
         title: "Jaké údaje shromažďujeme",
-        body: "Při odeslání poptávkového formuláře zpracováváme jméno, e-mail, název firmy, web (nepovinně), rozpočet, předpokládaný start a termín spuštění (nepovinně) a popis projektu. Ukládáme také jazykovou verzi webu, kterou jste použili.",
+        body: "Při odeslání poptávkového formuláře zpracováváme jméno, e-mail, název firmy, web (nepovinně), vybrané služby, rozpočet, termín (nepovinně) a popis projektu. Ukládáme také jazykovou verzi webu, kterou jste použili.",
       },
       {
         title: "Právní základ",
@@ -849,9 +900,9 @@ const cs: typeof en = {
     },
   },
   seo: {
-    title: "uitherapy — Prémiový webdesign, frontend a technické SEO",
+    title: "uitherapy — Prémiové weby, e-shopy a branding",
     description:
-      "uitherapy je seniorské frontend studio pro prémiové weby, ecommerce a rozhraní připravená pro vyhledávače. Next.js, motion design, přístupnost a technické SEO od prvního dne.",
+      "Navrhujeme a stavíme weby, Shopify e-shopy a značky, které vypadají o třídu výš než konkurence a dobře se hledají na Googlu. Next.js, motion a technické SEO v ceně. Podívejte se na naše projekty.",
     tagline:
       "Prémiová rozhraní, výkon na prvním místě a zážitky připravené pro vyhledávače.",
     keywords: [
@@ -866,7 +917,7 @@ const cs: typeof en = {
       "UI design",
     ],
     ogImageAlt:
-      "uitherapy — prémiové frontend studio pro weby připravené na vyhledávání",
+      "uitherapy — Terapie pro weby. Bohužel ne pro lidi. Weby, e-shopy, branding a motion.",
   },
 };
 

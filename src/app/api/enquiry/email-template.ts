@@ -3,7 +3,9 @@ type EnquiryEmailData = {
   email: string;
   company: string;
   website: string;
+  services: string;
   budget: string;
+  timeline: string;
   start: string;
   launch: string;
   brief: string;
@@ -61,10 +63,10 @@ export function buildEnquiryEmail(data: EnquiryEmailData) {
     `Name: ${data.name}`,
     `Email: ${data.email}`,
     `Company: ${dash(data.company)}`,
-    `Website: ${website}`,
+    ...(data.website.trim() ? [`Website: ${website}`] : []),
+    `Services: ${dash(data.services)}`,
     `Budget: ${data.budget}`,
-    `Start: ${formatDate(data.start)}`,
-    `Launch: ${formatDate(data.launch)}`,
+    `Timeline: ${dash(data.timeline)}`,
     `Locale: ${dash(data.locale)}`,
     "",
     "Brief",
@@ -97,10 +99,12 @@ export function buildEnquiryEmail(data: EnquiryEmailData) {
                   ${row("Name", data.name)}
                   ${row("Email", data.email, `mailto:${data.email}`)}
                   ${row("Company", dash(data.company))}
-                  ${row("Website", website, websiteHref)}
+                  ${data.website.trim() ? row("Website", website, websiteHref) : ""}
+                  ${row("Services", dash(data.services))}
                   ${row("Budget", data.budget)}
-                  ${row("Start", formatDate(data.start))}
-                  ${row("Launch", formatDate(data.launch))}
+                  ${row("Timeline", dash(data.timeline))}
+                  ${data.start ? row("Start", formatDate(data.start)) : ""}
+                  ${data.launch ? row("Launch", formatDate(data.launch)) : ""}
                   ${row("Locale", dash(data.locale))}
                 </table>
               </td>
