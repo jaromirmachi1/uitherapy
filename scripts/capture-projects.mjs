@@ -50,31 +50,57 @@ const HIDE_CSS = `
 const log = (...args) => console.log("  ", ...args);
 
 async function dismissConsent(page) {
+  // One evaluate per frame instead of one locator call per button: per-element
+  // calls into a busy cross-origin iframe (Google Maps on doktorbarber.cz)
+  // could each wait out a 30 s timeout, which looked like a frozen run.
+  const withTimeout = (promise, ms) =>
+    Promise.race([promise, new Promise((r) => setTimeout(() => r(false), ms))]);
   for (const frame of page.frames()) {
-    const candidates = frame.locator("button, a, [role=button]");
-    const count = Math.min(await candidates.count().catch(() => 0), 200);
-    for (let i = 0; i < count; i++) {
-      const el = candidates.nth(i);
-      const text = ((await el.innerText().catch(() => "")) || "").trim();
-      if (text && text.length < 40 && CONSENT_TEXT.test(text)) {
-        if (await el.isVisible().catch(() => false)) {
-          await el.click({ timeout: 2000 }).catch(() => {});
-          await page.waitForTimeout(500);
-          return true;
-        }
-      }
+    if (/google\.[^/]+\/maps|youtube|vimeo/.test(frame.url())) continue;
+    const clicked = await withTimeout(
+      frame
+        .evaluate((source) => {
+          const re = new RegExp(source, "i");
+          const els = document.querySelectorAll("button, a, [role=button]");
+          for (const el of els) {
+            const text = (el.innerText || "").trim();
+            const visible = el.offsetParent !== null || el.getClientRects().length > 0;
+            if (text && text.length < 40 && re.test(text) && visible) {
+              el.click();
+              return true;
+            }
+          }
+          return false;
+        }, CONSENT_TEXT.source)
+        .catch(() => false),
+      3000,
+    );
+    if (clicked) {
+      await page.waitForTimeout(500);
+      return true;
     }
   }
   return false;
 }
 
 async function prepare(page, project) {
-  try {
-    await page.goto(project.url, { waitUntil: "networkidle", timeout: 45000 });
-  } catch {
-    await page.goto(project.url, { waitUntil: "load", timeout: 60000 });
-  }
+  // Wait for "load", then give the network a short chance to settle.
+  // Never block on full network idle: embeds like Google Maps keep
+  // requesting forever, which used to stall a site for 45 s per pass.
+  await page.goto(project.url, { waitUntil: "load", timeout: 60000 });
+  await page
+    .waitForLoadState("networkidle", { timeout: project.idleMs ?? 8000 })
+    .catch(() => {});
+  await page.evaluate(() => document.fonts?.ready).catch(() => {});
   await page.waitForTimeout(1500);
+
+  // Guard: never save a capture of a different site (redirect, error page,
+  // proxy/localhost substitution) — how every tile once showed uitherapy.com.
+  const host = (u) => new URL(u).hostname.replace(/^www\./, "");
+  if (host(page.url()) !== host(project.url)) {
+    throw new Error(`landed on ${host(page.url())}, expected ${host(project.url)} — not saving`);
+  }
+
   for (const selector of project.click ?? []) {
     await page.locator(selector).first().click({ timeout: 4000 }).catch(() => {});
     await page.waitForTimeout(1200);
@@ -154,11 +180,22 @@ async function captureProject(browser, project) {
   entry.tint = await tint(deskShot);
 
   if (!project.skipShowcase) {
-    const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
-    const tall = await page.screenshot({
-      fullPage: true,
-      clip: { x: 0, y: 0, width: DESKTOP.width, height: Math.min(SHOWCASE_HEIGHT, pageHeight) },
-    });
+    let tall;
+    if (project.showcaseMode === "viewport") {
+      // Render the tall frame as a real viewport so everything in it is
+      // actually revealed, then restore the normal size.
+      await page.setViewportSize({ width: DESKTOP.width, height: SHOWCASE_HEIGHT });
+      await page.waitForTimeout(1500);
+      tall = await page.screenshot();
+      await page.setViewportSize({ width: DESKTOP.width, height: DESKTOP.height });
+      await page.waitForTimeout(800);
+    } else {
+      const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
+      tall = await page.screenshot({
+        fullPage: true,
+        clip: { x: 0, y: 0, width: DESKTOP.width, height: Math.min(SHOWCASE_HEIGHT, pageHeight) },
+      });
+    }
     entry.showcase = await save(
       `${project.id}-showcase.webp`,
       await frame(tall, {
@@ -171,7 +208,21 @@ async function captureProject(browser, project) {
     );
   }
 
-  await page.evaluate((y) => window.scrollTo(0, y), DESKTOP.height);
+  for (const selector of project.desk2Click ?? []) {
+    await page.locator(selector).first().click({ timeout: 4000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+  }
+  if (project.desk2Click) {
+    // Second shot is a different state of the same screen; stay put.
+  } else if (project.desk2Selector) {
+    await page
+      .locator(project.desk2Selector)
+      .first()
+      .evaluate((el) => el.scrollIntoView({ block: "start" }))
+      .catch(() => page.evaluate((y) => window.scrollTo(0, y), 900));
+  } else {
+    await page.evaluate((y) => window.scrollTo(0, y), DESKTOP.height);
+  }
   await page.waitForTimeout(1400);
   entry.desk2 = await save(`${project.id}-desk-2.webp`, await webp(await page.screenshot()));
   await desk.close();
@@ -224,6 +275,7 @@ async function main() {
     console.log(`→ ${project.id}  ${project.url}`);
     try {
       manifest[project.id] = await captureProject(browser, project);
+      await fs.writeFile(MANIFEST, JSON.stringify(manifest, null, 2) + "\n");
       log("done");
     } catch (error) {
       failed.push(project.id);

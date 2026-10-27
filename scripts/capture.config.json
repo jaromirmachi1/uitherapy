@@ -1,14 +1,78 @@
 {
-  "$comment": "Projects captured by `npm run capture`. Add a project here, run the script, done. Optional per project: hide (extra CSS selectors to hide), click (selectors to click before capturing, e.g. a gate), skipShowcase (keep a hand-made <id>.webp), waitMs.",
+  "$comment": "Projects captured by `npm run capture`. Add a project here, run the script, done. Optional per project: hide (extra CSS selectors to hide), click (Playwright selectors clicked before capturing, e.g. a gate or a cookie button — missing ones are skipped), skipShowcase (keep a hand-made <id>.webp), waitMs, desk2Selector (section to show in the second desktop shot instead of 'one screen down'). showcaseMode: \"viewport\" (tall frame rendered as one viewport — use when sections below the hero come out blank). desk2Click (selectors clicked for the second desktop shot, for one-screen sites that don't scroll).",
   "projects": [
-    { "id": "vojta", "url": "https://www.vojtahubne.cz", "skipShowcase": true },
-    { "id": "sadia", "url": "https://www.sadiaestate.cz" },
-    { "id": "panorama", "url": "https://panorama-sooty.vercel.app" },
-    { "id": "laflare", "url": "https://laflareclub.com" },
-    { "id": "dvd", "url": "https://www.dvdculture.com" },
-    { "id": "doktor", "url": "https://doktorbarber.cz" },
-    { "id": "golden", "url": "https://martin-press.vercel.app" },
-    { "id": "speed", "url": "https://www.speedcoffee.shop" },
-    { "id": "prevezem", "url": "https://www.prevezem.cz" }
+    {
+      "id": "vojta",
+      "url": "https://www.vojtahubne.cz",
+      "skipShowcase": true
+    },
+    {
+      "id": "sadia",
+      "url": "https://www.sadiaestate.cz",
+      "click": [
+        "button:has-text(\"Pouze nezbytné\")"
+      ],
+      "showcaseMode": "viewport"
+    },
+    {
+      "id": "panorama",
+      "url": "https://panorama-sooty.vercel.app",
+      "click": [
+        "button:has-text(\"Přijmout vše\")"
+      ],
+      "hide": [
+        "section:has-text(\"Soukromí a cookies\")"
+      ]
+    },
+    {
+      "id": "laflare",
+      "url": "https://laflareclub.com",
+      "click": [
+        "#shopify-pc__banner__btn-decline"
+      ],
+      "hide": [
+        "[id^=\"shopify-pc__\"]",
+        "[class^=\"shopify-pc__\"]"
+      ],
+      "waitMs": 2500
+    },
+    {
+      "id": "dvd",
+      "url": "https://www.dvdculture.com",
+      "click": [
+        "button:has-text(\"ENTER\")"
+      ],
+      "waitMs": 3500,
+      "desk2Click": [
+        "button:has-text(\"COMMERCIALS\")"
+      ]
+    },
+    {
+      "id": "doktor",
+      "url": "https://doktorbarber.cz"
+    },
+    {
+      "id": "golden",
+      "url": "https://martin-press.vercel.app"
+    },
+    {
+      "id": "speed",
+      "url": "https://www.speedcoffee.shop",
+      "waitMs": 6500,
+      "showcaseMode": "viewport"
+    },
+    {
+      "id": "prevezem",
+      "url": "https://www.prevezem.cz"
+    },
+    {
+      "id": "biziboiz",
+      "url": "https://biziboiz.com"
+    },
+    {
+      "id": "ouren",
+      "url": "https://www.ouren.cz",
+      "desk2Selector": "section:has(h2:has-text(\"Dokončené\"))"
+    }
   ]
 }

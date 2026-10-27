@@ -1,1 +1,100 @@
-{}
+{
+  "vojta": {
+    "desk": "/projects/vojta-desk.webp",
+    "tint": "#080808",
+    "desk2": "/projects/vojta-desk-2.webp",
+    "mobile": "/projects/vojta-mobile.webp",
+    "mobileFrame": "/projects/vojta-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "sadia": {
+    "desk": "/projects/sadia-desk.webp",
+    "tint": "#282838",
+    "showcase": "/projects/sadia-showcase.webp",
+    "desk2": "/projects/sadia-desk-2.webp",
+    "mobile": "/projects/sadia-mobile.webp",
+    "mobileFrame": "/projects/sadia-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "panorama": {
+    "desk": "/projects/panorama-desk.webp",
+    "tint": "#483828",
+    "showcase": "/projects/panorama-showcase.webp",
+    "desk2": "/projects/panorama-desk-2.webp",
+    "mobile": "/projects/panorama-mobile.webp",
+    "mobileFrame": "/projects/panorama-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "laflare": {
+    "desk": "/projects/laflare-desk.webp",
+    "tint": "#8898a8",
+    "showcase": "/projects/laflare-showcase.webp",
+    "desk2": "/projects/laflare-desk-2.webp",
+    "mobile": "/projects/laflare-mobile.webp",
+    "mobileFrame": "/projects/laflare-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "dvd": {
+    "desk": "/projects/dvd-desk.webp",
+    "tint": "#080808",
+    "showcase": "/projects/dvd-showcase.webp",
+    "desk2": "/projects/dvd-desk-2.webp",
+    "mobile": "/projects/dvd-mobile.webp",
+    "mobileFrame": "/projects/dvd-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "doktor": {
+    "desk": "/projects/doktor-desk.webp",
+    "tint": "#f8e8e8",
+    "showcase": "/projects/doktor-showcase.webp",
+    "desk2": "/projects/doktor-desk-2.webp",
+    "mobile": "/projects/doktor-mobile.webp",
+    "mobileFrame": "/projects/doktor-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "golden": {
+    "desk": "/projects/golden-desk.webp",
+    "tint": "#080808",
+    "showcase": "/projects/golden-showcase.webp",
+    "desk2": "/projects/golden-desk-2.webp",
+    "mobile": "/projects/golden-mobile.webp",
+    "mobileFrame": "/projects/golden-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "speed": {
+    "desk": "/projects/speed-desk.webp",
+    "tint": "#e8e8c8",
+    "showcase": "/projects/speed-showcase.webp",
+    "desk2": "/projects/speed-desk-2.webp",
+    "mobile": "/projects/speed-mobile.webp",
+    "mobileFrame": "/projects/speed-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "prevezem": {
+    "desk": "/projects/prevezem-desk.webp",
+    "tint": "#181818",
+    "showcase": "/projects/prevezem-showcase.webp",
+    "desk2": "/projects/prevezem-desk-2.webp",
+    "mobile": "/projects/prevezem-mobile.webp",
+    "mobileFrame": "/projects/prevezem-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "biziboiz": {
+    "desk": "/projects/biziboiz-desk.webp",
+    "tint": "#f8f8f8",
+    "showcase": "/projects/biziboiz-showcase.webp",
+    "desk2": "/projects/biziboiz-desk-2.webp",
+    "mobile": "/projects/biziboiz-mobile.webp",
+    "mobileFrame": "/projects/biziboiz-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  },
+  "ouren": {
+    "desk": "/projects/ouren-desk.webp",
+    "tint": "#080808",
+    "showcase": "/projects/ouren-showcase.webp",
+    "desk2": "/projects/ouren-desk-2.webp",
+    "mobile": "/projects/ouren-mobile.webp",
+    "mobileFrame": "/projects/ouren-mobile-frame.webp",
+    "capturedAt": "2026-10-27"
+  }
+}

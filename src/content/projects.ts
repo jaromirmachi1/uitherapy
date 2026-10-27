@@ -9,7 +9,9 @@ export type ProjectId =
   | "doktor"
   | "golden"
   | "speed"
-  | "prevezem";
+  | "prevezem"
+  | "biziboiz"
+  | "ouren";
 
 export type HighlightKind =
   | "hero"
@@ -272,6 +274,36 @@ export const projects: ProjectEntry[] = [
       "/projects/prevezem-desk.webp",
       "/projects/prevezem-desk-2.webp",
       "/projects/prevezem-mobile.webp",
+    ),
+  },
+  {
+    id: "biziboiz",
+    title: "biziboiz",
+    year: "2026",
+    url: "https://biziboiz.com",
+    image: "/projects/biziboiz-desk.webp",
+    frame: "inset",
+    tech: ["Shopify", "Custom theme", "E-commerce"],
+    services: ["ecommerce", "brand"],
+    highlights: deskPair(
+      "/projects/biziboiz-desk.webp",
+      "/projects/biziboiz-desk-2.webp",
+      "/projects/biziboiz-mobile.webp",
+    ),
+  },
+  {
+    id: "ouren",
+    title: "Ouren",
+    year: "2026",
+    url: "https://www.ouren.cz",
+    image: "/projects/ouren-desk.webp",
+    frame: "inset",
+    tech: ["React", "GSAP", "Brand"],
+    services: ["brand", "motion"],
+    highlights: deskPair(
+      "/projects/ouren-desk.webp",
+      "/projects/ouren-desk-2.webp",
+      "/projects/ouren-mobile.webp",
     ),
   },
 ];
