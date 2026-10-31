@@ -18,7 +18,7 @@ export const carePrices: Record<CareId, number> = {
 };
 
 export const packagePrices: Record<PackageId, number> = {
-  start: 35000,
+  start: 25000,
   business: 50000,
   premium: 110000,
   eshop: 60000,
