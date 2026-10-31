@@ -11,6 +11,13 @@ export type FluidEngineOptions = {
   ambient: boolean;
   maxPixelRatio: number;
   pointerRoot?: HTMLElement | null;
+  /**
+   * Opacity of the coloured dye wash (0–1). Lets the canvas sit above
+   * CSS overlays without the wash getting louder.
+   */
+  washOpacity?: number;
+  /** Colours for an optional text layer the fluid can distort (setText). */
+  text?: { color: RGB; tint: RGB };
 };
 
 type FBO = {
@@ -49,6 +56,8 @@ type UniformMap = Record<string, WebGLUniformLocation | null>;
 const MAX_DT = 0.016666;
 
 export type FluidEngine = {
+  /** Upload a text mask (white/alpha text on transparent, canvas-sized). */
+  setText: (source: HTMLCanvasElement | null) => void;
   play: () => void;
   pause: () => void;
   resize: () => void;
@@ -510,6 +519,14 @@ export function startFluidEngine(
     varying vec2 vB;
     uniform sampler2D uTexture;
     uniform vec2 texelSize;
+    uniform float washOpacity;
+    #ifdef TEXT
+    uniform sampler2D uText;
+    uniform sampler2D uVelocity;
+    uniform vec2 velocityTexel;
+    uniform vec3 textColor;
+    uniform vec3 tintColor;
+    #endif
     void main () {
       vec3 c = texture2D(uTexture, vUv).rgb;
       #ifdef SHADING
@@ -525,7 +542,36 @@ export function startFluidEngine(
       c *= diffuse;
       #endif
       float a = max(c.r, max(c.g, c.b));
-      gl_FragColor = vec4(c, a);
+      vec3 wash = c * washOpacity;
+      float washA = a * washOpacity;
+
+      #ifdef TEXT
+      // How much fluid is here: drives warp, colour split and tint.
+      float fluid = smoothstep(0.04, 0.42, a);
+      // Liquid warp: pull the text along the local flow (kept subtle).
+      vec2 vel = texture2D(uVelocity, vUv).xy * velocityTexel;
+      vec2 warp = clamp(vel * 0.018, vec2(-0.007), vec2(0.007));
+      vec2 uv = vec2(vUv.x, 1.0 - vUv.y) - vec2(warp.x, -warp.y);
+      // Colour echoes along the flow: light blue ahead, purple behind.
+      vec2 dir = length(vel) > 0.0001 ? normalize(vec2(vel.x, -vel.y)) : vec2(1.0, 0.0);
+      vec2 ca = dir * fluid * 0.0035;
+      float mBlue = texture2D(uText, uv + ca).a * fluid;
+      float mPurple = texture2D(uText, uv - ca).a * fluid;
+      float mText = texture2D(uText, uv).a;
+      const vec3 blue = vec3(0.357, 0.549, 1.0);     // #5b8cff
+      const vec3 purple = vec3(0.482, 0.302, 1.0);   // #7b4dff
+      vec3 ink = mix(textColor, tintColor, fluid * 0.85); // accent blue
+      // Premultiplied stack: blue, then purple, then the text on top.
+      vec3 col = blue * mBlue;
+      float alpha = mBlue;
+      col = purple * mPurple + col * (1.0 - mPurple);
+      alpha = mPurple + alpha * (1.0 - mPurple);
+      col = ink * mText + col * (1.0 - mText);
+      alpha = mText + alpha * (1.0 - mText);
+      gl_FragColor = vec4(col + wash * (1.0 - alpha), alpha + washA * (1.0 - alpha));
+      #else
+      gl_FragColor = vec4(wash, washA);
+      #endif
     }
   `;
 
@@ -966,10 +1012,65 @@ export function startFluidEngine(
       );
     }
     context.uniform1i(displayMaterial.uniforms.uTexture, dye.read.attach(0));
+    context.uniform1f(displayMaterial.uniforms.washOpacity, washOpacity);
+    if (textTexture && options.text && velocity) {
+      context.activeTexture(context.TEXTURE1);
+      context.bindTexture(context.TEXTURE_2D, textTexture);
+      context.uniform1i(displayMaterial.uniforms.uText, 1);
+      context.uniform1i(displayMaterial.uniforms.uVelocity, velocity.read.attach(2));
+      context.uniform2f(
+        displayMaterial.uniforms.velocityTexel,
+        velocity.texelSizeX,
+        velocity.texelSizeY,
+      );
+      const { color, tint } = options.text;
+      context.uniform3f(displayMaterial.uniforms.textColor, color.r, color.g, color.b);
+      context.uniform3f(displayMaterial.uniforms.tintColor, tint.r, tint.g, tint.b);
+    }
     blit(null);
   }
 
-  displayMaterial.setKeywords(config.SHADING ? ["SHADING"] : []);
+  const washOpacity = options.washOpacity ?? 1;
+  let textTexture: WebGLTexture | null = null;
+
+  function displayKeywords() {
+    const keywords: string[] = [];
+    if (config.SHADING) keywords.push("SHADING");
+    if (textTexture) keywords.push("TEXT");
+    return keywords;
+  }
+
+  function setText(source: HTMLCanvasElement | null) {
+    if (!source) {
+      if (textTexture) context.deleteTexture(textTexture);
+      textTexture = null;
+      displayMaterial.setKeywords(displayKeywords());
+      return;
+    }
+    if (!textTexture) {
+      textTexture = context.createTexture();
+      if (!textTexture) return;
+      textures.push(textTexture);
+    }
+    context.activeTexture(context.TEXTURE1);
+    context.bindTexture(context.TEXTURE_2D, textTexture);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_S, context.CLAMP_TO_EDGE);
+    context.texParameteri(context.TEXTURE_2D, context.TEXTURE_WRAP_T, context.CLAMP_TO_EDGE);
+    context.pixelStorei(context.UNPACK_FLIP_Y_WEBGL, false);
+    context.texImage2D(
+      context.TEXTURE_2D,
+      0,
+      context.RGBA,
+      context.RGBA,
+      context.UNSIGNED_BYTE,
+      source,
+    );
+    displayMaterial.setKeywords(displayKeywords());
+  }
+
+  displayMaterial.setKeywords(displayKeywords());
   resizeCanvas();
   initFramebuffers();
 
@@ -1037,10 +1138,15 @@ export function startFluidEngine(
     pointerRoot?.addEventListener("pointermove", onPointerMove, { passive: true });
   }
 
-  splat(0.42, 0.58, 120, 40, nextColor());
-  splat(0.62, 0.4, -90, -30, nextColor());
+  // Opening swirl, skipped when a text layer is attached so the heading
+  // starts perfectly still and only reacts to the cursor.
+  if (!options.text) {
+    splat(0.42, 0.58, 120, 40, nextColor());
+    splat(0.62, 0.4, -90, -30, nextColor());
+  }
 
   return {
+    setText,
     play,
     pause,
     resize() {

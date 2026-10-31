@@ -34,3 +34,8 @@ export function articlesPath(locale: Locale, slug?: string) {
 export function projectsPath(locale: Locale) {
   return locale === defaultLocale ? "/projekty" : "/en/projects";
 }
+
+/** Public pricing page: `/cenik` (cs) · `/en/pricing` (en) */
+export function pricingPath(locale: Locale) {
+  return locale === defaultLocale ? "/cenik" : "/en/pricing";
+}

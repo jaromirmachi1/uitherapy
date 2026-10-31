@@ -40,6 +40,20 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
 
+  // Czech public URL → internal /cs/pricing route
+  if (pathname === "/cenik") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}/pricing`;
+    return NextResponse.rewrite(url);
+  }
+
+  // Canonical Czech pricing path is /cenik
+  if (pathname === "/pricing") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/cenik";
+    return NextResponse.redirect(url);
+  }
+
   // Canonical Czech projects path is /projekty
   if (pathname === "/projects") {
     const url = request.nextUrl.clone();

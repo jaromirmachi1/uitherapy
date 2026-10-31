@@ -1,6 +1,7 @@
 import {
   articlesPath,
   defaultLocale,
+  pricingPath,
   projectsPath,
   type Locale,
 } from "@/i18n/config";
@@ -58,5 +59,18 @@ export function projectsLanguageAlternates(): Record<string, string> {
     cs: `${base}${projectsPath("cs")}`,
     en: `${base}${projectsPath("en")}`,
     "x-default": `${base}${projectsPath("cs")}`,
+  };
+}
+
+export function pricingUrl(locale: Locale): string {
+  return `${getSiteUrl()}${pricingPath(locale)}`;
+}
+
+export function pricingLanguageAlternates(): Record<string, string> {
+  const base = getSiteUrl();
+  return {
+    cs: `${base}${pricingPath("cs")}`,
+    en: `${base}${pricingPath("en")}`,
+    "x-default": `${base}${pricingPath("cs")}`,
   };
 }

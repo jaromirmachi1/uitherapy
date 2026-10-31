@@ -5,6 +5,7 @@ const en = {
   nav: {
     projects: "Projects",
     services: "Services",
+    pricing: "Pricing",
     articles: "Articles",
     contact: "Start a conversation",
     language: "Language",
@@ -465,6 +466,7 @@ const cs: typeof en = {
   nav: {
     projects: "Projekty",
     services: "Služby",
+    pricing: "Ceník",
     articles: "Články",
     contact: "Domluvme se",
     language: "Jazyk",

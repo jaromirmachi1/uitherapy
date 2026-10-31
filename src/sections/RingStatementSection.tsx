@@ -4,18 +4,28 @@ import { FluidCursor } from "@/components/FluidCursor";
 import StaggeredText from "@/components/reactbits/StaggeredText";
 import { useI18n } from "@/i18n/provider";
 import { motion, useReducedMotion } from "motion/react";
+import { useRef } from "react";
 
 export function RingStatementSection() {
   const { t } = useI18n();
   const reduceMotion = useReducedMotion();
   const proof = t.hero.proof;
+  const headingRef = useRef<HTMLDivElement>(null);
 
   return (
     <section
       aria-labelledby="hero-heading"
-      className="site-block relative isolate min-h-[calc(100svh-3rem)] overflow-hidden"
+      data-fluid-scope
+      className="group/hero site-block relative isolate min-h-[calc(100svh-3rem)] overflow-hidden"
     >
-      <FluidCursor intensity={0.42} />
+      {/* Above the soft overlays so the heading it redraws stays crisp. */}
+      <FluidCursor
+        key={t.hero.heading}
+        intensity={0.42}
+        washOpacity={0.55}
+        textTarget={headingRef}
+        className="z-[2]"
+      />
 
       <div
         className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,color-mix(in_srgb,var(--background)_48%,transparent)_0%,color-mix(in_srgb,var(--background)_12%,transparent)_42%,color-mix(in_srgb,var(--background)_58%,transparent)_100%)]"
@@ -55,6 +65,10 @@ export function RingStatementSection() {
           ))}
         </motion.ul>
 
+        <div
+          ref={headingRef}
+          className="transition-opacity duration-300 group-data-[fluid-text=on]/hero:opacity-0"
+        >
         <StaggeredText
           key={t.hero.heading}
           as="h1"
@@ -68,6 +82,7 @@ export function RingStatementSection() {
           staggerDirection="forward"
           className="mt-10 max-w-[20ch] text-balance font-[family-name:var(--font-display)] text-[clamp(3.4rem,8.4vw,7.6rem)] font-medium leading-[0.86] tracking-[-0.055em] text-foreground"
         />
+        </div>
 
         <motion.p
           className="mt-10 max-w-xl text-base leading-relaxed text-neutral-600 sm:text-lg"

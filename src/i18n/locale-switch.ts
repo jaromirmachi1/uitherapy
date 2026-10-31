@@ -2,6 +2,7 @@ import { articles as catalog } from "@/content/articles";
 import {
   articlesPath,
   localePath,
+  pricingPath,
   projectsPath,
   type Locale,
 } from "@/i18n/config";
@@ -34,6 +35,13 @@ export function localeSwitchHref(locale: Locale, pathname: string): string {
     pathname === "/en/projects"
   ) {
     return projectsPath(locale);
+  }
+  if (
+    pathname === "/cenik" ||
+    pathname === "/pricing" ||
+    pathname === "/en/pricing"
+  ) {
+    return pricingPath(locale);
   }
   return articlesLocaleHref(locale, pathname) ?? localePath(locale);
 }

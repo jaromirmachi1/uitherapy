@@ -1,7 +1,7 @@
 "use client";
 
 import { startFluidEngine } from "@/components/fluid-cursor-engine";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 
 type RGB = { r: number; g: number; b: number };
 
@@ -9,12 +9,29 @@ type Props = {
   colors?: string[];
   intensity?: number;
   className?: string;
+  /** Dye wash opacity (0–1) when the canvas sits above CSS overlays. */
+  washOpacity?: number;
+  /**
+   * Text the fluid should distort (e.g. the hero heading). Its word spans
+   * are redrawn into the canvas; while active, the closest `[data-fluid-scope]`
+   * ancestor gets `data-fluid-text="on"` so the DOM copy can be hidden.
+   */
+  textTarget?: RefObject<HTMLElement | null>;
+  /** Wait before swapping in the canvas text (lets intro animations finish). */
+  textDelayMs?: number;
 };
 
 const RESIZE_DEBOUNCE_MS = 140;
 const MAX_PIXEL_RATIO = 1.5;
 
-export function FluidCursor({ colors, intensity = 0.42, className }: Props) {
+export function FluidCursor({
+  colors,
+  intensity = 0.42,
+  className,
+  washOpacity,
+  textTarget,
+  textDelayMs = 1500,
+}: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [staticMode, setStaticMode] = useState(false);
@@ -60,6 +77,8 @@ export function FluidCursor({ colors, intensity = 0.42, className }: Props) {
         ambient: isTouchPrimary,
         maxPixelRatio: MAX_PIXEL_RATIO,
         pointerRoot: root.parentElement,
+        washOpacity,
+        text: textTarget ? resolveTextColors() : undefined,
       });
     } catch {
       engine = null;
@@ -89,22 +108,55 @@ export function FluidCursor({ colors, intensity = 0.42, className }: Props) {
     visible = true;
     engine.play();
 
+    // --- Optional distorted text layer ---
+    const scope = root.closest<HTMLElement>("[data-fluid-scope]");
+    const maskCanvas = textTarget ? document.createElement("canvas") : null;
+    let textOn = false;
+    let textTimer = 0;
+    let disposed = false;
+
+    const drawText = () => {
+      const target = textTarget?.current;
+      if (!maskCanvas || !target || disposed) return;
+      const ok = drawTextMask(maskCanvas, canvas, root, target);
+      if (!ok) {
+        engine.setText(null);
+        if (scope) delete scope.dataset.fluidText;
+        textOn = false;
+        return;
+      }
+      engine.setText(maskCanvas);
+      if (!textOn && scope) scope.dataset.fluidText = "on";
+      textOn = true;
+    };
+
+    if (maskCanvas) {
+      const fontsReady = document.fonts?.ready ?? Promise.resolve();
+      textTimer = window.setTimeout(() => {
+        fontsReady.then(() => requestAnimationFrame(drawText));
+      }, textDelayMs);
+    }
+
     const resizeObserver = new ResizeObserver(() => {
       window.clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(() => {
         engine.resize();
+        if (textOn) drawText();
         playIfVisible();
       }, RESIZE_DEBOUNCE_MS);
     });
     resizeObserver.observe(root);
 
     return () => {
+      disposed = true;
+      window.clearTimeout(textTimer);
+      if (scope) delete scope.dataset.fluidText;
       window.clearTimeout(resizeTimer);
       intersection.disconnect();
       resizeObserver.disconnect();
       engine.dispose();
     };
-  }, [colors, intensity]);
+  }, [colors, intensity, washOpacity, textTarget, textDelayMs]);
 
   return (
     <div
@@ -125,6 +177,74 @@ function StaticPoster() {
   return (
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_42%),radial-gradient(ellipse_at_70%_70%,color-mix(in_srgb,var(--accent-hover)_12%,transparent),transparent_46%),var(--background)]" />
   );
+}
+
+/** Text ink and hover tint, from the site's CSS tokens. */
+function resolveTextColors() {
+  const styles = getComputedStyle(document.documentElement);
+  const read = (name: string, fallback: RGB) =>
+    parseCssColor(styles.getPropertyValue(name).trim()) ?? fallback;
+  return {
+    color: read("--foreground", { r: 0.17, g: 0.17, b: 0.17 }),
+    tint: read("--accent", { r: 0.12, g: 0.37, b: 1 }),
+  };
+}
+
+/**
+ * Paints each visible word of `target` into `mask` at its on-screen spot,
+ * in the canvas's pixel space. Word spans are `inline-block` (StaggeredText),
+ * so each one is drawn at its own box; plain text falls back to the element.
+ */
+function drawTextMask(
+  mask: HTMLCanvasElement,
+  canvas: HTMLCanvasElement,
+  root: HTMLElement,
+  target: HTMLElement,
+) {
+  const width = canvas.width;
+  const height = canvas.height;
+  const rootRect = root.getBoundingClientRect();
+  if (!width || !height || rootRect.width === 0) return false;
+
+  mask.width = width;
+  mask.height = height;
+  const ctx = mask.getContext("2d");
+  if (!ctx) return false;
+  ctx.clearRect(0, 0, width, height);
+
+  const scale = width / rootRect.width;
+  const words = Array.from(
+    target.querySelectorAll<HTMLElement>("span.inline-block"),
+  );
+  const pieces = words.length > 0 ? words : [target];
+  let drawn = 0;
+
+  for (const piece of pieces) {
+    const text = piece.textContent?.trim();
+    if (!text) continue;
+    const rect = piece.getBoundingClientRect();
+    if (rect.width === 0) continue;
+    const style = getComputedStyle(piece);
+    const size = Number.parseFloat(style.fontSize) * scale;
+    ctx.font = `${style.fontStyle} ${style.fontWeight} ${size}px ${style.fontFamily}`;
+    const spacing = Number.parseFloat(style.letterSpacing);
+    if ("letterSpacing" in ctx) {
+      (ctx as CanvasRenderingContext2D & { letterSpacing: string }).letterSpacing =
+        Number.isFinite(spacing) ? `${spacing * scale}px` : "0px";
+    }
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#fff";
+    const metrics = ctx.measureText(text);
+    const ascent = metrics.fontBoundingBoxAscent ?? size * 0.9;
+    const descent = metrics.fontBoundingBoxDescent ?? size * 0.25;
+    const boxHeight = rect.height * scale;
+    const x = (rect.left - rootRect.left) * scale;
+    const y =
+      (rect.top - rootRect.top) * scale + (boxHeight - (ascent + descent)) / 2 + ascent;
+    ctx.fillText(text, x, y);
+    drawn += 1;
+  }
+  return drawn > 0;
 }
 
 function resolvePalette(colors?: string[]): RGB[] {

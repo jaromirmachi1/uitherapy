@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Magnetic } from "@/components/Magnetic";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useConversation } from "@/components/conversation/ConversationProvider";
-import { articlesPath, localePath, projectsPath } from "@/i18n/config";
+import { articlesPath, localePath, pricingPath, projectsPath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 
 export function SiteHeader() {
@@ -42,6 +42,7 @@ export function SiteHeader() {
               {[
                 { href: projectsPath(locale), label: t.nav.projects },
                 { href: localePath(locale, "#services"), label: t.nav.services },
+                { href: pricingPath(locale), label: t.nav.pricing },
                 { href: articlesPath(locale), label: t.nav.articles },
               ].map((link) => (
                 <li key={link.href} className="relative">

@@ -15,7 +15,6 @@ import { useConversation } from "@/components/conversation/ConversationProvider"
 import {
   mobileFrameImage,
   portraitImage,
-  projectTint,
   showcaseImage,
   wideImage,
   type ProjectEntry,
@@ -93,6 +92,34 @@ function ArrowIcon({ className }: { className?: string }) {
 
 const tileBase =
   "group relative block w-full overflow-hidden rounded-[1.25rem] text-left aspect-[16/10] md:aspect-auto md:h-[clamp(22rem,36vw,35rem)]";
+
+/**
+ * Tile stage behind framed captures. Same for every project on purpose:
+ * per-project tints made the grid look like a patchwork.
+ * Switch to "dark" if the light stage ever feels too quiet.
+ */
+const STAGE_MODE: "light" | "dark" = "light";
+
+const STAGES = {
+  light: {
+    base: "bg-[#ececee]",
+    background:
+      "radial-gradient(80% 60% at 50% 0%, #fafafb, transparent 70%), #ececee",
+    dot: "rgba(0,0,0,0.55)",
+    dotsOpacity: 0.07,
+    shadow: "drop-shadow-[0_24px_40px_rgba(15,17,21,0.22)]",
+  },
+  dark: {
+    base: "bg-[#111214]",
+    background:
+      "radial-gradient(80% 60% at 50% 110%, #24262c, transparent 70%), #111214",
+    dot: "rgba(255,255,255,0.7)",
+    dotsOpacity: 0.1,
+    shadow: "drop-shadow-[0_30px_50px_rgba(0,0,0,0.5)]",
+  },
+} as const;
+
+const STAGE = STAGES[STAGE_MODE];
 
 const parallaxSpring = { stiffness: 120, damping: 20, mass: 0.6 };
 
@@ -172,7 +199,6 @@ function ProjectTile({
   // Framed captures (vojta.webp style) on a tinted stage when available.
   const framed =
     slot === "narrow" ? mobileFrameImage(project) : showcaseImage(project);
-  const tint = projectTint(project);
 
   return (
     <button
@@ -180,29 +206,27 @@ function ProjectTile({
       onClick={() => onOpen(project)}
       data-cursor-label={t.projects.cursorView}
       {...handlers}
-      className={`${tileBase} bg-[#0f1115] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
+      className={`${tileBase} ${STAGE.base} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent`}
     >
       {framed ? (
         <>
-          {/* Stage: the site's own colour, deepened, with a soft floor glow. */}
+          {/* One shared stage for every project, so the grid reads as a set. */}
+          <span
+            aria-hidden
+            className="absolute inset-0"
+            style={{ background: STAGE.background }}
+          />
           <span
             aria-hidden
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(90% 70% at 50% 110%, color-mix(in oklab, ${tint} 70%, white 10%), transparent 70%), color-mix(in oklab, ${tint} 38%, #0b0b0d)`,
-            }}
-          />
-          <span
-            aria-hidden
-            className="absolute inset-0 opacity-[0.12]"
-            style={{
-              backgroundImage:
-                "radial-gradient(rgba(255,255,255,0.7) 0.6px, transparent 0.7px)",
+              opacity: STAGE.dotsOpacity,
+              backgroundImage: `radial-gradient(${STAGE.dot} 0.6px, transparent 0.7px)`,
               backgroundSize: "16px 16px",
             }}
           />
           <motion.span
-            className={`absolute left-0 right-0 mx-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.45)] ${
+            className={`absolute left-0 right-0 mx-auto ${STAGE.shadow} ${
               slot === "narrow"
                 ? "top-[7%] aspect-[900/1934] w-[70%]"
                 : slot === "full"
