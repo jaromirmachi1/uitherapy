@@ -3,6 +3,7 @@ import {
   defaultLocale,
   pricingPath,
   projectsPath,
+  redesignPath,
   type Locale,
 } from "@/i18n/config";
 import { getSiteUrl } from "./site";
@@ -72,5 +73,18 @@ export function pricingLanguageAlternates(): Record<string, string> {
     cs: `${base}${pricingPath("cs")}`,
     en: `${base}${pricingPath("en")}`,
     "x-default": `${base}${pricingPath("cs")}`,
+  };
+}
+
+export function redesignUrl(locale: Locale): string {
+  return `${getSiteUrl()}${redesignPath(locale)}`;
+}
+
+export function redesignLanguageAlternates(): Record<string, string> {
+  const base = getSiteUrl();
+  return {
+    cs: `${base}${redesignPath("cs")}`,
+    en: `${base}${redesignPath("en")}`,
+    "x-default": `${base}${redesignPath("cs")}`,
   };
 }

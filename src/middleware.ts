@@ -24,6 +24,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // English public URL → internal /en/redesign route
+  if (pathname === "/en/website-redesign") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/en/redesign";
+    return NextResponse.rewrite(url);
+  }
+
   if (pathnameLocale) return;
 
   // Czech public URLs → internal /cs/articles routes
@@ -37,6 +44,13 @@ export function middleware(request: NextRequest) {
   if (pathname === "/projekty") {
     const url = request.nextUrl.clone();
     url.pathname = `/${defaultLocale}/projects`;
+    return NextResponse.rewrite(url);
+  }
+
+  // Czech public URL → internal /cs/redesign route
+  if (pathname === "/redesign-webu") {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}/redesign`;
     return NextResponse.rewrite(url);
   }
 

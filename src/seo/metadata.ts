@@ -4,10 +4,14 @@ import { getDictionary } from "@/i18n/dictionary";
 import { canonicalUrl, languageAlternates } from "./urls";
 import { getSiteUrl, siteName } from "./site";
 
-function googleSiteVerification(): Metadata["verification"] | undefined {
-  const token = process.env.GOOGLE_SITE_VERIFICATION;
-  if (!token) return undefined;
-  return { google: token };
+function siteVerification(): Metadata["verification"] | undefined {
+  const google = process.env.GOOGLE_SITE_VERIFICATION;
+  const seznam = process.env.SEZNAM_SITE_VERIFICATION;
+  if (!google && !seznam) return undefined;
+  return {
+    ...(google ? { google } : {}),
+    ...(seznam ? { other: { "seznam-wmt": seznam } } : {}),
+  };
 }
 
 export function buildSiteMetadata(locale: Locale): Metadata {
@@ -98,6 +102,6 @@ export function buildSiteMetadata(locale: Locale): Metadata {
         "max-snippet": -1,
       },
     },
-    verification: googleSiteVerification(),
+    verification: siteVerification(),
   };
 }

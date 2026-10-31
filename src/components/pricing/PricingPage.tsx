@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
 import { ScrollReveal } from "@/components/reactbits/ScrollReveal";
@@ -19,6 +20,7 @@ import {
   type CareId,
   type PackageId,
 } from "@/content/pricing";
+import { redesignPath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 
 type Mode = "oneOff" | "subscription";
@@ -352,7 +354,13 @@ export function PricingPage() {
               {c.redesign.body}{" "}
               <span className="whitespace-nowrap font-medium text-white">
                 {c.redesign.price} {czk(redesignFrom)}.
-              </span>
+              </span>{" "}
+              <Link
+                href={redesignPath(locale)}
+                className="whitespace-nowrap underline decoration-white/40 underline-offset-4 hover:decoration-white"
+              >
+                {c.redesign.more}
+              </Link>
             </p>
           </div>
           <button

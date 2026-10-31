@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
 import { articles } from "@/content/articles";
-import { articlesPath, pricingPath, projectsPath } from "@/i18n/config";
+import { articlesPath, pricingPath, projectsPath, redesignPath } from "@/i18n/config";
 import {
   articlesLanguageAlternates,
   languageAlternates,
   pricingLanguageAlternates,
+  redesignLanguageAlternates,
   projectsLanguageAlternates,
 } from "@/seo/urls";
 import { getSiteUrl } from "@/seo/site";
@@ -67,6 +68,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
       alternates: { languages: projectsLanguageAlternates() },
+    },
+    {
+      url: `${base}${redesignPath("cs")}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: { languages: redesignLanguageAlternates() },
+    },
+    {
+      url: `${base}${redesignPath("en")}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+      alternates: { languages: redesignLanguageAlternates() },
     },
     {
       url: `${base}${pricingPath("cs")}`,

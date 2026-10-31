@@ -137,6 +137,7 @@ const cs = {
     body: "Předělám vizuál stávajícího webu bez stavby od nuly.",
     price: "Předělávka vizuálu od",
     cta: "Chci předělat web",
+    more: "Jak redesign probíhá",
   },
   faqTitle: "Časté otázky",
   faq: [
@@ -239,6 +240,7 @@ const en: typeof cs = {
     body: "I’ll redesign the look of your current site without rebuilding it from scratch.",
     price: "Visual redesign from",
     cta: "Redesign my site",
+    more: "How a redesign works",
   },
   faqTitle: "FAQ",
   faq: [

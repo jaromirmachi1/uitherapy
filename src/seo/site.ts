@@ -8,12 +8,16 @@ export const siteEmail = "core@uitherapy.com";
 
 export const legalEntityName = "Jaromír Machalíček";
 export const legalEntityIco = "IČO 14293811";
-export const legalEntityAddress = "Slatina 198, 742 93";
+export const legalEntityAddress = "Bohunická 81, 619 00 Brno";
+export const legalEntityStreet = "Bohunická 81";
+export const legalEntityCity = "Brno";
+export const legalEntityPostalCode = "619 00";
 export const legalEntityCountry = "CZ";
 
 export const siteLogoPath = "/uitherapy-logo.png";
 
-const fallbackUrl = "https://uitherapy.com";
+/** The live site serves www; the bare domain redirects here. */
+const fallbackUrl = "https://www.uitherapy.com";
 
 export function getSiteUrl(): string {
   if (

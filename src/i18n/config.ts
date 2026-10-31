@@ -39,3 +39,8 @@ export function projectsPath(locale: Locale) {
 export function pricingPath(locale: Locale) {
   return locale === defaultLocale ? "/cenik" : "/en/pricing";
 }
+
+/** Public redesign landing page: `/redesign-webu` (cs) · `/en/website-redesign` (en) */
+export function redesignPath(locale: Locale) {
+  return locale === defaultLocale ? "/redesign-webu" : "/en/website-redesign";
+}

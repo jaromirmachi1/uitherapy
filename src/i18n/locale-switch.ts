@@ -4,6 +4,7 @@ import {
   localePath,
   pricingPath,
   projectsPath,
+  redesignPath,
   type Locale,
 } from "@/i18n/config";
 
@@ -42,6 +43,9 @@ export function localeSwitchHref(locale: Locale, pathname: string): string {
     pathname === "/en/pricing"
   ) {
     return pricingPath(locale);
+  }
+  if (pathname === "/redesign-webu" || pathname === "/en/website-redesign") {
+    return redesignPath(locale);
   }
   return articlesLocaleHref(locale, pathname) ?? localePath(locale);
 }

@@ -3,10 +3,12 @@ import { getDictionary } from "@/i18n/dictionary";
 import { canonicalUrl } from "@/seo/urls";
 import {
   getSiteUrl,
-  legalEntityAddress,
+  legalEntityCity,
   legalEntityCountry,
   legalEntityIco,
   legalEntityName,
+  legalEntityPostalCode,
+  legalEntityStreet,
   siteEmail,
   siteLogoPath,
   siteName,
@@ -48,9 +50,9 @@ export function JsonLdGraph({ locale }: { locale: Locale }) {
     },
     address: {
       "@type": "PostalAddress",
-      streetAddress: legalEntityAddress.split(",")[0]?.trim(),
-      addressLocality: "Slatina",
-      postalCode: "742 93",
+      streetAddress: legalEntityStreet,
+      addressLocality: legalEntityCity,
+      postalCode: legalEntityPostalCode,
       addressCountry: legalEntityCountry,
     },
     identifier: {
@@ -79,7 +81,9 @@ export function JsonLdGraph({ locale }: { locale: Locale }) {
     email: siteEmail,
     image: `${url}${siteLogoPath}`,
     provider: { "@id": entityId("/#organization") },
+    address: organization.address,
     areaServed: [
+      { "@type": "City", name: "Brno" },
       { "@type": "Country", name: "Czech Republic" },
       { "@type": "Place", name: "Worldwide" },
     ],

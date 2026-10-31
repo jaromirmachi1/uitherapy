@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useLegal } from "@/components/legal/LegalProvider";
+import { pricingPath, projectsPath, redesignPath } from "@/i18n/config";
 import { useI18n } from "@/i18n/provider";
 import { getSiteUrl, siteEmail } from "@/seo/site";
 
 export function SiteFooter() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { openLegal } = useLegal();
   const year = new Date().getFullYear();
   const url = getSiteUrl();
@@ -23,6 +24,17 @@ export function SiteFooter() {
         <Link href={url} className="transition-colors hover:text-accent">
           {url.replace(/^https?:\/\//, "")}
         </Link>
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2">
+          <Link href={redesignPath(locale)} className="transition-colors hover:text-accent">
+            {t.footer.redesign}
+          </Link>
+          <Link href={pricingPath(locale)} className="transition-colors hover:text-accent">
+            {t.nav.pricing}
+          </Link>
+          <Link href={projectsPath(locale)} className="transition-colors hover:text-accent">
+            {t.nav.projects}
+          </Link>
+        </nav>
         <button
           type="button"
           onClick={openLegal}

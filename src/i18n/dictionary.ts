@@ -409,6 +409,7 @@ const en = {
     ],
   },
   footer: {
+    redesign: "Website redesign",
     legal: "Legal",
   },
   legal: {
@@ -418,7 +419,7 @@ const en = {
     sections: [
       {
         title: "Data controller",
-        body: "The data controller is uitherapy, operated by Jaromír Machalíček (sole trader registered under the Trade Licensing Act, IČO 14293811), business address Slatina 198, 742 93, Czech Republic. For privacy enquiries, contact core@uitherapy.com.",
+        body: "The data controller is uitherapy, operated by Jaromír Machalíček (sole trader registered under the Trade Licensing Act, IČO 14293811), business address Bohunická 81, 619 00 Brno, Czech Republic. For privacy enquiries, contact core@uitherapy.com.",
       },
       {
         title: "What we collect",
@@ -869,6 +870,7 @@ const cs: typeof en = {
     ],
   },
   footer: {
+    redesign: "Redesign webu",
     legal: "Právní informace",
   },
   legal: {
@@ -878,7 +880,7 @@ const cs: typeof en = {
     sections: [
       {
         title: "Správce údajů",
-        body: "Správcem osobních údajů je uitherapy, provozovaný Jaromírem Machalíčkem (fyzická osoba podnikající dle živnostenského zákona, IČO 14293811), se sídlem Slatina 198, 742 93. V otázkách ochrany soukromí pište na core@uitherapy.com.",
+        body: "Správcem osobních údajů je uitherapy, provozovaný Jaromírem Machalíčkem (fyzická osoba podnikající dle živnostenského zákona, IČO 14293811), se sídlem Bohunická 81, 619 00 Brno. V otázkách ochrany soukromí pište na core@uitherapy.com.",
       },
       {
         title: "Jaké údaje shromažďujeme",
