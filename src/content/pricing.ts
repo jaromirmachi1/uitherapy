@@ -29,7 +29,7 @@ export const packageExample: Record<PackageId, { id: string; image: string }> = 
   start: { id: "Doktor Barber", image: "/projects/doktor-desk.webp" },
   business: { id: "Převezem", image: "/projects/prevezem-desk.webp" },
   premium: { id: "Ouren", image: "/projects/ouren-desk.webp" },
-  eshop: { id: "biziboiz", image: "/projects/biziboiz-desk.webp" },
+  eshop: { id: "Vojta Hubne", image: "/projects/vojta-desk.webp" },
 };
 
 export const featuredPackage: PackageId = "business";
