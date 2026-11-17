@@ -13,6 +13,13 @@ export function middleware(request: NextRequest) {
     return;
   }
 
+  // Statický koncept QB Coffee (public/projects/qb, build z projektu qb-coffee)
+  if (pathname === "/projects/qb" || pathname === "/projects/qb/") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/projects/qb/index.html";
+    return NextResponse.rewrite(url);
+  }
+
   const pathnameLocale = locales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
